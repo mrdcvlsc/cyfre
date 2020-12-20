@@ -18,7 +18,7 @@ int main(){
 		      {6,5,4},
 		      {3,2,1}});
 
-	cyfre::matrix_int32 answer = mat1 + mat2;
+	cyfre::matrix_int32 answer = mat1 - mat2;
 
 	for(size_t i=0; i<answer.height; ++i){
 		for(size_t j=0; j<answer.width; ++j)

@@ -43,6 +43,7 @@ namespace cyfre
 		*/
 
 		matrix_int32 operator+(const matrix_int32& rmat) const;
+		matrix_int32 operator-(const matrix_int32& rmat) const;
 
 		long long int& operator()(size_t i, size_t j);
 
