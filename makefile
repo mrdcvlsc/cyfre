@@ -19,7 +19,7 @@ test: lib cyfre.lib main.cpp
 lib: library
 	@echo $(OBJ)
 
-library: $(OUT)column_operations.o $(OUT)row_operations.o $(OUT)algorithms.o $(OUT)arithmetic_operators.o $(OUT)comparison_operators.o $(OUT)constructors.o $(OUT)io_operators.o $(OUT)maths.o $(OUT)array_matrix.o
+library: $(OUT)column_operations.o $(OUT)row_operations.o $(OUT)algorithms.o $(OUT)arithmetic_operators.o $(OUT)comparison_operators.o $(OUT)constructors.o $(OUT)io_operators.o $(OUT)maths.o
 	@echo "building single static library : cyfre.lib"
 	@ar rvs cyfre.lib $(OUT)*.o
 
@@ -54,11 +54,4 @@ $(OUT)io_operators.o: $(SRC)io_operators.cpp
 $(OUT)maths.o: $(SRC)maths.cpp
 	@echo "compiling source code to object file..."
 	@$(CXX) $(CXXFLAGS) $(SRC)maths.cpp -o obj/maths.o
-
-$(OUT)array_matrix.o: $(SRC)array_matrix.cpp
-	@echo "compiling source code to object file..."
-	@$(CXX) $(CXXFLAGS) $(SRC)array_matrix.cpp -o obj/array_matrix.o
-
-
-
 
