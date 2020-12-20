@@ -47,4 +47,13 @@ namespace cyfre
 		this->height = height;
 		this->_matrix = _matrix;
 	}
+
+	matrix_int32::matrix_int32(vector<vector<long long int>> array2d){
+		this->width = array2d[0].size();
+		this->height = array2d.size();
+		for(size_t i=0; i<this->height; ++i)
+		{
+			_matrix.insert(_matrix.end(),array2d[i].begin(),array2d[i].end());
+		}
+	}
 }

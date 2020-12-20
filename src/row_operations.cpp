@@ -3,7 +3,7 @@
 namespace cyfre
 {
 
-	vector<long long int> matrix_int32::row(size_t i)
+	vector<long long int> matrix_int32::row(size_t i) const
 	{
 		if(i>height-1)
 		{

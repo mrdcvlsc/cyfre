@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <vector>
 //#include "array_matrix.h"
 #include "cyfre.h"
 
@@ -8,31 +9,23 @@ using namespace std::chrono;
 
 int main(){
 
-	cyfre::matrix_int32 obj(3,4,{ 
-		2, 4, 6,
-	    8, 5, 3,
-	    7, 2, 1,
-	    3, 1, 9
-	});
+	cyfre::matrix_int32 
+		mat1({{1,2,3},
+		      {4,5,6},
+		      {7,8,9}}),
 
-	cyfre::matrix_int32 arrays({1,2,3,4,5,6,7,8,9,10});
-	
-	cyfre::array_view(arrays.row(0));
+		mat2({{9,8,7},
+		      {6,5,4},
+		      {3,2,1}});
 
+	cyfre::matrix_int32 answer = mat1 + mat2;
 
-	size_t cnt=0;
-	for(int i=0;i<obj.height;++i){
-		for(int j=0;j<obj.width;++j){
-			cout<<obj(i,j)<<' ';
-		}
+	for(size_t i=0; i<answer.height; ++i){
+		for(size_t j=0; j<answer.width; ++j)
+			cout<<answer(i,j)<<' ';
 		cout<<'\n';
 	}
-
-	vector<long long int> rows = obj.row(1);
-
-	cyfre::array_view(rows);
-	cyfre::array_view(obj.col(1));
-
+	cout<<endl;
 	/*
 	dimensions *a = new matrix_int64(4);
 	dimensions *b = new matrix_float64(5);
