@@ -2,7 +2,7 @@
 
 namespace cyfre
 {
-	vector<long long int> matrix_int32::col(size_t i) const
+	vector<long long int> matrix_int64::col(size_t i) const
 	{
 		if(i>width-1){
 			cerr<<"index column "<<i<<" out of bound, range is only between 0-"<<width-1<<'\n';

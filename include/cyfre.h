@@ -9,26 +9,25 @@ using namespace std;
 
 namespace cyfre
 {
-	template<typename T>
-	void array_view(T arr){
-		for(auto e: arr)
-			cout<<e<<' ';
-		cout<<'\n';
-	}
+	typedef long long int i64;
+	typedef double fltpnt;
 
-	class matrix_int32
+	i64 dot_product_i64(vector<i64> a, vector<i64> b);
+
+	class matrix_int64
 	{
 	public:
-		vector<long long int> _matrix;
+		vector<i64> _matrix;
 		size_t width;
 		size_t height;
 
-		matrix_int32(size_t w);
-		matrix_int32(size_t width, size_t height);
-		matrix_int32(vector<long long int> _matrix);
-		matrix_int32(size_t swidth, vector<long long int> _matrix);
-		matrix_int32(size_t width, size_t height, vector<long long int> _matrix);
-		matrix_int32(vector<vector<long long int>> array2d);
+		// constructors
+		matrix_int64(size_t w); // N x N
+		matrix_int64(size_t width, size_t height); // N x M
+		matrix_int64(vector<i64> _matrix); // vector input, matrix as height of 1 or 1 row only
+		matrix_int64(size_t swidth, vector<i64> _matrix); // N x N and vector input,
+		matrix_int64(size_t width, size_t height, vector<i64> _matrix); // N x M and vector input
+		matrix_int64(vector<vector<i64>> array2d); // 2d vector input
 		
 		// add 2d array constructor
 
@@ -42,13 +41,24 @@ namespace cyfre
 		    Orthogonal Matrix
 		*/
 
-		matrix_int32 operator+(const matrix_int32& rmat) const;
-		matrix_int32 operator-(const matrix_int32& rmat) const;
+		// operators
+		matrix_int64 scalar(i64 multiplyier) const;
 
-		long long int& operator()(size_t i, size_t j);
+		matrix_int64 operator+(const matrix_int64& rmat) const;
+		matrix_int64 operator-(const matrix_int64& rmat) const;
+		matrix_int64 operator*(const matrix_int64& rmat) const;
 
-		vector<long long int> row(size_t i) const;
-		vector<long long int> col(size_t i) const;
+		i64& operator()(size_t i, size_t j);
+		i64 operator()(size_t i, size_t j) const;
+
+		// row and columns
+		vector<i64> row(size_t i) const;
+		vector<i64> col(size_t i) const;
+
+		// displays
+		void status(string name) const;
+		void view() const;
+		size_t area() const;
 	};
 }
 #endif
