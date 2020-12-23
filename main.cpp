@@ -17,19 +17,28 @@ int main(){
 
 	squared.view();
 
-	cout<<"TRACE VALUE : "<<squared.trace();
+	cout<<"\nTRACE VALUE : "<<squared.trace();
 
 	squared = hadamard(squared,mymatrix);
 
-	cout<<"hadamard multipication : \n";
+	cout<<"\nhadamard multipication : \n";
 	squared.view();
-	cout<<"SUM OF ELEMENTS"<<squared.sum();
+	cout<<"\nSUM OF ELEMENTS = "<<squared.sum();
 
 	cyfre::matrix_int64 test(
 		{{1,2},
 		 {3,4}}
-	);
+	),
+	test2({
+		{2,2},
+		{2,2}
+	});
 
 	cout<<"\n\ndet = "<<test.det()<<endl;
+
+	cout<<"mult test : \n";
+	test = cyfre::hadamard(test,test2);
+	test.view();
+
 	return 0;
 }

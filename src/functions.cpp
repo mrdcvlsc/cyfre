@@ -22,10 +22,9 @@ namespace cyfre
 	matrix_int64 hadamard(matrix_int64 a, matrix_int64 b){
 		if(a.height==b.height && a.width==b.width){
 			matrix_int64 answer(a.width,a.height);
-			for(size_t i=0; i<a.height; ++i){
-				for(size_t j=0; j<a.width; ++j){
-					answer(i,j) = a(i,j) * b(i,j);
-				}
+			size_t n = answer._matrix.size();
+			for(size_t i=0; i<n; ++i){
+				answer._matrix[i] = a._matrix[i] * b._matrix[i];
 			}
 			return answer;
 		}

@@ -12,8 +12,6 @@ namespace cyfre
 	typedef long long int i64;
 	typedef double fltpnt;
 
-	i64 dot_product_i64(vector<i64> a, vector<i64> b);
-
 	class matrix_int64
 	{
 	public:
@@ -41,19 +39,12 @@ namespace cyfre
 		    Orthogonal Matrix
 		*/
 
-		// scalar operations
-		matrix_int64 scale_mul(i64 scalar) const;
-		matrix_int64 scale_add(i64 scalar) const;
-		matrix_int64 scale_sub(i64 scalar) const;
-		matrix_int64 scale_div(i64 scalar) const;
-
-		matrix_int64 transpose() const;
-
-		// operators
+		// arithmetic operators
 		matrix_int64 operator+(const matrix_int64& rmat) const;
 		matrix_int64 operator-(const matrix_int64& rmat) const;
 		matrix_int64 operator*(const matrix_int64& rmat) const;
 
+		// indexing operator
 		i64& operator()(size_t i, size_t j);
 		i64 operator()(size_t i, size_t j) const;
 
@@ -63,13 +54,29 @@ namespace cyfre
 
 		// displays
 		void status(string name) const;
-		i64 trace() const;
-		i64 sum() const;
-		i64 det() const;
 		void view() const;
+
+		// scalar operations
+		matrix_int64 scale_mul(i64 scalar) const;
+		matrix_int64 scale_add(i64 scalar) const;
+		matrix_int64 scale_sub(i64 scalar) const;
+		matrix_int64 scale_div(i64 scalar) const;
+
+		// maths
+		i64 trace() const;
+		matrix_int64 transpose() const;
+		i64 sum() const;
 		size_t area() const;
+
+		// complex algorithms
+		i64 det() const;
+		
+		
 	};
 
+	// outer functions functions
+	i64 dot_product_i64(vector<i64> a, vector<i64> b);
 	matrix_int64 hadamard(matrix_int64 a, matrix_int64 b);
+
 }
 #endif
