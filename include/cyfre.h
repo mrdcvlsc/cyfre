@@ -41,9 +41,15 @@ namespace cyfre
 		    Orthogonal Matrix
 		*/
 
-		// operators
-		matrix_int64 scalar(i64 multiplyier) const;
+		// scalar operations
+		matrix_int64 scale_mul(i64 scalar) const;
+		matrix_int64 scale_add(i64 scalar) const;
+		matrix_int64 scale_sub(i64 scalar) const;
+		matrix_int64 scale_div(i64 scalar) const;
 
+		matrix_int64 transpose() const;
+
+		// operators
 		matrix_int64 operator+(const matrix_int64& rmat) const;
 		matrix_int64 operator-(const matrix_int64& rmat) const;
 		matrix_int64 operator*(const matrix_int64& rmat) const;
@@ -57,8 +63,13 @@ namespace cyfre
 
 		// displays
 		void status(string name) const;
+		i64 trace() const;
+		i64 sum() const;
+		i64 det() const;
 		void view() const;
 		size_t area() const;
 	};
+
+	matrix_int64 hadamard(matrix_int64 a, matrix_int64 b);
 }
 #endif
