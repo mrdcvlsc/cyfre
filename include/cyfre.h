@@ -19,15 +19,24 @@ namespace cyfre
 		size_t width;
 		size_t height;
 
-		// constructors
+		/** constructors : START **/
+
+		// zero fill
 		matrix_int64(size_t w); // N x N
 		matrix_int64(size_t width, size_t height); // N x M
+		
+		// value set fill
+		matrix_int64(size_t w, string type, i64 values); // fill or scalar/identity creation
+		matrix_int64(size_t w, string type, vector<i64> diagonal_values); // diagonal matrix
+		matrix_int64(size_t width, size_t height,  i64 values); // N x M
+
+		// exact values
 		matrix_int64(vector<i64> _matrix); // vector input, matrix as height of 1 or 1 row only
-		matrix_int64(size_t swidth, vector<i64> _matrix); // N x N and vector input,
+		matrix_int64(size_t swidth, vector<i64> _matrix); // N x N and vector input
 		matrix_int64(size_t width, size_t height, vector<i64> _matrix); // N x M and vector input
 		matrix_int64(vector<vector<i64>> array2d); // 2d vector input
-		
-		// add 2d array constructor
+
+		/** constructors : END  **/
 
 		// add type constructor
 		/*
