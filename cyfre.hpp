@@ -20,7 +20,7 @@ namespace cyfre
         ROW
     };
 
-    enum SCALAR_OPERATIONS{ ADD, SUB, MUL, DIV };
+    enum SCALAR_OPERATIONS { ADD, SUB, MUL, DIV };
 
     template<typename T>
     class mat
@@ -110,6 +110,28 @@ namespace cyfre
 
         // ============================== scalar return methods ==============================
 
+        /// @returns the dot product of two std::vector<typename std::vector<T>::const_iterator>> :=
+        /// it accepts a vector of iterators that points to row or column elements or a matrix
+        static T dot(std::vector<typename std::vector<T>::const_iterator> iter_tuple1, std::vector<typename std::vector<T>::const_iterator> iter_tuple2)
+        {
+            size_t length = iter_tuple1.size();
+
+            if(length!=iter_tuple2.size())
+            {
+                std::cerr<<"\n\nERROR : T dot(std::vector<typename std::vector<T>> iter_tuple1, std::vector<typename std::vector<T>> iter_tuple2)\n";
+                std::cerr<<"\tarray don't have the same lenght\n";
+                std::cout<<"\titer_tuple1 length : "<<iter_tuple1.size()<<'\n';
+                std::cout<<"\titer_tuple2 length : "<<iter_tuple2.size()<<'\n';
+                exit(1); 
+            }
+            
+            T summation = (T)0;
+
+            for(size_t i=0; i<length; ++i) summation += (*iter_tuple1[i])*(*iter_tuple2[i]);
+
+            return summation;
+        }
+
         /// @returns T total, the total sum of all the elements of the matrix
         T total() const
         {
@@ -174,7 +196,7 @@ namespace cyfre
         // ============================== ROW ==============================
 
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a row
-        std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index)
+        std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index) const
         {
             if(row_index < 0 ^ row_index > width)
             {
@@ -189,7 +211,7 @@ namespace cyfre
         }
 
         /// @returns std::vector<std::vector<T>> of a row
-        std::vector<std::vector<T>> row(size_t row_index)
+        std::vector<std::vector<T>> row(size_t row_index) const
         {
             if(row_index < 0 ^ row_index > width)
             {
@@ -207,7 +229,7 @@ namespace cyfre
         // ============================== COLUMN ==============================
 
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a column
-        std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index)
+        std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index) const
         {
             if(column_index < 0 ^ column_index > height)
             {
@@ -222,7 +244,7 @@ namespace cyfre
         }
 
         /// @returns std::vector<std::vector<T>> of a column
-        std::vector<std::vector<T>> column(size_t column_index)
+        std::vector<std::vector<T>> column(size_t column_index) const
         {
             if(column_index < 0 ^ column_index > height)
             {
@@ -294,6 +316,140 @@ namespace cyfre
                 }
             }
         }
+
+        // ============================== MATRIX OPERATIONS ==============================
+
+        /// @returns element by element addition
+        mat operator+(const mat& that) const
+        {
+            if(this->width!=that.width || this->height!=that.height)
+            {
+                std::cerr<<"\n\nERROR : mat operator+(const mat& that) const\n";
+                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
+                exit(1);
+            }
+            
+            mat answer = *this;
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j) answer.matrix[i][j]+=that.matrix[i][j];
+            }
+
+            return answer;
+        }
+
+        /// @returns element by element subtraction
+        mat operator-(const mat& that) const
+        {
+            if(this->width!=that.width || this->height!=that.height)
+            {
+                std::cerr<<"\n\nERROR : mat operator+(const mat& that) const\n";
+                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
+                exit(1);
+            }
+            
+            mat answer = *this;
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j) answer.matrix[i][j]-=that.matrix[i][j];
+            }
+
+            return answer;
+        }
+
+        /// @returns hadamard matrix product - element by element multiplication, not to be confused with matrix multiplication
+        static mat hadamard(const mat& left, const mat& right)
+        {
+            if(left.width!=right.width || left.height!=right.height)
+            {
+                std::cerr<<"\n\nERROR : static mat hadamard(const mat& left, const mat& right) const\n";
+                std::cerr<<"\thadamard multiplication of two different shaped matrix is not allowed\n";
+                exit(1);
+            }
+            
+            mat answer = left;
+            for(size_t i=0; i<answer.height; ++i)
+            {
+                for(size_t j=0; j<answer.width; ++j) answer.matrix[i][j]*=right.matrix[i][j];
+            }
+
+            return answer;
+        }
+
+        /// @returns matrix multiplication
+        mat operator*(const mat& that) const
+        {
+            if(this->width!=that.width || this->height!=that.height)
+            {
+                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
+                std::cerr<<"\tmultiplication of incompatible matrix shapes\n";
+                std::cerr<<"\tmat_a columns is not equal to the mat_b rows\n";
+                exit(1);
+            }
+
+            mat answer(height,that.width,0);
+
+            std::vector<std::vector<typename std::vector<T>::const_iterator>> row_tuple_iter;
+            std::vector<std::vector<typename std::vector<T>::const_iterator>> col_tuple_iter;
+
+            for(size_t i=0; i<height; ++i)     row_tuple_iter.push_back(this->row_iterators(i));
+            for(size_t i=0; i<that.width; ++i) col_tuple_iter.push_back(that.column_iterators(i));
+
+            for(size_t i=0; i<answer.height; ++i)
+            {
+                for(size_t j=0; j<answer.height; ++j)
+                {
+                    answer.matrix[i][j] = mat::dot((row_tuple_iter[i]),(col_tuple_iter[j]));
+                }
+            }
+
+            return answer;
+        }
+
+        // ============================== MATRIX TRANSFORMATION ==============================
+
+        mat get_transpose() const
+        {
+            mat answer(width,height,(T)0);
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    answer.matrix[j][i] = matrix[i][j]; 
+                }
+            }
+            return answer;
+        }
+
+        void transpose()
+        {
+            if(height==width)
+            {
+                // to be change
+                mat answer(width,height,(T)0);
+                for(size_t i=0; i<height; ++i)
+                {
+                    for(size_t j=0; j<width; ++j)
+                    {
+                        answer.matrix[j][i] = matrix[i][j]; 
+                    }
+                }
+                *this = answer;
+            }
+            else
+            {
+                mat answer(width,height,(T)0);
+                for(size_t i=0; i<height; ++i)
+                {
+                    for(size_t j=0; j<width; ++j)
+                    {
+                        answer.matrix[j][i] = matrix[i][j]; 
+                    }
+                }
+                *this = answer;
+            }
+        }
+
     };
 }
 
