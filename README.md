@@ -5,9 +5,9 @@
 ### constructing matrix - shows different ways to construct a matrix
 
 <details>
-<summary>How do I dropdown?</summary>
+<summary>DROP?</summary>
 <br>
-This is how you dropdown.
+  DROPS
 </details>
 
 ```c++
