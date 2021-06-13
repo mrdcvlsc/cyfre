@@ -3,6 +3,13 @@
 ### my implementation of a C++ matrix library
 
 ### constructing matrix - shows different ways to construct a matrix
+
+<details>
+<summary>How do I dropdown?</summary>
+<br>
+This is how you dropdown.
+</details>
+
 ```c++
 #include <iostream>
 #include <cyfre.hpp>
