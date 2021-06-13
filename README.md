@@ -2,13 +2,9 @@
 ## Under Development
 ### my implementation of a C++ matrix library
 
-### constructing matrix - shows different ways to construct a matrix
-
 <details>
-<summary>DROP?</summary>
+<summary><h2>mat constructors - constructing matrix</h2></summary>
 <br>
-  DROPS
-</details>
 
 ```c++
 #include <iostream>
@@ -40,6 +36,8 @@ int main()
 }
 
 ```
+</details>
+
 ### scalar operations
 
 ```c++
