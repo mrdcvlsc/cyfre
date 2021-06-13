@@ -39,7 +39,7 @@ int main()
 </details>
   
 <details>
-<summary><b>cyfre::mat scalar operation</b></summary>
+<summary><b>Scalar Operations</b></summary>
 <br>
 
 ```c++
@@ -78,7 +78,7 @@ int main()
 </details>
   
 <details>
-<summary><b>cyfre::mat operators & matrix operations</b></summary>
+<summary><b>Matrix Operations & Operators</b></summary>
 <br>
 
   - addition(+)
@@ -109,12 +109,11 @@ int main()
 }
 
 ```
-  
-  </details>
+</details>
   
   
 <details>
-<summary><b>cyfre::mat methods</b></summary>
+<summary><b>Available Methods</b></summary>
 <br>
 
 ```c++
@@ -123,25 +122,50 @@ int main()
 
 int main()
 {
-  cyfre::mat<int> a, b, c, d;
+  
+  cyfre::mat<int> back, t;
   cyfre::mat<int> origin_matrix(
     {{1,2,3},
      {4,5,6},
      {7,8,9}
   });
   
-  int total_sum = original_matrix.total();
   
+  // sums
+  
+  int total_sum = original_matrix.total();
   int main_diagonal_total_sum  = original_matrix.trace();
   
-  std::vector<int> first_row = original_matrix.row(0);
+  
+  
+  // getting rows & column as vectors
+  
+  std::vector<int> first_row = original_matrix.row(0);  
   std::vector<int> second_column = original_matrix.column(1);
+  
+  
+  
+  // getting rows & columns as a collection of iterators
+  
+  std::vector<typename std::vector<int>::const_iterator> first_row_iterators = original_matrix.row_iterators(0);
+  std::vector<typename std::vector<int>::const_iterator> second_column_iterators = original_matrix.column_iterators(1);
+  
+  
+  
+  // transpose of a matrix
+  
+  t = original_matrix.get_transpose(); // return a new transposed matrix
+  t.transpose();  // transpose itself
+  back = t;
+  
+  
   
   return 0;
 }
 
 ```
-
+</details>
+  
 <details>
 <summary><b>accessing matrix elements</b></summary>
 <br>
