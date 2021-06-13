@@ -3,7 +3,7 @@
 ### my implementation of a C++ matrix library
 
 <details>
-<summary><h2>mat constructors - constructing matrix</h2></summary>
+<summary>mat constructors - constructing matrix</summary>
 <br>
 
 ```c++
