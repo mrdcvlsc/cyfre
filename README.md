@@ -3,7 +3,7 @@
 ### my implementation of a C++ matrix library
 
 <details>
-<summary>mat constructors - constructing matrix</summary>
+<summary><b>cyfre::mat constructors - constructing matrix</b></summary>
 <br>
 
 ```c++
