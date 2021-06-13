@@ -37,8 +37,10 @@ int main()
 
 ```
 </details>
-
-### scalar operations
+  
+<details>
+<summary><b>cyfre::mat scalar operation</b></summary>
+<br>
 
 ```c++
 #include <iostream>
@@ -72,12 +74,17 @@ int main()
 }
 
 ```
+  
+</details>
+  
+<details>
+<summary><b>cyfre::mat operators & matrix operations</b></summary>
+<br>
 
-### supported operations and operators
-
-  -addition(+)
-  -subtraction(-)
-  -multiplication(*)
+  - addition(+)
+  - subtraction(-)
+  - multiplication(*)
+  - hadamard product(mat::hadamard())
   
 ```c++
 #include <iostream>
@@ -103,7 +110,12 @@ int main()
 
 ```
   
-### matrix methods
+  </details>
+  
+  
+<details>
+<summary><b>cyfre::mat methods</b></summary>
+<br>
 
 ```c++
 #include <iostream>
@@ -130,7 +142,9 @@ int main()
 
 ```
 
-### accessing matrix elements
+<details>
+<summary><b>accessing matrix elements</b></summary>
+<br>
 
 ```c++
 #include <iostream>
@@ -159,3 +173,5 @@ int main()
 }
 
 ```
+  
+</details>
