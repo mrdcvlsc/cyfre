@@ -1,6 +1,6 @@
 # cyfre
 ## Under Development
-### my implementation of a C++ matrix library
+### a C++ matrix library
 
 <details>
 <summary><b>cyfre::mat constructors - constructing matrix</b></summary>
