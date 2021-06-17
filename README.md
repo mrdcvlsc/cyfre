@@ -1,6 +1,11 @@
 # cyfre
 ## Under Development
+
 ### a C++ matrix library
+
+### cyfre aims to provide an easy to use c++ matrix library with basic matrix operations.
+
+This library uses cpp stl's std::vector intensively
 
 <details>
 <summary><b>cyfre::mat constructors - constructing matrix</b></summary>
