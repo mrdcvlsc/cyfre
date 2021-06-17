@@ -34,6 +34,20 @@ namespace cyfre
         
         // ============================== constructors ==============================
 
+        mat()
+        {
+            height = 1;
+            width = 1;
+            std::vector<T> default_index;
+            default_index.push_back(T(0));
+            matrix.push_back(default_index);
+        }
+
+        // mat(const std::string text_file)
+        // {
+
+        // }
+
         /// initializes a matrix using a 2 dimension vector : @arg std::vector<std::vector<T>> matrix
         mat(std::vector<std::vector<T>> matrix)
         {
@@ -261,36 +275,7 @@ namespace cyfre
 
         // ============================== SCALAR MATRIX OPERATIONS ==============================
 
-        mat get_scale(const SCALAR_OPERATIONS scalar_operation, const T scalar) const
-        {
-            mat scalar_output(height,width,(T)0);
-
-            auto scalar_function = [](SCALAR_OPERATIONS scalar_operation, const T scalar, const T matrix_element)->int
-            {
-                switch(scalar_operation)
-                {
-                case ADD: return matrix_element + scalar;
-                case SUB: return matrix_element - scalar;
-                case MUL: return matrix_element * scalar;
-                case DIV: return matrix_element / scalar;
-                default:
-                    std::cerr<<"\n\nERROR : mat get_scale(SCALAR_OPERATIONS scalar_operation,T scalar)\n";
-                    std::cerr<<"\tSCALAR_OPERATIONS has invalid argument value, the valid SCALAR_OPERATION values are: ADD, SUB, MULL, and DIV\n";
-                    exit(1);
-                }
-            };
-
-            for(size_t i=0; i<height; ++i)
-            {
-                for(size_t j=0; j<width; ++j)
-                {
-                    scalar_output.matrix[i][j] = scalar_function(scalar_operation,scalar,matrix[i][j]);
-                }
-            }
-            
-            return scalar_output;
-        }
-
+        /// scales the matrix itself, changing it's own value
         void scale(SCALAR_OPERATIONS scalar_operation, T scalar)
         {
             auto scalar_function = [](SCALAR_OPERATIONS scalar_operation, const T scalar, typename std::vector<T>::iterator index)->void
@@ -357,25 +342,6 @@ namespace cyfre
             return answer;
         }
 
-        /// @returns hadamard matrix product - element by element multiplication, not to be confused with matrix multiplication
-        static mat hadamard(const mat& left, const mat& right)
-        {
-            if(left.width!=right.width || left.height!=right.height)
-            {
-                std::cerr<<"\n\nERROR : static mat hadamard(const mat& left, const mat& right) const\n";
-                std::cerr<<"\thadamard multiplication of two different shaped matrix is not allowed\n";
-                exit(1);
-            }
-            
-            mat answer = left;
-            for(size_t i=0; i<answer.height; ++i)
-            {
-                for(size_t j=0; j<answer.width; ++j) answer.matrix[i][j]*=right.matrix[i][j];
-            }
-
-            return answer;
-        }
-
         /// @returns matrix multiplication
         mat operator*(const mat& that) const
         {
@@ -408,19 +374,7 @@ namespace cyfre
 
         // ============================== MATRIX TRANSFORMATION ==============================
 
-        mat get_transpose() const
-        {
-            mat answer(width,height,(T)0);
-            for(size_t i=0; i<height; ++i)
-            {
-                for(size_t j=0; j<width; ++j)
-                {
-                    answer.matrix[j][i] = matrix[i][j]; 
-                }
-            }
-            return answer;
-        }
-
+        /// transpose self
         void transpose()
         {
             if(height==width)
