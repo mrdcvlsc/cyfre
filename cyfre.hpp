@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include <numeric>
-#include <vector>
+#include <fstream>
+#include <cstdio>
+#include "helper_functions.hpp"
 
 namespace cyfre
 {
@@ -43,10 +45,71 @@ namespace cyfre
             matrix.push_back(default_index);
         }
 
-        // mat(const std::string text_file)
-        // {
+        mat(std::string text_file, char separator)
+        {
+            std::ifstream filereader;
+            filereader.open(text_file.c_str());
 
-        // }
+            if(filereader.fail()){
+                std::cerr<<"\nERROR : constructor::mat<T>(\""<<text_file<<"\")"<<std::endl;
+                std::cerr<<"\tinitialization error, text file not found or might not be supported\n";
+                exit(2);
+            }
+
+            std::vector<std::string> strlines;
+            std::string tmp;
+            
+            while(!filereader.eof()){
+                getline(filereader,tmp);
+                strlines.push_back(tmp);
+            }
+
+            std::vector<std::vector<std::string>> matrix_strings;
+            bool an_integer = true;
+            for(size_t i=0; i<strlines.size(); ++i)
+            {
+                std::vector<std::string> row_parse = cyfre::helpers::parse(strlines[i],separator);
+                for(size_t j=0; j<row_parse.size(); ++j)
+                {
+                    std::pair<bool,bool> isvalid_isrational = cyfre::helpers::isanumber(row_parse[j]);
+                    if(!isvalid_isrational.first)
+                    {
+                        std::cerr<<"\nERROR : constructor::mat<T>(\""<<text_file<<"\")"<<std::endl;
+                        std::cerr<<"\tinitialization error, invalid number inside the text file:"<<text_file<<", on line:"<<i<<"\n";
+                        exit(2);
+                    }
+                    if(isvalid_isrational.second) an_integer = false;
+                }
+                matrix_strings.push_back(row_parse);
+            }
+
+            for(size_t i=1; i<matrix_strings.size(); ++i)
+            {
+                if(matrix_strings[i].size()!=matrix_strings[i-1].size())
+                {
+                    std::cerr<<"\nERROR : constructor::mat<T>(\""<<text_file<<"\")"<<std::endl;
+                    std::cerr<<"\tinitialization error, the text file provided an unequal length of rows\n";
+                    std::cerr<<"\terror occurs in text file after comparison on line "<<i<<" & "<<i+1<<"\n";
+                    exit(2);
+                }
+            }
+
+            std::vector<std::vector<T>> fmat;
+            for(size_t i=0; i<matrix_strings.size(); ++i)
+            {
+                std::vector<T> tmp;
+                fmat.push_back(tmp);
+                for(size_t j=0; j<matrix_strings[i].size(); ++j)
+                {
+                    if(an_integer) fmat[i].push_back((T)std::stoll(matrix_strings[i][j]));
+                    else fmat[i].push_back((T)std::stold(matrix_strings[i][j]));
+                }
+            }
+
+            this->height = fmat.size();
+            this->width  = fmat[0].size();
+            this->matrix = fmat;
+        }
 
         /// initializes a matrix using a 2 dimension vector : @arg std::vector<std::vector<T>> matrix
         mat(std::vector<std::vector<T>> matrix)
@@ -212,7 +275,7 @@ namespace cyfre
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a row
         std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index) const
         {
-            if(row_index < 0 ^ row_index > width)
+            if((row_index < 0) ^ (row_index > width))
             {
                 std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index)\n";
                 std::cerr<<"\tthe given row index is out of bound\n";
@@ -227,7 +290,7 @@ namespace cyfre
         /// @returns std::vector<std::vector<T>> of a row
         std::vector<std::vector<T>> row(size_t row_index) const
         {
-            if(row_index < 0 ^ row_index > width)
+            if((row_index < 0) ^ (row_index > width))
             {
                 std::cerr<<"\n\nERROR : std::vector<std::vector<T>> row(size_t row_index)\n";
                 std::cerr<<"\tthe given row index is out of bound\n";
@@ -245,7 +308,7 @@ namespace cyfre
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a column
         std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index) const
         {
-            if(column_index < 0 ^ column_index > height)
+            if((column_index < 0) ^ (column_index > height))
             {
                 std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index)\n";
                 std::cerr<<"\tthe given column index is out of bound\n";
@@ -260,7 +323,7 @@ namespace cyfre
         /// @returns std::vector<std::vector<T>> of a column
         std::vector<std::vector<T>> column(size_t column_index) const
         {
-            if(column_index < 0 ^ column_index > height)
+            if((column_index < 0) ^ (column_index > height))
             {
                 std::cerr<<"\n\nERROR : std::vector<std::vector<T>> column(size_t column_index)\n";
                 std::cerr<<"\tthe given column index is out of bound\n";
@@ -328,7 +391,7 @@ namespace cyfre
         {
             if(this->width!=that.width || this->height!=that.height)
             {
-                std::cerr<<"\n\nERROR : mat operator+(const mat& that) const\n";
+                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
                 std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
                 exit(1);
             }
@@ -345,9 +408,9 @@ namespace cyfre
         /// @returns matrix multiplication
         mat operator*(const mat& that) const
         {
-            if(this->width!=that.width || this->height!=that.height)
+            if(this->width!=that.height)
             {
-                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
+                std::cerr<<"\n\nERROR : mat operator*(const mat& that) const\n";
                 std::cerr<<"\tmultiplication of incompatible matrix shapes\n";
                 std::cerr<<"\tmat_a columns is not equal to the mat_b rows\n";
                 exit(1);
@@ -403,8 +466,25 @@ namespace cyfre
                 *this = answer;
             }
         }
-
     };
+
+    template<typename T>
+    void display(const mat<T>& input)
+    {
+        std::cout<<"\n[";
+        for(size_t i=0; i<input.height; ++i)
+        {
+            std::cout<<"[";
+            for(size_t j=0; j<input.width; ++j)
+            {
+                std::cout<<input.matrix[i][j];
+                if(j!=input.width-1) std::cout<<'\t';
+            }
+            std::cout<<"]";
+            if(i!=input.height-1) std::cout<<",\n";
+            else std::cout<<"]\n";
+        }
+    }
 }
 
 #endif
