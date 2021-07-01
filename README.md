@@ -5,55 +5,132 @@
 
 ### cyfre aims to provide an easy to use c++ matrix library with basic matrix operations.
 
+**```#include "cyfre/cyfre.hpp"```**
+
 This library uses cpp stl's std::vector intensively
 
 --------------------------------------------------
 
-## CONSTRUCTORS
-
 <details>
-<summary><b>cyfre::mat constructors - constructing matrix</b></summary>
+<summary><b><i>CONSTRUCTORS</i></b></summary>
 <br>
 
-```c++
-#include <iostream>
-#include <cyfre.hpp>
+<!--=====================================================================================-->
+<details>
+<summary><b>cyfre::MATRIX_TYPES</b></summary>
+<br>
+  
+  **defined** :
+  ```c++
+  cyfre::MATRIX_TYPES{IDENTITY,NULLZERO,SCALAR}
+  ```
 
-#define SQUARE_LENGTH 5
-#define DEFAULT_VALUE 15
-#define ROW_LEN 10
-#define COL_LEN 20
+  <br>
 
-int main()
-{
+  **use :**
+  *cyfre::MATRIX_TYPES*
+  ex:
+  ```c++
+  cyfre::NULLZERO // to select
+  ```
+</details>
 
-  cyfre::mat<int> idet(cyfre::IDENTITY,SQUARE_LENGTH);   // creates a 5x5 matrix, all values in main diagonal is 1
+<!--=====================================================================================-->
+<details>
+<summary><b>identity matrix</b></summary>
+<br>
   
-  cyfre::mat<int> scal(cyfre::SCALAR,7,DEFAULT_VALUE);   // creates a 7x7 matrix, all values in main diagonal is 15
+  **construct an identity matrix**
+
+  ```c++
+  cyfre::mat<int> mat_object(cyfre::IDENTITY,3);
+
+  // mat_object = [[1,0,0],
+  //               [0,1,0],
+  //               [0,0,1]]
+  ```
+
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>scalar matrix</b></summary>
+<br>
   
-  cyfre::mat<int> nill(cyfre::NULLZERO,SQUARE_LENGTH);   // creates a 5x5 matrix, where all values are 0 
+  **construct an scalar matrix**
+
+  ```c++
+  cyfre::mat<int> mat_object(cyfre::SCALAR,3,7);
+
+  // mat_object = [[7,0,0],
+  //               [0,7,0],
+  //               [0,0,7]]
+  ```
+
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>zero/null matrix</b></summary>
+<br>
   
-  cyfre::mat<int> rect(ROW_LEN,COL_LEN,DEFAULT_VALUE); // creates a 10x20 matrix, where all values are 15
+  **construct an zero/null matrix**
+
+  ```c++
+  cyfre::mat<int> mat_object(cyfre::NULLZERO,3);
+
+  // mat_object = [[0,0,0],
+  //               [0,0,0],
+  //               [0,0,0]]
+  ```
+
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>shaped matrix with values</b></summary>
+<br>
   
-  cyfre::mat<int> costum(   // creates the matrix displayed below, converts it into a 2d vector
-    {{1,2,3},
-     {4,5,6},
-     {7,8,9}
+  **construct an costum shaped matrix, with initial values**
+
+  ```c++
+  cyfre::mat<int> mat_object(1,3,5);
+
+  // mat_object = [[5],
+  //               [5],
+  //               [5]]
+  ```
+
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>defined matrix</b></summary>
+<br>
+  
+  **construct and define a matrix**
+
+  ```c++
+  cyfre::mat<int> mat_object({
+    {1,2,3},
+    {4,5,6},
+    {7,8,9}
   });
-  
-  return 0;
-}
+  ```
 
-```
+</details>
+
 </details>
 
 --------------------------------------------------
 
-## SCALAR OPERATIONS
+<details>
+<summary><b><i>SCALAR OPERATIONS</i></b></summary>
+<br>
 
 <!--=====================================================================================-->
 <details>
-<summary><b>cyfre::SCALAR_OPERATIONS</b></summary>
+<summary><b>selecting a scalar operation</b></summary>
 <br>
   
   **defined** :
@@ -67,23 +144,25 @@ int main()
   *cyfre::SCALAR_OPERATION* <br>
   ex:
   ```c++
-  cyfre::ADD``` to select addition
+  cyfre::ADD // to select addition
   ```
 
 <!--=====================================================================================-->
 </details>
 
 <details>
-<summary><b>cyfre::scale(mat_object,scalar_operation,scalar_value)</b></summary>
+<summary><b>matrix scalar operation</b></summary>
 <br>
 
-### returns a scaled matrix of the original one, see example below
+**returns a copy scaled matrix of the original one**
 
 ```c++
-cyfre::mat mat_object({{1,2},
-                       {3,4}});
+cyfre::mat<int> mat_object({
+  {1,2},
+  {3,4}
+});
 
-cyfre::mat a = cyfre::scale(mat_object,cyfre::ADD,2);
+cyfre::mat<int> a = cyfre::scale(mat_object,cyfre::ADD,2);
 
 // a = [[3,4],
 //      [5,6]]
@@ -93,14 +172,16 @@ cyfre::mat a = cyfre::scale(mat_object,cyfre::ADD,2);
 
 <!--=====================================================================================-->
 <details>
-<summary><b>mat_object.scale(scalar_operation,scalar_value)</b></summary>
+<summary><b>matrix scalar operation [self]</b></summary>
 <br>
 
-### scales all the elements of the matrix with the give operation [changes the matrix itself]
+**scales all the elements of the matrix using a scalar value [changes the matrix itself]**
 
 ```c++
-cyfre::mat mat_object({{1,2},
-                       {3,4}});
+cyfre::mat<int> mat_object({
+  {1,2},
+  {3,4}
+});
 
 mat_object.scale(cyfre::SUB,2);
 
@@ -112,14 +193,16 @@ mat_object.scale(cyfre::SUB,2);
 
 <!--=====================================================================================-->
 <details>
-<summary><b>mat_object.scale_row(row_index,scalar_operation,scalar_value)</b></summary>
+<summary><b>row scalar operation</b></summary>
 <br>
 
-### scales all the elements of the row with the give operation [changes the matrix itself]
+**scales all the elements of the row using a scalar value [changes the matrix itself]**
 
 ```c++
-cyfre::mat mat_object({{1,2},
-                       {3,4}});
+cyfre::mat<int> mat_object({
+  {1,2},
+  {3,4}
+});
 
 mat_object.scale_row(0,cyfre::MUL,2);
 
@@ -133,19 +216,21 @@ multiply all elements of the row '0' to 3, changes the original matrix
 
 <!--=====================================================================================-->
 <details>
-<summary><b>mat_object.scale_column(column_index,scalar_operation,scalar_value)</b></summary>
+<summary><b>column scalar operation</b></summary>
 <br>
 
-### scales all the elements of the column with the give operation [changes the matrix itself]
+**scales all the elements of the column using a scalar value [changes the matrix itself]**
 
 ```c++
-cyfre::mat mat_object({{2,4},
-                       {6,8}});
+cyfre::mat<int> mat_object({
+  {2,4},
+  {6,8}
+});
 
-mat_object.scale_column(0,cyfre::DIV,2);
+mat_object.scale_column(1,cyfre::DIV,2);
 
-// mat_object = [[1,4],
-//               [3,8]]
+// mat_object = [[2,2],
+//               [6,4]]
 ```
 
 divides all elements of the column '1' to 2, changes the original matrix
@@ -154,15 +239,17 @@ divides all elements of the column '1' to 2, changes the original matrix
 
 <!--=====================================================================================-->
 <details>
-<summary><b>mat_object.row_operation(base_row,scalar_operation,scalar_row)</b></summary>
+<summary><b>row to row operation</b></summary>
 <br>
 
-### scales all the elements of the row with the give operation [changes the matrix itself]
+**scale a row using another row [changes the matrix itself]**
 
 ```c++
-cyfre::mat mat_object({{1,2,3},
-                       {4,5,6},
-                       {7,8,9}});
+cyfre::mat<int> mat_object({
+  {1,2,3},
+  {4,5,6},
+  {7,8,9}
+});
 
 mat_object.row_operation(1,cyfre::MUL,2);
 
@@ -174,15 +261,17 @@ mat_object.row_operation(1,cyfre::MUL,2);
 
 <!--=====================================================================================-->
 <details>
-<summary><b>mat_object.column_operation(base_column,scalar_operation,scalar_column)</b></summary>
+<summary><b>column to column operation</b></summary>
 <br>
 
-### scales all the elements of the column with the give operation [changes the matrix itself]
+**scale a column using another column [changes the matrix itself]**
 
 ```c++
-cyfre::mat mat_object({{1,2,3},
-                       {4,5,6},
-                       {7,8,9}});
+cyfre::mat<int> mat_object({
+  {1,2,3},
+  {4,5,6},
+  {7,8,9}
+});
 
 mat_object.column_operation(2,cyfre::DIV,3);
 
@@ -192,52 +281,112 @@ mat_object.column_operation(2,cyfre::DIV,3);
 ```
 </details>
 
+</details>
+
 --------------------------------------------------
 
-## MATRIX OPERATIONS
-  
 <details>
-<summary><b>Matrix Operations & Operators</b></summary>
+<summary><b><i>MATRIX OPERATIONS</i></b></summary>
 <br>
 
-  - addition(+)
-  - subtraction(-)
-  - multiplication(*)
-  - hadamard product(mat::hadamard())
-  
+<!--=====================================================================================-->
+<details>
+<summary><b>matrix addition</b></summary>
+<br>
+
 ```c++
-#include <iostream>
-#include <cyfre.hpp>
+cyfre::mat<int> A({{ 1, 2, 3},
+                   { 4, 5, 6}});
 
-int main()
-{
-  cyfre::mat<int> squared_matrix, doubled_matrix, zero_matrix;
-  cyfre::mat<int> product_matrix, half_values;
-  cyfre::mat<int> origin_matrix(
-    {{1,2,3},
-     {4,5,6},
-     {7,8,9}
-  });
-  
+cyfre::mat<int> B({{-1,-2,-3},
+                   {-4,-5,-6}});
 
-  // you can use the +,-,*,/ operators to perform matrix addition, subtraction, and multiplication
-  
-  doubled_matrix = origin_matrix + origin_matrix;
-  zero_matrix    = origin_matrix - orignial_matrix;
-  squared_matrix = origin_matrix * origin_matrix;
-  half_values    = origin_matrix / origin_matrix;
-  
+cyfre::mat<int> C = A+B;
 
-  // not to be confused with matrix multiplication, hadamard product multiply two matrix element by element only
-  
-  product_matrix = mat::hadamard(origin_matrix,origin_matrix);
-
-  return 0;
-}
-
+// C = [[ 0, 0, 0],
+//      [ 0, 0, 0]]
 ```
 </details>
-  
+
+<!--=====================================================================================-->
+<details>
+<summary><b>matrix subtraction</b></summary>
+<br>
+
+```c++
+cyfre::mat<int> A({{10, 1,33},
+                   {44,50,12}});
+
+cyfre::mat<int> B({{ 7,19, 5},
+                   { 7, 6, 5}});
+
+cyfre::mat<int> C = A-B;
+
+// C = [[ 3,-18,28],
+//      [37, 44, 7]]
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>matrix element-by-element division</b></summary>
+<br>
+
+```c++
+cyfre::mat<int> A({{2,4,6},
+                   {8,2,4}});
+
+cyfre::mat<int> B({{1,4,3},
+                   {2,2,1}});
+
+cyfre::mat<int> C = A/B;
+
+// C = [[2,1,2],
+//      [4,1,4]]
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>hadamard product</b></summary>
+<br>
+
+```c++
+cyfre::mat<int> A({{2,4,6},
+                   {8,2,4}});
+
+cyfre::mat<int> B({{1,4,3},
+                   {2,2,1}});
+
+cyfre::mat<int> C = cyfre::hadamard(A,B);
+
+// C = [[ 2,16,18],
+//      [16, 4, 4]]
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>multiplying matrices (dot product)</b></summary>
+<br>
+
+```c++
+cyfre::mat<int> X({
+  { 7,12,13},
+  {14, 5,20},
+  {66,42,-4}
+});
+
+cyfre::mat<int> W({{-3,4,56}});
+
+cyfre::mat<int> Y = X*W;
+
+// C = [[3731,2336,-183]]
+```
+</details>
+
+</details>
+
 --------------------------------------------------
 
 ## OTHER METHODS

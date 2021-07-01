@@ -548,7 +548,26 @@ namespace cyfre
             return answer;
         }
 
-        /// @returns matrix multiplication
+        /// @returns element by element division
+        mat operator/(const mat& that) const
+        {
+            if(this->width!=that.width || this->height!=that.height)
+            {
+                std::cerr<<"\n\nERROR : mat operator/(const mat& that) const\n";
+                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
+                exit(1);
+            }
+            
+            mat answer = *this;
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j) answer.matrix[i][j]-/that.matrix[i][j];
+            }
+
+            return answer;
+        }
+
+        /// @returns matrix multiplication / dot product
         mat operator*(const mat& that) const
         {
             if(this->width!=that.height)
@@ -569,7 +588,7 @@ namespace cyfre
 
             for(size_t i=0; i<answer.height; ++i)
             {
-                for(size_t j=0; j<answer.height; ++j)
+                for(size_t j=0; j<answer.width; ++j)
                 {
                     answer.matrix[i][j] = mat::dot((row_tuple_iter[i]),(col_tuple_iter[j]));
                 }
