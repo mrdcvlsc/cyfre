@@ -1,7 +1,7 @@
-#ifndef TRANSFORM_HPP
-#define TRANSFORM_HPP
+#ifndef OPERATIONS_HPP
+#define OPERATIONS_HPP
 
-#include "cyfre.hpp"
+#include "matrix_class.hpp"
 
 namespace cyfre
 {
@@ -35,20 +35,6 @@ namespace cyfre
         return input;
     }
 
-    /// @returns a transposed self copy
-    template<typename T>
-    mat<T> transpose(mat<T> input)
-    {
-        for(size_t i=0; i<input.height; ++i)
-        {
-            for(size_t j=0; j<input.width; ++j)
-            {
-                input.matrix[j][i] = input.matrix[i][j]; 
-            }
-        }
-        return input;
-    }
-
     /// @returns hadamard matrix product - element by element multiplication, not to be confused with matrix multiplication
     template<typename T>
     mat<T> hadamard(const mat<T>& left, const mat<T>& right)
@@ -68,6 +54,18 @@ namespace cyfre
 
         return answer;
     }
+
+    // p matrix
+
+    // sudo-inverse
+
+    // inverse
+
+    // diagonalize
+
+    // matrix^exponent - power
+
+    // euler^matrix
 }
 
 #endif

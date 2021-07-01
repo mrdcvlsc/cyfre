@@ -1,7 +1,7 @@
-#ifndef SCALARS_HPP
-#define SCALARS_HPP
+#ifndef SCALAR_OPERATIONS_HPP
+#define SCALAR_OPERATIONS_HPP
 
-#include "cyfre.hpp"
+#include "matrix_class.hpp"
 
 namespace cyfre
 {
@@ -54,6 +54,8 @@ namespace cyfre
         for(size_t i=0; i<input.height; ++i) trace_total+=input.matrix[i][i];
         return trace_total;
     }
+
+    // determinant
 }
 
 #endif
