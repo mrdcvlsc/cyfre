@@ -191,10 +191,12 @@ cyfre::mat<int> mat_object({
   {3,4}
 });
 
-cyfre::mat<int> a = cyfre::scale(mat_object,cyfre::ADD,2);
+cyfre::mat<int> a = mat_object+2;
 
 // a = [[3,4],
 //      [5,6]]
+
+// NOTE : cyfre::mat<int> a = 2+mat_object;  <-- also a valid expression
 ```
 
 </details>
@@ -212,7 +214,7 @@ cyfre::mat<int> mat_object({
   {3,4}
 });
 
-mat_object.scale(cyfre::SUB,2);
+mat_object-=2;
 
 // mat_object = [[-1,0],
 //               [ 1,2]]
@@ -391,6 +393,11 @@ cyfre::mat<int> C = cyfre::hadamard(A,B);
 
 // C = [[ 2,16,18],
 //      [16, 4, 4]]
+
+A.hadamard(B); // faster in some cases because of direct operation on the A matrix
+
+// A = [[ 2,16,18],
+//      [16, 4, 4]]
 ```
 </details>
 
@@ -414,77 +421,169 @@ cyfre::mat<int> Y = X*W;
 ```
 </details>
 
+<!--=====================================================================================-->
+<details>
+<summary><b>rasing a matrix to a certain power</b></summary>
+<br>
+
+```c++
+cyfre::mat<int> X({
+  { 7,12,13},
+  {14, 5,20},
+  {66,42,-4}
+});
+
+
+cyfre::mat<int> X_cubed = cyfre::power(X,3);
+
+// X_cubed = [[32427  23838 25975],
+//            [37818  28389 38636],
+//            [128454 83358 17402]]
+
+
+cyfre::mat<int> X_squared = X;
+X_squared.power(2);
+
+// X_squared = [[1047 666  239],
+//              [1488 1005 202],
+//              [786  702  1714]]
+
+```
+</details>
+
 </details>
 
 --------------------------------------------------
 
-## OTHER METHODS
-  
 <details>
-<summary><b>Available Methods</b></summary>
+<summary><b><i>METHODS</i></b></summary>
+<br>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>sum of all elements</b></summary>
 <br>
 
 ```c++
-#include <iostream>
-#include <cyfre.hpp>
+cyfre::mat<int> X({
+  {1,2,3},
+  {4,5,6},
+  {7,8,9}
+});
 
-int main()
-{
-  
-  cyfre::mat<int> back, t;
-  cyfre::mat<int> origin_matrix(
-    {{1,2,3},
-     {4,5,6},
-     {7,8,9}
-  });
-  
-  
-  // sums
-  
-  int total_sum = origin_matrix.total();
-  int main_diagonal_total_sum  = origin_matrix.trace();
-  
-  
-  
-  // getting rows & column as vectors
-  
-  std::vector<int> first_row = origin_matrix.row(0);  
-  std::vector<int> second_column = origin_matrix.column(1);
-  
-  
-  
-  // getting rows & columns as a collection of iterators
-  
-  std::vector<typename std::vector<int>::const_iterator> first_row_iterators = origin_matrix.row_iterators(0);
-  std::vector<typename std::vector<int>::const_iterator> second_column_iterators = origin_matrix.column_iterators(1);
-  
-  
-  
-  // transpose of a matrix
-  
-  t = origin_matrix.get_transpose(); // return a new transposed matrix
-  t.transpose();  // transpose itself
-  back = t;
-  
-  
-  
-  return 0;
-}
+int sum = X.total();
+
+// sum = 45
 
 ```
 </details>
-  
+
+<!--=====================================================================================-->
 <details>
-<summary><b>accessing matrix elements</b></summary>
+<summary><b>sum of the main-diagonal</b></summary>
 <br>
 
 ```c++
-#include <iostream>
-#include <cyfre.hpp>
+cyfre::mat<int> X({
+  {1,2,3},
+  {4,5,6},
+  {7,8,9}
+});
 
-int main()
+int diag_sum = X.trace();
+
+// diag_sum = 15
+
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>getting row/column as std::vector</b></summary>
+<br>
+
+```c++
+cyfre::mat<int> plane({
+  {1,2,3},
+  {4,5,6},
+  {7,8,9}
+});
+
+std::vector<int> x = plane.row(1);  
+std::vector<int> y = plane.column(1);
+
+// x = [4,5,6]
+// y = [2,5,8]
+
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>getting row/column as std::vector of std::iterators</b></summary>
+<br>
+
+**you can modify values of rows and columns using a vector of iterator from a matrix**
+
+```c++
+cyfre::mat<int> P({
+  { 30, 40, 42},
+  { 10, 25, 90},
+  {102, 88,150}
+});
+
+std::vector<typename std::vector<int>::iterator> xaxis = P.row_iterators_r(1);
+std::vector<typename std::vector<int>::iterator> yaxis = P.column_iterators_r(1);
+
+for(size_t i=0; i<3; ++i)
 {
-  cyfre::mat<int> a, b, c, d;
+    *xaxis[i] = 1;
+    *yaxis[i] = 1;
+}
+
+// X = [[30    1    42],
+//      [1     1     1],
+//      [102   1   150]]
+
+
+// for vectors of const_iterator use the method below instead 
+
+// std::vector<typename std::vector<int>::const_iterator> xaxis = P.row_iterators(1);
+// std::vector<typename std::vector<int>::const_iterator> yaxis = P.column_iterators(1);
+
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>transpose a matrix</b></summary>
+<br>
+
+```c++
+cyfre::mat<int> X({
+  {1,2,3,4},
+  {5,6,7,8},
+});
+
+X.transpose();
+
+// X = [[1,5],
+//      [2,6],
+//      [3,7],
+//      [4,8]]
+
+```
+</details>
+
+</details>
+  
+--------------------------------------------------
+
+<details>
+<summary><b>the matrix itself and it's height, & width</b></summary>
+<br>
+
+```c++
   cyfre::mat<int> nums(
     {{1,2,3},
      {4,5,6},
@@ -495,15 +594,19 @@ int main()
   {
     for(size_t j=0; j<nums.width; ++j)
     {
-      // the .matrix is a 2d vector member of the mat class, so you can treat it and use it like a 2d vector
+      nums.matrix[i][j]*=2;
       std::cout<<nums.matrix[i][j]<<'\t';
     }
     std::cout<<'\n';
   }
-  
-  return 0;
-}
 
+```
+
+**output :**
+```
+2       4       6
+8       10      12
+14      16      18
 ```
   
 </details>

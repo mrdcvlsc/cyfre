@@ -5,35 +5,6 @@
 
 namespace cyfre
 {
-    /// copies a cyfre::mat<T> object, then the values of that copy
-    /// @returns a scaled copy cyfre::mat<T> object
-    template<typename T>
-    mat<T> scale(mat<T> input, const SCALAR_OPERATIONS scalar_operation, const T scalar)
-    {
-        auto scalar_function = [](SCALAR_OPERATIONS scalar_operation, const T scalar, typename std::vector<T>::iterator index)->void
-        {
-            switch(scalar_operation)
-            {
-            case ADD: (*index) += scalar; break;
-            case SUB: (*index) -= scalar; break;
-            case MUL: (*index) *= scalar; break;
-            case DIV: (*index) /= scalar; break;
-            default:
-                std::cerr<<"\n\nERROR : void scale(SCALAR_OPERATIONS scalar_operation, T scalar="<<scalar_operation<<")\n";
-                std::cerr<<"\tSCALAR_OPERATIONS has invalid argument value, the valid SCALAR_OPERATION values are: ADD, SUB, MULL, and DIV\n";
-                exit(1);
-            }
-        };
-
-        for(size_t i=0; i<input.height; ++i)
-        {
-            for(size_t j=0; j<input.width; ++j)
-            {
-                scalar_function(scalar_operation,scalar,(*(input.matrix.begin()+i)).begin()+j);
-            }
-        }
-        return input;
-    }
 
     /// @returns hadamard matrix product - element by element multiplication, not to be confused with matrix multiplication
     template<typename T>
@@ -53,6 +24,37 @@ namespace cyfre
         }
 
         return answer;
+    }
+
+    /// @returns raised matrix to a certain number 'p'
+    /// @note raising to a negative integer(inverse) is not supported yet but will be in the future
+    template<typename T>
+    mat<T> power(mat<T> base, const int p)
+    {
+        if(base.width!=base.height)
+        {
+            std::cerr<<"\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n";
+            exit(1);
+        }
+        else if(p<0)
+        {
+            std::cerr<<"\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n";
+            exit(1);
+        }
+        if(p==0)
+        {
+            mat<T> identity(IDENTITY,base.width);
+            base = identity;
+        }
+        else if(p>=2)
+        {
+            mat<T> multiplier = base;
+            for(size_t i=2; i<=p; ++i)
+            {
+                base*=multiplier;
+            }
+        }
+        return base;
     }
 
     // p matrix

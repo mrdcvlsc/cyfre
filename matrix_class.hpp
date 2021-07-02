@@ -296,6 +296,21 @@ namespace cyfre
             return row_iterator;
         }
 
+        /// @returns std::vector<typename std::vector<T>::iterator> of a row
+        std::vector<typename std::vector<T>::iterator> row_iterators_r(size_t row_index)
+        {
+            if((row_index < 0) ^ (row_index > width))
+            {
+                std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::iterator> row_iterators_r(size_t row_index)\n";
+                std::cerr<<"\tthe given row index is out of bound\n";
+                exit(1);
+            }
+
+            std::vector<typename std::vector<T>::iterator> row_iterator;
+            for(size_t i=0; i<width; ++i) row_iterator.push_back(matrix[row_index].begin()+i);
+            return row_iterator;
+        }
+
         /// @returns std::vector<std::vector<T>> of a row
         std::vector<std::vector<T>> row(size_t row_index) const
         {
@@ -396,6 +411,21 @@ namespace cyfre
             return column_iterator;
         }
 
+        /// @returns std::vector<typename std::vector<T>::iterator> of a column
+        std::vector<typename std::vector<T>::iterator> column_iterators_r(size_t column_index)
+        {
+            if((column_index < 0) ^ (column_index > height))
+            {
+                std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::iterator> column_iterators_r(size_t column_index)\n";
+                std::cerr<<"\tthe given column index is out of bound\n";
+                exit(1);
+            }
+
+            std::vector<typename std::vector<T>::iterator> column_iterator;
+            for(size_t i=0; i<height; ++i) column_iterator.push_back(matrix[i].begin()+column_index);
+            return column_iterator;
+        }
+
         /// @returns std::vector<std::vector<T>> of a column
         std::vector<std::vector<T>> column(size_t column_index) const
         {
@@ -478,40 +508,12 @@ namespace cyfre
                 matrix[i][output_index] = operation_function(matrix[i][output_index],matrix[i][input_index]);
             }
         }
-        
-        // ============================== SCALAR MATRIX OPERATIONS ==============================
-
-        /// scales the matrix itself, changing it's own value
-        void scale(SCALAR_OPERATIONS scalar_operation, T scalar)
-        {
-            auto scalar_function = [](SCALAR_OPERATIONS scalar_operation, const T scalar, typename std::vector<T>::iterator index)->void
-            {
-                switch(scalar_operation)
-                {
-                case ADD: (*index) += scalar; break;
-                case SUB: (*index) -= scalar; break;
-                case MUL: (*index) *= scalar; break;
-                case DIV: (*index) /= scalar; break;
-                default:
-                    std::cerr<<"\n\nERROR : void scale(SCALAR_OPERATIONS scalar_operation, T scalar="<<scalar_operation<<")\n";
-                    std::cerr<<"\tSCALAR_OPERATIONS has invalid argument value, the valid SCALAR_OPERATION values are: ADD, SUB, MULL, and DIV\n";
-                    exit(1);
-                }
-            };
-
-            for(size_t i=0; i<height; ++i)
-            {
-                for(size_t j=0; j<width; ++j)
-                {
-                    scalar_function(scalar_operation,scalar,(*(matrix.begin()+i)).begin()+j);
-                }
-            }
-        }
 
         // ============================== MATRIX OPERATIONS ==============================
 
+        /// ---------------------- Addition -----------------------------
         /// @returns element by element addition
-        mat operator+(const mat& that) const
+        inline mat operator+(const mat& that) const
         {
             if(this->width!=that.width || this->height!=that.height)
             {
@@ -529,8 +531,61 @@ namespace cyfre
             return answer;
         }
 
+        inline void operator+=(const mat& that)
+        {
+            if(this->width!=that.width || this->height!=that.height)
+            {
+                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
+                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
+                exit(1);
+            }
+            
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j) matrix[i][j]+=that.matrix[i][j];
+            }
+        }
+
+        inline mat operator+(const T scalar) const
+        {
+            mat scaled_addition = *this;
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    scaled_addition.matrix[i][j]+=scalar;
+                }
+            }
+            return scaled_addition;
+        }
+
+        inline void operator+=(const T scalar)
+        {
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    matrix[i][j]+=scalar;
+                }
+            }
+        }
+
+        template<typename S> inline friend mat operator+(const S scalar, const mat& that)
+        {
+            mat scaled_addition = that;
+            for(size_t i=0; i<scaled_addition.height; ++i)
+            {
+                for(size_t j=0; j<scaled_addition.width; ++j)
+                {
+                    scaled_addition.matrix[i][j] = scalar+scaled_addition.matrix[i][j];
+                }
+            }
+            return scaled_addition;
+        }
+
+        /// ---------------------- Subtraction -----------------------------
         /// @returns element by element subtraction
-        mat operator-(const mat& that) const
+        inline mat operator-(const mat& that) const
         {
             if(this->width!=that.width || this->height!=that.height)
             {
@@ -548,8 +603,61 @@ namespace cyfre
             return answer;
         }
 
+        inline void operator-=(const mat& that)
+        {
+            if(this->width!=that.width || this->height!=that.height)
+            {
+                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
+                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
+                exit(1);
+            }
+            
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j) matrix[i][j]-=that.matrix[i][j];
+            }
+        }
+
+        inline mat operator-(const T scalar) const
+        {
+            mat scaled_addition = *this;
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    scaled_addition.matrix[i][j]-=scalar;
+                }
+            }
+            return scaled_addition;
+        }
+
+        inline void operator-=(const T scalar)
+        {
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    matrix[i][j]-=scalar;
+                }
+            }
+        }
+
+        template<typename S> inline friend mat operator-(const S scalar, const mat& that)
+        {
+            mat scaled_addition = that;
+            for(size_t i=0; i<scaled_addition.height; ++i)
+            {
+                for(size_t j=0; j<scaled_addition.width; ++j)
+                {
+                    scaled_addition.matrix[i][j] = scalar-scaled_addition.matrix[i][j];
+                }
+            }
+            return scaled_addition;
+        }
+
+        /// ---------------------- Division -----------------------------
         /// @returns element by element division
-        mat operator/(const mat& that) const
+        inline mat operator/(const mat& that) const
         {
             if(this->width!=that.width || this->height!=that.height)
             {
@@ -561,14 +669,67 @@ namespace cyfre
             mat answer = *this;
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) answer.matrix[i][j]-/that.matrix[i][j];
+                for(size_t j=0; j<width; ++j) answer.matrix[i][j]/=that.matrix[i][j];
             }
 
             return answer;
         }
 
+        inline void operator/=(const mat& that)
+        {
+            if(this->width!=that.width || this->height!=that.height)
+            {
+                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
+                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
+                exit(1);
+            }
+            
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j) matrix[i][j]/=that.matrix[i][j];
+            }
+        }
+
+        inline mat operator/(const T scalar) const
+        {
+            mat scaled_addition = *this;
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    scaled_addition.matrix[i][j]/=scalar;
+                }
+            }
+            return scaled_addition;
+        }
+
+        inline void operator/=(const T scalar)
+        {
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    matrix[i][j]/=scalar;
+                }
+            }
+        }
+
+        template<typename S> inline friend mat operator/(const S scalar, const mat& that)
+        {
+            mat scaled_addition = that;
+            for(size_t i=0; i<scaled_addition.height; ++i)
+            {
+                for(size_t j=0; j<scaled_addition.width; ++j)
+                {
+                    scaled_addition.matrix[i][j] = scalar/scaled_addition.matrix[i][j];
+                }
+            }
+            return scaled_addition;
+        }
+
+        /// ---------------------- Multiplication -----------------------------
         /// @returns matrix multiplication / dot product
-        mat operator*(const mat& that) const
+        inline mat operator*(const mat& that) const
         {
             if(this->width!=that.height)
             {
@@ -595,6 +756,95 @@ namespace cyfre
             }
 
             return answer;
+        }
+
+        inline void operator*=(const mat& that)
+        {
+            *this = *this * that;
+        }
+
+        /// @returns hadamard matrix product - element by element multiplication, not to be confused with matrix multiplication
+        void hadamard(const mat& that)
+        {
+            if(this->width!=that.width || this->height!=that.height)
+            {
+                std::cerr<<"\n\nERROR : static mat hadamard(const mat& left, const mat& that) const\n";
+                std::cerr<<"\thadamard multiplication of two different shaped matrix is not allowed\n";
+                exit(1);
+            }
+            
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j) matrix[i][j]*=that.matrix[i][j];
+            }
+        }
+
+        inline mat operator*(const T scalar) const
+        {
+            mat scaled_addition = *this;
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    scaled_addition.matrix[i][j]*=scalar;
+                }
+            }
+            return scaled_addition;
+        }
+
+        inline void operator*=(const T scalar)
+        {
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    matrix[i][j]*=scalar;
+                }
+            }
+        }
+        
+        template<typename S> inline friend mat operator*(const S scalar, const mat& that)
+        {
+            mat scaled_addition = that;
+            for(size_t i=0; i<scaled_addition.height; ++i)
+            {
+                for(size_t j=0; j<scaled_addition.width; ++j)
+                {
+                    scaled_addition.matrix[i][j] = scalar*scaled_addition.matrix[i][j];
+                }
+            }
+            return scaled_addition;
+        }
+
+        // ============================== MATRIX EXPOENTIAL ==============================
+
+        /// @returns raised matrix to a certain number 'p'
+        /// @note raising to a negative integer(inverse) is not supported yet but will be in the future
+        void power(size_t p)
+        {
+            if(width!=height)
+            {
+                std::cerr<<"\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n";
+                exit(1);
+            }
+            else if(p<0)
+            {
+                std::cerr<<"\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n";
+                exit(1);
+            }
+            if(p==0)
+            {
+                mat<T> identity(IDENTITY,width);
+                *this = identity;
+            }
+            else if(p>=2)
+            {
+                mat multiplier = *this;
+                for(size_t i=2; i<=p; ++i)
+                {
+                    *this*=multiplier;
+                }
+            }
         }
 
         // ============================== MATRIX TRANSFORMATION ==============================

@@ -6,9 +6,9 @@
 namespace cyfre
 {
     /// @arg accepts a vector of iterators that
-    /// @returns a copy of the dot product of two std::vector<typename std::vector<T>::const_iterator>> :=
+    /// @returns a copy of the dot product of two std::vector<typename std::vector<T>::iteratir>> :=
     template<typename T>
-    T dot(std::vector<T> tuple1, std::vector<T> tuple2)
+    inline T dot(std::vector<T> tuple1, std::vector<T> tuple2)
     {
         size_t length = tuple1.size();
 
