@@ -4,6 +4,7 @@
 #include <iostream>
 #include <numeric>
 #include <fstream>
+#include <limits>
 #include <cstdio>
 #include "helper_functions.hpp"
 
@@ -118,7 +119,7 @@ namespace cyfre
         }
 
         /// initializes a matrix using a 2 dimension vector : @arg std::vector<std::vector<T>> matrix
-        mat(std::vector<std::vector<T>> matrix)
+        mat(const std::vector<std::vector<T>>& matrix)
         {
             if(matrix.empty())
             {
@@ -144,8 +145,16 @@ namespace cyfre
             this->matrix = matrix;
         }
 
+        /// initializes a matrix using a vector : @arg std::vector<T> matrix
+        mat(const std::vector<T>& array_vector)
+        {
+            height = 1;
+            width = array_vector.size();
+            matrix.push_back(array_vector);
+        }
+
         /// initializes a matrix given a @arg height, @arg width for the matrix shape, and a @arg default_value of all elements in the matrix
-        mat(size_t height, size_t width, T default_value)
+        mat(const size_t height, const size_t width, const T default_value)
         {
             size_t i=height, j=width;
             this->height = height;
@@ -160,7 +169,7 @@ namespace cyfre
         }
 
         /// initializes a square matrix with a given 'x' scalar values of elements in the main diagonal
-        mat(MATRIX_TYPES matrix_type, size_t n, T scalar)
+        mat(const MATRIX_TYPES matrix_type, const size_t n, const T scalar)
         {
             size_t i=n, j=n;
             height = width = n;
@@ -175,7 +184,7 @@ namespace cyfre
             for(size_t i=0; i<n; ++i) matrix[i][i] = scalar;
         }
         
-        mat(MATRIX_TYPES matrix_type, size_t n) : mat(matrix_type,n,0)
+        mat(const MATRIX_TYPES matrix_type, const size_t n) : mat(matrix_type,n,0)
         {
             switch(matrix_type)
             {
@@ -890,7 +899,7 @@ namespace cyfre
             for(size_t j=0; j<input.width; ++j)
             {
                 std::cout<<input.matrix[i][j];
-                if(j!=input.width-1) std::cout<<'\t';
+                if(j!=input.width-1) std::cout<<' ';
             }
             std::cout<<"]";
             if(i!=input.height-1) std::cout<<",\n";
