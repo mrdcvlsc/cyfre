@@ -198,7 +198,7 @@ namespace cyfre
 
         /// @returns the dot product of two std::vector<typename std::vector<T>::const_iterator>> :=
         /// it accepts a vector of iterators that points to row or column elements or a matrix
-        static T dot(std::vector<typename std::vector<T>::const_iterator> iter_tuple1, std::vector<typename std::vector<T>::const_iterator> iter_tuple2)
+        inline static T dot(std::vector<typename std::vector<T>::const_iterator> iter_tuple1, std::vector<typename std::vector<T>::const_iterator> iter_tuple2)
         {
             size_t length = iter_tuple1.size();
 

@@ -6,7 +6,7 @@
 namespace cyfre
 {
     /// @arg accepts a vector of iterators that
-    /// @returns a copy of the dot product of two std::vector<typename std::vector<T>::iteratir>> :=
+    /// @returns a copy of the dot product of two std::vector
     template<typename T>
     inline T dot(std::vector<T> tuple1, std::vector<T> tuple2)
     {
