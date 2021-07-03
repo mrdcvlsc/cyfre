@@ -8,6 +8,8 @@
 #include <cstdio>
 #include "helper_functions.hpp"
 
+#define SAFECHECK 1
+
 /*
         CONTAINS ALL CYFRE LIBRARY TYPES from classes, to enums, and typedefs
 */
@@ -249,45 +251,6 @@ namespace cyfre
             for(size_t i=0; i<height; ++i) trace_total+=matrix[i][i];
         }
 
-        /// @returns T determinant of matrix, this method is using LU Decomposition
-        /*
-        long long int determinant() const
-        {
-            std::vector<std::vector<T>> lower=matrix, upper=matrix;
-            size_t i=0, j=0, k=0, n=height;
-            for(i=0; i<n; i++)
-            {
-                for(j=0; j<n; j++)
-                {
-                    if(j<i) lower[j][i] = 0;
-                    else
-                    {
-                        lower[j][i] = matrix[j][i];
-                        for (k=0; k<i; k++) lower[j][i] = lower[j][i] - lower[j][k] * upper[k][i];
-                    }
-                }
-                for(j=0; j<n; j++)
-                {
-                    if(j<i)       upper[i][j] = 0;
-                    else if(j==i) upper[i][j] = 1;
-                    else
-                    {
-                        upper[i][j] = matrix[i][j] / lower[i][i];
-                        for (k = 0; k < i; k++) upper[i][j] = upper[i][j] - ((lower[i][k] * upper[k][j]) / lower[i][i]);
-                    }
-                }
-            }
-
-            long long int upper_determinant = 1, lower_determinant = 1;
-            for(size_t i = 0; i < n; ++i)
-            {
-                upper_determinant *= upper[i][i];
-                lower_determinant *= lower[i][i];
-            }
-            return upper_determinant*lower_determinant;
-        }
-        */
-
         // ============================== ROW ==============================
 
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a row
@@ -403,6 +366,84 @@ namespace cyfre
             }
         }
 
+        /// @note: swaps the values of a row to another row :: a<-->b
+        void row_swap(size_t row_a, size_t row_b)
+        {
+            #ifdef SAFECHECK
+            if((row_a < 0) ^ (row_a > height-1))
+            {
+                std::cerr<<"\n\nERROR : void row_swap(size_t row_a, size_t row_b)\n";
+                std::cerr<<"\tthe given row 'row_a' is out of bound\n";
+                exit(1);
+            }
+            else if((row_b < 0) ^ (row_b > height-1))
+            {
+                std::cerr<<"\n\nERROR : void row_swap(size_t row_a, size_t row_b)\n";
+                std::cerr<<"\tthe given row 'row_b'  is out of bound\n";
+                exit(1);
+            }
+            #endif
+
+            T temp;
+            for(size_t i=0; i<width; ++i)
+            {
+                temp = matrix[row_a][i];
+                matrix[row_a][i] = matrix[row_b][i];
+                matrix[row_b][i] = temp;
+            }
+        }
+
+        /// @note: multiply all the values of a row to a non-zero constant
+        /// @arg(scalar,base_row)
+        /// @param 1 scalar : template S type value that you want to multiply to all the elements of the row
+        /// @param 2 base_row : size_t index of the row you want to perform scaling
+        template<typename S>
+        void row_scale(S scalar, size_t base_row)
+        {
+            #ifdef SAFECHECK
+            if((base_row < 0) ^ (base_row > height-1))
+            {
+                std::cerr<<"\n\nERROR : void row_scale(S scalar, size_t base_row)\n";
+                std::cerr<<"\tthe given row 'base_row' is out of bound\n";
+                exit(1);
+            }
+            #endif
+
+            for(size_t i=0; i<width; ++i)
+            {
+                matrix[base_row][i]*=scalar;
+            }
+        }
+
+        /// @note: multiply all the values of a row to a non-zero constant, then add the result to another row
+        /// @arg(scalar,scale_row,base_row)
+        /// @param 1 scalar : template S type value that you want to multiply to all the elements of the row
+        /// @param 2 scale_row : size_t index of the row you want to scale
+        /// @param 3 base_row : size_t index of the row you want to add the results of the scaled row
+        template<typename S>
+        void row_scale(S scalar, size_t scale_row, size_t base_row)
+        {
+            #ifdef SAFECHECK
+            if((scale_row < 0) ^ (scale_row > height-1))
+            {
+                std::cerr<<"\n\nERROR : void row_scale(S scalar, size_t scale_row, size_t scale_row)\n";
+                std::cerr<<"\tthe given row 'scale_row' is out of bound\n";
+                exit(1);
+            }
+            else if((base_row < 0) ^ (base_row > height-1))
+            {
+                std::cerr<<"\n\nERROR : void row_scale(S scalar, size_t scale_row, size_t base_row)\n";
+                std::cerr<<"\tthe given row 'base_row' is out of bound\n";
+                exit(1);
+            }
+            #endif
+
+            for(size_t i=0; i<width; ++i)
+            {
+                matrix[base_row][i] += scalar*matrix[scale_row][i];
+            }
+        }
+
         // ============================== COLUMN ==============================
 
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a column
@@ -515,6 +556,84 @@ namespace cyfre
             for(size_t i=0; i<height; ++i)
             {
                 matrix[i][output_index] = operation_function(matrix[i][output_index],matrix[i][input_index]);
+            }
+        }
+
+        /// @note: swaps the values of a column to another column :: a<-->b
+        void column_swap(size_t column_a, size_t column_b)
+        {
+            #ifdef SAFECHECK
+            if((column_a < 0) ^ (column_a > width-1))
+            {
+                std::cerr<<"\n\nERROR : void column_swap(size_t column_a, size_t column_b)\n";
+                std::cerr<<"\tthe given column 'column_a' is out of bound\n";
+                exit(1);
+            }
+            else if((column_b < 0) ^ (column_b > width-1))
+            {
+                std::cerr<<"\n\nERROR : void column_swap(size_t column_a, size_t column_b)\n";
+                std::cerr<<"\tthe given column 'column_b'  is out of bound\n";
+                exit(1);
+            }
+            #endif
+
+            T temp;
+            for(size_t i=0; i<height; ++i)
+            {
+                temp = matrix[i][column_a];
+                matrix[i][column_a] = matrix[i][column_b];
+                matrix[i][column_b] = temp;
+            }
+        }
+
+        /// @note: multiply all the values of a column to a non-zero constant
+        /// @arg(scalar,base_column)
+        /// @param 1 scalar : template S type value that you want to multiply to all the elements of the column
+        /// @param 2 base_column : size_t index of the column you want to perform scaling
+        template<typename S>
+        void column_scale(S scalar, size_t base_column)
+        {
+            #ifdef SAFECHECK
+            if((base_column < 0) ^ (base_column > width-1))
+            {
+                std::cerr<<"\n\nERROR : void column_scale(S scalar, size_t base_column)\n";
+                std::cerr<<"\tthe given column 'base_column' is out of bound\n";
+                exit(1);
+            }
+            #endif
+
+            for(size_t i=0; i<height; ++i)
+            {
+                matrix[i][base_column]*=scalar;
+            }
+        }
+
+        /// @note: multiply all the values of a column to a non-zero constant, then add the result to another column
+        /// @arg(scalar,scale_column,base_column)
+        /// @param 1 scalar : template S type value that you want to multiply to all the elements of the column
+        /// @param 2 scale_column : size_t index of the column you want to scale
+        /// @param 3 base_column : size_t index of the column you want to add the results of the scaled column
+        template<typename S>
+        void column_scale(S scalar, size_t scale_column, size_t base_column)
+        {
+            #ifdef SAFECHECK
+            if((scale_column < 0) ^ (scale_column > width-1))
+            {
+                std::cerr<<"\n\nERROR : void column_scale(S scalar, size_t scale_column, size_t scale_column)\n";
+                std::cerr<<"\tthe given column 'scale_column' is out of bound\n";
+                exit(1);
+            }
+            else if((base_column < 0) ^ (base_column > width-1))
+            {
+                std::cerr<<"\n\nERROR : void column_scale(S scalar, size_t scale_column, size_t base_column)\n";
+                std::cerr<<"\tthe given column 'base_column' is out of bound\n";
+                exit(1);
+            }
+            #endif
+
+            for(size_t i=0; i<height; ++i)
+            {
+                matrix[i][base_column] += scalar*matrix[i][scale_column];
             }
         }
 
