@@ -175,7 +175,91 @@ This library uses cpp stl's std::vector intensively
 --------------------------------------------------
 
 <details>
-<summary><b><i>SCALAR OPERATIONS</i></b></summary>
+<summary><b><i>ELEMENTARY ROW/COLUMN OPERATIONS</i></b></summary>
+<br>
+
+**ROWS**
+- row_swap(size_t,size_t)
+- row_scale(S,size_t)
+- row_scale(S,size_t,size_t)
+
+**COLUMNS**
+- column_swap(size_t,size_t)
+- column_scale(S,size_t)
+- column_scale(S,size_t,size_t)
+
+<!--=====================================================================================-->
+<details>
+<summary><b>swaping rows/columns</b></summary>
+<br>
+
+**row_swap(row1,row2)**
+
+```c++
+cyfre::mat<int> mat_object({
+  {1,2,3},
+  {4,5,6},
+  {7,8,9}
+});
+
+mat_object.row_swap(1,2);
+
+// mat_object = [[ 1, 2, 3],
+//               [ 7, 8, 9],
+//               [ 4, 5, 6]]
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>scaling rows/columns</b></summary>
+<br>
+
+**row_scale(scalar_value,row_to_scale)**
+
+```c++
+cyfre::mat<int> mat_object({
+  {1,2,3},
+  {4,5,6},
+  {7,8,9}
+});
+
+mat_object.row_scale(5,0);
+
+// mat_object = [[ 5,10,15],
+//               [ 4, 5, 6],
+//               [ 7, 8, 9]]
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>scale a row/column then add the products to another row</b></summary>
+<br>
+
+**row_scale(scalar_value,row_to_scale,base_row)**
+
+```c++
+cyfre::mat<int> mat_object({
+  {1,2,3},
+  {4,5,6},
+  {0,0,0}
+});
+
+mat_object.row_scale(7,0,2);
+
+// mat_object = [[ 1, 2, 3],
+//               [ 4, 5, 6],
+//               [ 7,14,21]]
+```
+</details>
+
+</details>
+
+--------------------------------------------------
+
+<details>
+<summary><b><i>ADDITIONAL SCALAR OPERATIONS</i></b></summary>
 <br>
 
 <!--=====================================================================================-->
