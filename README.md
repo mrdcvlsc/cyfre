@@ -105,7 +105,22 @@ This library uses cpp stl's std::vector intensively
 
 <!--=====================================================================================-->
 <details>
-<summary><b>defined matrix</b></summary>
+<summary><b>defined matrix (row)</b></summary>
+<br>
+  
+  **construct and define a matrix**
+
+  ```c++
+  cyfre::mat<int> mat_object({5,10,15,20,25});
+
+  // mat_object = [[5,10,15,20,25]] <-- (1x5 matrix)
+  ```
+
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>defined matrix (2D)</b></summary>
 <br>
   
   **construct and define a matrix**
@@ -116,6 +131,12 @@ This library uses cpp stl's std::vector intensively
     {4,5,6},
     {7,8,9}
   });
+
+  /*
+    mat_object = [[1,2,3],
+                  [4,5,6],
+                  [7,8,9]]
+  */
   ```
 
 </details>
@@ -583,6 +604,10 @@ X.transpose();
 <summary><b>the matrix itself and it's height, & width</b></summary>
 <br>
 
+**operator(i,j)** - performs check of indices, terminates program if indices are out of range
+
+**.matrix[i][j]** - direct access, no checks, faster way
+
 ```c++
   cyfre::mat<int> nums(
     {{1,2,3},
@@ -594,8 +619,13 @@ X.transpose();
   {
     for(size_t j=0; j<nums.width; ++j)
     {
-      nums.matrix[i][j]*=2;
-      std::cout<<nums.matrix[i][j]<<'\t';
+      // operator()
+      nums(i,j)*=2;
+      std::cout<<nums(i,j)<<'\t';
+
+      // direct access
+      // nums.matrix[i][j]*=2;
+      // std::cout<<nums.matrix[i][j]<<'\t';
     }
     std::cout<<'\n';
   }
@@ -609,4 +639,68 @@ X.transpose();
 14      16      18
 ```
   
+</details>
+
+--------------------------------------------------
+
+<details>
+<summary><b><i>STATISTICS</i></b></summary>
+<br>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>mean, median, mode</b></summary>
+<br>
+
+```c++
+cyfre::mat<short> X({
+  {7,2,4},
+  {4,7,6},
+  {7,4,9}
+});
+
+long double mean   = cyfre::sts::mean(X);
+long double median = cyfre::sts::median(X);
+
+std::pair<size_t,std::vector<short>> getmode = cyfre::sts::mode(X);
+
+size_t numbers_of_modes  = getmode.second.size();
+size_t modes_occurrence  = getmode.first;
+
+std::vector<short> modes = getmode.second;
+
+/*
+  mean = 3.22222
+  median = 1
+  numbers_of_modes = 2
+  modes_occurrence = 3
+  modes = [7,4]
+*/
+
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>sum of squares, variance, standard deviation</b></summary>
+<br>
+
+```c++
+cyfre::mat<short> X({7,2,4,3,9});
+
+long double
+  sum_of_square      = cyfre::sts::sofs(X,cyfre::SAMPLE),
+  variance           = cyfre::sts::variance(X,cyfre::SAMPLE),
+  standard_deviation = cyfre::sts::stddvn(X,cyfre::SAMPLE);;
+
+/*
+  sum_of_square = 34
+  variance = 8.5
+  standard_deviation = 2.91548
+
+  for population use 'cyfre::POPULATION' instead
+*/
+```
+</details>
+
 </details>

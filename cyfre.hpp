@@ -4,6 +4,7 @@
 #include "matrix_class.hpp"
 #include "matrix_operations.hpp"
 #include "matrix_transform.hpp"
+#include "matrix_stats.hpp"
 #include "scalar_operations.hpp"
 
 /*
