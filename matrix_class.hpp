@@ -293,7 +293,7 @@ namespace cyfre
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a row
         std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index) const
         {
-            if((row_index < 0) ^ (row_index > width))
+            if((row_index < 0) ^ (row_index > height-1))
             {
                 std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index)\n";
                 std::cerr<<"\tthe given row index is out of bound\n";
@@ -308,7 +308,7 @@ namespace cyfre
         /// @returns std::vector<typename std::vector<T>::iterator> of a row
         std::vector<typename std::vector<T>::iterator> row_iterators_r(size_t row_index)
         {
-            if((row_index < 0) ^ (row_index > width))
+            if((row_index < 0) ^ (row_index > height-1))
             {
                 std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::iterator> row_iterators_r(size_t row_index)\n";
                 std::cerr<<"\tthe given row index is out of bound\n";
@@ -323,7 +323,7 @@ namespace cyfre
         /// @returns std::vector<std::vector<T>> of a row
         std::vector<std::vector<T>> row(size_t row_index) const
         {
-            if((row_index < 0) ^ (row_index > width))
+            if((row_index < 0) ^ (row_index > height-1))
             {
                 std::cerr<<"\n\nERROR : std::vector<std::vector<T>> row(size_t row_index)\n";
                 std::cerr<<"\tthe given row index is out of bound\n";
@@ -339,7 +339,7 @@ namespace cyfre
         /// 'ADD,SUB,MUL, or DIV' a given 'const T value' to all elements of a selected 'const size_t row_index' 
         void scale_row(const size_t row_index, const SCALAR_OPERATIONS scalar_operation, const T value)
         {
-            if((row_index < 0) ^ (row_index > width))
+            if((row_index < 0) ^ (row_index > height-1))
             {
                 std::cerr<<"\n\nERROR : void scale_row(const size_t row_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n";
                 std::cerr<<"\tthe given row index is out of bound\n";
@@ -369,13 +369,13 @@ namespace cyfre
 
         void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)
         {
-            if((output_index < 0) ^ (output_index > width))
+            if((output_index < 0) ^ (output_index > height-1))
             {
                 std::cerr<<"\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
                 std::cerr<<"\tthe given row 'output_index' is out of bound\n";
                 exit(1);
             }
-            else if((input_index < 0) ^ (input_index > width))
+            else if((input_index < 0) ^ (input_index > height-1))
             {
                 std::cerr<<"\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
                 std::cerr<<"\tthe given row 'input_index'  is out of bound\n";
@@ -408,7 +408,7 @@ namespace cyfre
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a column
         std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index) const
         {
-            if((column_index < 0) ^ (column_index > height))
+            if((column_index < 0) ^ (column_index > width-1))
             {
                 std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index)\n";
                 std::cerr<<"\tthe given column index is out of bound\n";
@@ -423,7 +423,7 @@ namespace cyfre
         /// @returns std::vector<typename std::vector<T>::iterator> of a column
         std::vector<typename std::vector<T>::iterator> column_iterators_r(size_t column_index)
         {
-            if((column_index < 0) ^ (column_index > height))
+            if((column_index < 0) ^ (column_index > width-1))
             {
                 std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::iterator> column_iterators_r(size_t column_index)\n";
                 std::cerr<<"\tthe given column index is out of bound\n";
@@ -438,7 +438,7 @@ namespace cyfre
         /// @returns std::vector<std::vector<T>> of a column
         std::vector<std::vector<T>> column(size_t column_index) const
         {
-            if((column_index < 0) ^ (column_index > height))
+            if((column_index < 0) ^ (column_index > width-1))
             {
                 std::cerr<<"\n\nERROR : std::vector<std::vector<T>> column(size_t column_index)\n";
                 std::cerr<<"\tthe given column index is out of bound\n";
@@ -454,7 +454,7 @@ namespace cyfre
         /// 'ADD,SUB,MUL, or DIV' a given 'const T value' to all elements of a selected 'const size_t column_index'
         void scale_column(const size_t column_index, const SCALAR_OPERATIONS scalar_operation, const T value)
         {
-            if((column_index < 0) ^ (column_index > height))
+            if((column_index < 0) ^ (column_index > width-1))
             {
                 std::cerr<<"\n\nERROR : void scale_column(const size_t column_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n";
                 std::cerr<<"\tthe given column index is out of bound\n";
@@ -484,13 +484,13 @@ namespace cyfre
 
         void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)
         {
-            if((output_index < 0) ^ (output_index > height))
+            if((output_index < 0) ^ (output_index > width-1))
             {
                 std::cerr<<"\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
                 std::cerr<<"\tthe given column 'output_index' is out of bound\n";
                 exit(1);
             }
-            else if((input_index < 0) ^ (input_index > height))
+            else if((input_index < 0) ^ (input_index > width-1))
             {
                 std::cerr<<"\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
                 std::cerr<<"\tthe given column 'input_index' is out of bound\n";
@@ -516,6 +516,42 @@ namespace cyfre
             {
                 matrix[i][output_index] = operation_function(matrix[i][output_index],matrix[i][input_index]);
             }
+        }
+
+        // ============================== SAFE INDEXING ================================
+
+        T& operator()(size_t i, size_t j)
+        {
+            if((i < 0) ^ (i > height-1))
+            {
+                std::cerr<<"\n\nERROR : T& operator()(size_t i, size_t j)\n";
+                std::cerr<<"\tthe given row index is out of bound\n";
+                exit(1);
+            }
+            else if((j < 0) ^ (j > width-1))
+            {
+                std::cerr<<"\n\nERROR : T& operator()(size_t i, size_t j)\n";
+                std::cerr<<"\tthe given column index is out of bound\n";
+                exit(1);
+            }
+            return matrix[i][j];
+        }
+        
+        const T& operator()(size_t i, size_t j) const
+        {
+            if((i < 0) ^ (i > height-1))
+            {
+                std::cerr<<"\n\nERROR : const T& operator()(size_t i, size_t j)\n";
+                std::cerr<<"\tthe given row index is out of bound\n";
+                exit(1);
+            }
+            else if((j < 0) ^ (j > width-1))
+            {
+                std::cerr<<"\n\nERROR : const T& operator()(size_t i, size_t j)\n";
+                std::cerr<<"\tthe given column index is out of bound\n";
+                exit(1);
+            }
+            return matrix[i][j];
         }
 
         // ============================== MATRIX OPERATIONS ==============================
