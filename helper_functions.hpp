@@ -44,7 +44,8 @@ namespace cyfre::helpers
         }
         catch(std::string VALUE_ERROR)
         {
-            std::cerr<<"\nERROR : YOU ASSIGNED AN INVALID NUMBER FORMAT\n";
+
+            std::cerr<<"\nERROR : YOU ASSIGNED AN INVALID NUMBER FORMAT("<<VALUE_ERROR<<")\n";
             return {false,false};
         }
         return {true,rational_true};

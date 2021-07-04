@@ -734,8 +734,32 @@ X = [[1,5],
 
 <!--=====================================================================================-->
 <details>
-<summary><b>Reduce Row Echelon Form (rref)</b></summary>
+<summary><b>Determinant of a Matrix</b></summary>
 <br>
+
+```c++
+cyfre::mat<long double> X({
+  { 5, 10,-15,  20},
+  {30,-35,-40, -45},
+  {55, 60, 75, -80},
+  {90, 95,100,-105}
+});
+
+long double determinant = cyfre::det(X);  /*
+
+determiant = -720000
+
+*/
+
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>Echelon Forms (ref & rref)</b></summary>
+<br>
+
+**R***educe* **R***ow* **E***chelon* **F***orm*
 
 ```c++
 cyfre::mat<int> X({
@@ -756,6 +780,9 @@ X = [[1 0 0 -1],
 
 */
 ```
+
+**R***ow* **E***echelon* **F***orm* : **```X.ref()```** *or* **```X = cyfre::ref(X)```**
+
 </details>
 
 </details>
@@ -838,7 +865,7 @@ std::vector<short> modes = getmode.second;
 
 /*
   mean = 3.22222
-  median = 1
+  median = 7
   numbers_of_modes = 2
   modes_occurrence = 3
   modes = [7,4]
