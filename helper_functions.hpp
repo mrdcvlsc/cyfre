@@ -19,6 +19,7 @@ namespace cyfre::helpers
 
             for(size_t i=0; i<value_size; ++i)
             {	
+                if(value[i]=='-' && i==0) continue;
                 if(value[i]=='.')
                 {
                     rational_true++;

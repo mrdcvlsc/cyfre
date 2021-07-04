@@ -29,18 +29,19 @@ namespace cyfre
 
     // flaten into x axis, or y axis
 
-    /// @returns echelon form of a matrix
+    /// @returns row echelon form of a matrix
     template<typename T>
-    mat<T> echelon(mat<T> input)
+    mat<T> ref(mat<T> input)
     {
 
     }
 
-    /// @returns reduced echelon form of a matrix
+    /// @returns reduced row echelon form of a matrix
     template<typename T>
-    mat<T> echelon_reduced(mat<T> input)
+    mat<T> rref(mat<T> input)
     {
-        
+        input.rref();
+        return input;
     }
 }
 
