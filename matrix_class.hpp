@@ -1042,6 +1042,61 @@ namespace cyfre
                 *this = answer;
             }
         }
+
+        // ============================= REDUCE ROW ECHELON FORM ================================
+
+        /// @returns reduced row echelon form of a matrix
+        void rref()
+        {
+
+            auto nonzrow = [](const mat<T>& input, size_t i, size_t j) -> long long int
+            {
+                for(size_t r=i; r<input.height; ++r)
+                {
+                    if(input.matrix[r][j]!=0)
+                    {
+                        return r;
+                    }
+                }
+                return -1;
+            };
+
+            auto fix_pivot = [](mat<T>& input, size_t pi, size_t pj)
+            {
+                for(size_t i=0; i<input.height; ++i)
+                {
+                    if(i!=pi)
+                    {
+                        input.row_scale(-input.matrix[i][pj],pi,i);
+                    }
+                }
+            };
+
+            auto make_pivot = [](mat<T>& input, size_t pi, size_t pj)
+            {
+                input.scale_row(pi,DIV,input.matrix[pi][pj]);
+            };
+            
+            size_t cpi = 0;
+            size_t cpj = 0;
+
+            while(cpi<height && cpj<width)
+            {
+                long long int nonzerorow = nonzrow(*this,cpi,cpj);
+        
+                if(nonzerorow<0)
+                {
+                    cpj++;
+                    continue;
+                }
+
+                if(nonzerorow!=cpi) this->row_swap(cpi,nonzerorow);
+                if(matrix[cpi][cpj]!=1) make_pivot(*this,cpi,cpj);
+                fix_pivot(*this,cpi,cpj);
+                cpi++;
+                cpj++;
+            }
+        }
     };
 
     template<typename T>
@@ -1053,7 +1108,11 @@ namespace cyfre
             std::cout<<"[";
             for(size_t j=0; j<input.width; ++j)
             {
-                std::cout<<input.matrix[i][j];
+                if(input.matrix[i][j]==0)
+                    std::cout<<std::abs(input.matrix[i][j]);
+                else
+                    std::cout<<input.matrix[i][j];
+
                 if(j!=input.width-1) std::cout<<' ';
             }
             std::cout<<"]";

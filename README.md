@@ -43,11 +43,13 @@ This library uses cpp stl's std::vector intensively
   **construct an identity matrix**
 
   ```c++
-  cyfre::mat<int> mat_object(cyfre::IDENTITY,3);
+  cyfre::mat<int> mat_object(cyfre::IDENTITY,3);  /*
 
-  // mat_object = [[1,0,0],
-  //               [0,1,0],
-  //               [0,0,1]]
+  mat_object = [[1,0,0],
+                [0,1,0],
+                [0,0,1]]
+
+  */
   ```
 
 </details>
@@ -60,11 +62,13 @@ This library uses cpp stl's std::vector intensively
   **construct an scalar matrix**
 
   ```c++
-  cyfre::mat<int> mat_object(cyfre::SCALAR,3,7);
+  cyfre::mat<int> mat_object(cyfre::SCALAR,3,7);  /*
 
-  // mat_object = [[7,0,0],
-  //               [0,7,0],
-  //               [0,0,7]]
+  mat_object = [[7,0,0],
+                [0,7,0],
+                [0,0,7]]
+
+  */
   ```
 
 </details>
@@ -77,11 +81,13 @@ This library uses cpp stl's std::vector intensively
   **construct an zero/null matrix**
 
   ```c++
-  cyfre::mat<int> mat_object(cyfre::NULLZERO,3);
+  cyfre::mat<int> mat_object(cyfre::NULLZERO,3);  /*
 
-  // mat_object = [[0,0,0],
-  //               [0,0,0],
-  //               [0,0,0]]
+  mat_object = [[0,0,0],
+                [0,0,0],
+                [0,0,0]]
+
+  */
   ```
 
 </details>
@@ -94,11 +100,13 @@ This library uses cpp stl's std::vector intensively
   **construct an costum shaped matrix, with initial values**
 
   ```c++
-  cyfre::mat<int> mat_object(1,3,5);
+  cyfre::mat<int> mat_object(1,3,5);  /*
 
-  // mat_object = [[5],
-  //               [5],
-  //               [5]]
+  mat_object = [[5],
+                [5],
+                [5]]
+
+  */
   ```
 
 </details>
@@ -157,15 +165,17 @@ This library uses cpp stl's std::vector intensively
   ```
 
   ```c++
-  cyfre::mat<int> mat_object("matrix1.txt",' ');
+  cyfre::mat<int> mat_object("matrix1.txt",' ');  /*
 
-  // mat_object = [
-  //   [23,12,53,34,23]
-  //   [33,77,53,90,28]
-  //   [87,26,11,24,31]
-  //   [84,32,73,64,26]
-  //   [77,88,45,97,86]
-  // ]
+  mat_object = [
+    [23,12,53,34,23]
+    [33,77,53,90,28]
+    [87,26,11,24,31]
+    [84,32,73,64,26]
+    [77,88,45,97,86]
+  ]
+
+  */
   ```
 
 </details>
@@ -202,11 +212,13 @@ cyfre::mat<int> mat_object({
   {7,8,9}
 });
 
-mat_object.row_swap(1,2);
+mat_object.row_swap(1,2);  /*
 
-// mat_object = [[ 1, 2, 3],
-//               [ 7, 8, 9],
-//               [ 4, 5, 6]]
+mat_object = [[ 1, 2, 3],
+              [ 7, 8, 9],
+              [ 4, 5, 6]]
+
+*/
 ```
 </details>
 
@@ -224,11 +236,13 @@ cyfre::mat<int> mat_object({
   {7,8,9}
 });
 
-mat_object.row_scale(5,0);
+mat_object.row_scale(5,0);  /*
 
-// mat_object = [[ 5,10,15],
-//               [ 4, 5, 6],
-//               [ 7, 8, 9]]
+mat_object = [[ 5,10,15],
+              [ 4, 5, 6],
+              [ 7, 8, 9]]
+
+*/
 ```
 </details>
 
@@ -246,11 +260,13 @@ cyfre::mat<int> mat_object({
   {0,0,0}
 });
 
-mat_object.row_scale(7,0,2);
+mat_object.row_scale(7,0,2);  /*
 
-// mat_object = [[ 1, 2, 3],
-//               [ 4, 5, 6],
-//               [ 7,14,21]]
+mat_object = [[ 1, 2, 3],
+              [ 4, 5, 6],
+              [ 7,14,21]]
+
+*/
 ```
 </details>
 
@@ -296,12 +312,14 @@ cyfre::mat<int> mat_object({
   {3,4}
 });
 
-cyfre::mat<int> a = mat_object+2;
+cyfre::mat<int> a = mat_object+2;  /*
 
-// a = [[3,4],
-//      [5,6]]
+a = [[3,4],
+     [5,6]]
 
-// NOTE : cyfre::mat<int> a = 2+mat_object;  <-- also a valid expression
+NOTE : cyfre::mat<int> a = 2+mat_object;  <-- is also a valid expression
+
+*/
 ```
 
 </details>
@@ -319,10 +337,12 @@ cyfre::mat<int> mat_object({
   {3,4}
 });
 
-mat_object-=2;
+mat_object-=2;  /*
 
-// mat_object = [[-1,0],
-//               [ 1,2]]
+mat_object = [[-1,0],
+              [ 1,2]]
+
+*/
 ```
 
 </details>
@@ -340,10 +360,12 @@ cyfre::mat<int> mat_object({
   {3,4}
 });
 
-mat_object.scale_row(0,cyfre::MUL,2);
+mat_object.scale_row(0,cyfre::MUL,2);  /*
 
-// mat_object = [[2,4],
-//               [3,4]]
+mat_object = [[2,4],
+              [3,4]]
+
+*/
 ```
 
 multiply all elements of the row '0' to 3, changes the original matrix
@@ -363,10 +385,12 @@ cyfre::mat<int> mat_object({
   {6,8}
 });
 
-mat_object.scale_column(1,cyfre::DIV,2);
+mat_object.scale_column(1,cyfre::DIV,2);  /*
 
-// mat_object = [[2,2],
-//               [6,4]]
+mat_object = [[2,2],
+              [6,4]]
+
+*/
 ```
 
 divides all elements of the column '1' to 2, changes the original matrix
@@ -387,11 +411,13 @@ cyfre::mat<int> mat_object({
   {7,8,9}
 });
 
-mat_object.row_operation(1,cyfre::MUL,2);
+mat_object.row_operation(1,cyfre::MUL,2);  /*
 
-// mat_object = [[ 1, 2, 3],
-//               [28,40,54],
-//               [ 7, 8, 9]]
+mat_object = [[ 1, 2, 3],
+              [28,40,54],
+              [ 7, 8, 9]]
+
+*/
 ```
 </details>
 
@@ -409,11 +435,13 @@ cyfre::mat<int> mat_object({
   {7,8,9}
 });
 
-mat_object.column_operation(2,cyfre::DIV,3);
+mat_object.column_operation(2,cyfre::DIV,3); /*
 
-// mat_object = [[ 1, 2, 1],
-//               [ 4, 4, 2],
-//               [ 7, 8, 3]]
+mat_object = [[ 1, 2, 1],
+              [ 4, 4, 2],
+              [ 7, 8, 3]]
+
+*/
 ```
 </details>
 
@@ -437,10 +465,12 @@ cyfre::mat<int> A({{ 1, 2, 3},
 cyfre::mat<int> B({{-1,-2,-3},
                    {-4,-5,-6}});
 
-cyfre::mat<int> C = A+B;
+cyfre::mat<int> C = A+B; /*
 
-// C = [[ 0, 0, 0],
-//      [ 0, 0, 0]]
+C = [[ 0, 0, 0],
+     [ 0, 0, 0]]
+
+*/
 ```
 </details>
 
@@ -456,10 +486,12 @@ cyfre::mat<int> A({{10, 1,33},
 cyfre::mat<int> B({{ 7,19, 5},
                    { 7, 6, 5}});
 
-cyfre::mat<int> C = A-B;
+cyfre::mat<int> C = A-B; /*
 
-// C = [[ 3,-18,28],
-//      [37, 44, 7]]
+C = [[ 3,-18,28],
+     [37, 44, 7]]
+
+*/
 ```
 </details>
 
@@ -475,10 +507,12 @@ cyfre::mat<int> A({{2,4,6},
 cyfre::mat<int> B({{1,4,3},
                    {2,2,1}});
 
-cyfre::mat<int> C = A/B;
+cyfre::mat<int> C = A/B; /*
 
-// C = [[2,1,2],
-//      [4,1,4]]
+C = [[2,1,2],
+     [4,1,4]]
+
+*/
 ```
 </details>
 
@@ -494,15 +528,19 @@ cyfre::mat<int> A({{2,4,6},
 cyfre::mat<int> B({{1,4,3},
                    {2,2,1}});
 
-cyfre::mat<int> C = cyfre::hadamard(A,B);
+cyfre::mat<int> C = cyfre::hadamard(A,B); /*
 
-// C = [[ 2,16,18],
-//      [16, 4, 4]]
+C = [[ 2,16,18],
+     [16, 4, 4]]
 
-A.hadamard(B); // faster in some cases because of direct operation on the A matrix
+*/
 
-// A = [[ 2,16,18],
-//      [16, 4, 4]]
+A.hadamard(B); /* faster in some cases because of direct operation on the A matrix
+
+A = [[ 2,16,18],
+     [16, 4, 4]]
+
+*/
 ```
 </details>
 
@@ -539,19 +577,22 @@ cyfre::mat<int> X({
 });
 
 
-cyfre::mat<int> X_cubed = cyfre::power(X,3);
+cyfre::mat<int> X_cubed = cyfre::power(X,3);  /*
 
-// X_cubed = [[32427  23838 25975],
-//            [37818  28389 38636],
-//            [128454 83358 17402]]
+X_cubed = [[32427  23838 25975],
+           [37818  28389 38636],
+           [128454 83358 17402]]
 
+*/
 
 cyfre::mat<int> X_squared = X;
-X_squared.power(2);
+X_squared.power(2); /*
 
-// X_squared = [[1047 666  239],
-//              [1488 1005 202],
-//              [786  702  1714]]
+X_squared = [[1047 666  239],
+             [1488 1005 202],
+             [786  702  1714]]
+
+*/
 
 ```
 </details>
@@ -617,9 +658,12 @@ cyfre::mat<int> plane({
 std::vector<int> x = plane.row(1);  
 std::vector<int> y = plane.column(1);
 
-// x = [4,5,6]
-// y = [2,5,8]
+/*
 
+x = [4,5,6]
+y = [2,5,8]
+
+*/
 ```
 </details>
 
@@ -628,7 +672,7 @@ std::vector<int> y = plane.column(1);
 <summary><b>getting row/column as std::vector of std::iterators</b></summary>
 <br>
 
-**you can modify values of rows and columns using a vector of iterator from a matrix**
+- **you can modify values of rows and columns using a vector of iterator from a matrix**
 
 ```c++
 cyfre::mat<int> P({
@@ -644,24 +688,28 @@ for(size_t i=0; i<3; ++i)
 {
     *xaxis[i] = 1;
     *yaxis[i] = 1;
-}
+}   /*
 
-// X = [[30    1    42],
-//      [1     1     1],
-//      [102   1   150]]
+X = [[30    1    42],
+     [1     1     1],
+     [102   1   150]]
 
-
-// for vectors of const_iterator use the method below instead 
-
-// std::vector<typename std::vector<int>::const_iterator> xaxis = P.row_iterators(1);
-// std::vector<typename std::vector<int>::const_iterator> yaxis = P.column_iterators(1);
+*/
 
 ```
+
+- *for vectors of const_iterator use the method below instead*
+
+```c++
+std::vector<typename std::vector<int>::const_iterator> xaxis = P.row_iterators(1);
+std::vector<typename std::vector<int>::const_iterator> yaxis = P.column_iterators(1);
+```
+
 </details>
 
 <!--=====================================================================================-->
 <details>
-<summary><b>transpose a matrix</b></summary>
+<summary><b>Transpose of a Matrix</b></summary>
 <br>
 
 ```c++
@@ -672,11 +720,41 @@ cyfre::mat<int> X({
 
 X.transpose();
 
-// X = [[1,5],
-//      [2,6],
-//      [3,7],
-//      [4,8]]
+/*
 
+X = [[1,5],
+     [2,6],
+     [3,7],
+     [4,8]]
+
+*/
+
+```
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>Reduce Row Echelon Form (rref)</b></summary>
+<br>
+
+```c++
+cyfre::mat<int> X({
+  {1,2,3,4},
+  {5,6,7,8},
+  {-2,3,-4,1}
+});
+
+X = cyfre::rref(X);
+
+/* or
+
+X.rref();
+
+X = [[1 0 0 -1],
+    [0 1 0 1],
+    [0 0 1 1]]
+
+*/
 ```
 </details>
 
@@ -685,7 +763,7 @@ X.transpose();
 --------------------------------------------------
 
 <details>
-<summary><b>the matrix itself and it's height, & width</b></summary>
+<summary><b>mat members: matrix, height, & width</b></summary>
 <br>
 
 **operator(i,j)** - performs check of indices, terminates program if indices are out of range
@@ -703,13 +781,18 @@ X.transpose();
   {
     for(size_t j=0; j<nums.width; ++j)
     {
-      // operator()
+      /* operator() */
+
       nums(i,j)*=2;
       std::cout<<nums(i,j)<<'\t';
 
-      // direct access
-      // nums.matrix[i][j]*=2;
-      // std::cout<<nums.matrix[i][j]<<'\t';
+
+      /* direct access
+
+      nums.matrix[i][j]*=2;
+      std::cout<<nums.matrix[i][j]<<'\t';
+
+      */
     }
     std::cout<<'\n';
   }
