@@ -29,14 +29,6 @@ namespace cyfre
 
     // flaten into x axis, or y axis
 
-    /// @returns reduced row echelon form of a matrix
-    template<typename T>
-    mat<T> ref(mat<T> input)
-    {
-        input.ref();
-        return input;
-    }
-
     template<typename T>
     T det(mat<T> input)
     {
@@ -102,9 +94,25 @@ namespace cyfre
 
     /// @returns reduced row echelon form of a matrix
     template<typename T>
+    mat<T> ref(mat<T> input)
+    {
+        input.ref();
+        return input;
+    }
+
+    /// @returns reduced row echelon form of a matrix
+    template<typename T>
     mat<T> rref(mat<T> input)
     {
         input.rref();
+        return input;
+    }
+
+    /// @returns inverse of a matrix
+    template<typename T>
+    mat<T> inv(mat<T> input)
+    {
+        input.inv();
         return input;
     }
 }
