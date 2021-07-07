@@ -6,6 +6,8 @@
 #include <fstream>
 #include <limits>
 #include <cstdio>
+#include <exception>
+#include <functional>
 #include "helper_functions.hpp"
 
 #define SAFECHECK 1
@@ -53,6 +55,15 @@ namespace cyfre
             matrix.push_back(default_index);
         }
 
+        mat(T one_value)
+        {
+            height = 1;
+            width = 1;
+            std::vector<T> default_index;
+            default_index.push_back(one_value);
+            matrix.push_back(default_index);
+        }
+
         /// initializes a matrix from a text file
         mat(std::string text_file, char separator)
         {
@@ -60,9 +71,10 @@ namespace cyfre
             filereader.open(text_file.c_str());
 
             if(filereader.fail()){
-                std::cerr<<"\nERROR : constructor::mat<T>(\""<<text_file<<"\")"<<std::endl;
-                std::cerr<<"\tinitialization error, text file not found or might not be supported\n";
-                exit(2);
+                throw std::ios_base::failure(
+                    std::string("\n\nERROR : constructor::mat<T>(\""+text_file+"\")\n")+
+                    "\tinitialization error, text file not found or might not be supported\n"
+                );
             }
 
             std::vector<std::string> strlines;
@@ -83,9 +95,10 @@ namespace cyfre
                     std::pair<bool,bool> isvalid_isrational = cyfre::helpers::isanumber(row_parse[j]);
                     if(!isvalid_isrational.first)
                     {
-                        std::cerr<<"\nERROR : constructor::mat<T>(\""<<text_file<<"\")"<<std::endl;
-                        std::cerr<<"\tinitialization error, invalid number inside the text file:"<<text_file<<", on line:"<<i<<"\n";
-                        exit(2);
+                        throw std::ios_base::failure(
+                            std::string("\n\nERROR : constructor::mat<T>(\""+text_file+"\")\n")+
+                            "\tinitialization error, invalid number inside the text file:"+text_file+", on line:"+std::to_string(i)+"\n"
+                        );
                     }
                     if(isvalid_isrational.second) an_integer = false;
                 }
@@ -96,10 +109,11 @@ namespace cyfre
             {
                 if(matrix_strings[i].size()!=matrix_strings[i-1].size())
                 {
-                    std::cerr<<"\nERROR : constructor::mat<T>(\""<<text_file<<"\")"<<std::endl;
-                    std::cerr<<"\tinitialization error, the text file provided an unequal length of rows\n";
-                    std::cerr<<"\terror occurs in text file after comparison on line "<<i<<" & "<<i+1<<"\n";
-                    exit(2);
+                    throw std::length_error(
+                        std::string("\n\nERROR : constructor::mat<T>(\""+text_file+"\")\n")+
+                        std::string("\tinitialization error, the text file provided an unequal length of rows\n")+
+                        std::string("\terror occurs in text file after comparison on line "+std::to_string(i)+" & "+std::to_string(i+1)+"\n")
+                    );
                 }
             }
 
@@ -125,9 +139,10 @@ namespace cyfre
         {
             if(matrix.empty())
             {
-                std::cerr<<"\n\nERROR : mat(std::vector<std::vector<T>>)\n";
-                std::cerr<<"\tthe outer 'std::vector<>' is empty\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : mat(std::vector<std::vector<T>>)\n")+
+                    "\tthe outer 'std::vector<>' is empty\n"
+                );
             }
 
             size_t prev_row_len = matrix[0].size();
@@ -135,9 +150,10 @@ namespace cyfre
             {
                 if(matrix[i].size()!=prev_row_len)
                 {
-                    std::cerr<<"\n\nERROR : mat(std::vector<std::vector<T>>)\n";
-                    std::cerr<<"\tthe inner vector rows inside <std::vector'<std::vector<T>'> is not equal\n";
-                    exit(1);
+                    throw std::length_error(
+                        std::string("\n\nERROR : mat(std::vector<std::vector<T>>)\n")+
+                        "\tthe inner vector rows inside <std::vector'<std::vector<T>'> is not equal\n"
+                    );
                 }
                 prev_row_len = matrix[0].size();
             }
@@ -195,12 +211,12 @@ namespace cyfre
                 case IDENTITY: break;
                 case NULLZERO: break;
                 case SCALAR  :
-                    std::cerr<<"\n\nERROR : mat(MATRIX_TYPES matrix_type, size_t n, T scalar)\n";
-                    std::cerr<<"\tSCALAR matrix initialization, missing argument\n";
-                    exit(1);
+                    throw std::invalid_argument(
+                        std::string("\n\nERROR : mat(MATRIX_TYPES matrix_type, size_t n, T scalar)\n")+
+                        "\tSCALAR matrix initialization, missing argument\n"
+                    );
                 default:
-                    std::cerr<<"\n\nERROR : mat()\n\tmatrix initialization\n";
-                    exit(1);
+                    throw std::invalid_argument("\n\nERROR : mat()\n\tmatrix initialization - constructor invalid given an invalid MATRIX_TYPES\n");
             }
         }
 
@@ -217,11 +233,10 @@ namespace cyfre
 
             if(length!=iter_tuple2.size())
             {
-                std::cerr<<"\n\nERROR : T dot(std::vector<typename std::vector<T>> iter_tuple1, std::vector<typename std::vector<T>> iter_tuple2)\n";
-                std::cerr<<"\tarray don't have the same lenght\n";
-                std::cout<<"\titer_tuple1 length : "<<iter_tuple1.size()<<'\n';
-                std::cout<<"\titer_tuple2 length : "<<iter_tuple2.size()<<'\n';
-                exit(1); 
+                throw std::length_error(
+                    std::string("\n\nERROR : T dot(std::vector<typename std::vector<T>> iter_tuple1, std::vector<typename std::vector<T>> iter_tuple2)\n")+
+                    "\tarray don't have the same lenght\n"
+                ); 
             }
             
             T summation = (T)0;
@@ -244,9 +259,10 @@ namespace cyfre
         {
             if(width!=height)
             {
-                std::cerr<<"\n\nERROR : mat.trace()\n";
-                std::cerr<<"\tthe matrix is not a square matrix, cannot get trace\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : mat.trace()\n")+
+                    "\tthe matrix is not a square matrix, cannot get trace\n"
+                );
             }
 
             T trace_total = 0;
@@ -260,9 +276,10 @@ namespace cyfre
         {
             if((row_index < 0) ^ (row_index > height-1))
             {
-                std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index)\n";
-                std::cerr<<"\tthe given row index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index)\n")+
+                    "\tthe given row index is out of bound\n"
+                );
             }
 
             std::vector<typename std::vector<T>::const_iterator> row_iterator;
@@ -275,9 +292,10 @@ namespace cyfre
         {
             if((row_index < 0) ^ (row_index > height-1))
             {
-                std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::iterator> row_iterators_r(size_t row_index)\n";
-                std::cerr<<"\tthe given row index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : std::vector<typename std::vector<T>::iterator> row_iterators_r(size_t row_index)\n")+
+                    "\tthe given row index is out of bound\n"
+                );
             }
 
             std::vector<typename std::vector<T>::iterator> row_iterator;
@@ -290,9 +308,10 @@ namespace cyfre
         {
             if((row_index < 0) ^ (row_index > height-1))
             {
-                std::cerr<<"\n\nERROR : std::vector<std::vector<T>> row(size_t row_index)\n";
-                std::cerr<<"\tthe given row index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : std::vector<std::vector<T>> row(size_t row_index)\n")+
+                    "\tthe given row index is out of bound\n"
+                );
             }
 
             std::vector<std::vector<T>> row_vector;
@@ -306,9 +325,10 @@ namespace cyfre
         {
             if((row_index < 0) ^ (row_index > height-1))
             {
-                std::cerr<<"\n\nERROR : void scale_row(const size_t row_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n";
-                std::cerr<<"\tthe given row index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void scale_row(const size_t row_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n")+
+                    "\tthe given row index is out of bound\n"
+                );
             }
 
             auto operation_function = [scalar_operation](const T matrix_index,const T operation_value)
@@ -320,9 +340,10 @@ namespace cyfre
                     case MUL: return matrix_index*operation_value;
                     case DIV: return matrix_index/operation_value;
                     default:
-                        std::cerr<<"\n\nERROR : scale_row(const size_t row_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n";
-                        std::cerr<<"\tscale_row was given an invalid operation\n";
-                        exit(1);
+                        throw std::invalid_argument(
+                            std::string("\n\nERROR : scale_row(const size_t row_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n")+
+                            "\tscale_row was given an invalid operation\n"
+                        );
                 }
             };
 
@@ -336,15 +357,17 @@ namespace cyfre
         {
             if((output_index < 0) ^ (output_index > height-1))
             {
-                std::cerr<<"\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
-                std::cerr<<"\tthe given row 'output_index' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                    "\tthe given row 'output_index' is out of bound\n"
+                );
             }
             else if((input_index < 0) ^ (input_index > height-1))
             {
-                std::cerr<<"\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
-                std::cerr<<"\tthe given row 'input_index'  is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                    "\tthe given row 'input_index'  is out of bound\n"
+                );
             }
 
             auto operation_function = [scalar_operation](const T matrix_index,const T operation_value)
@@ -356,9 +379,10 @@ namespace cyfre
                     case MUL: return matrix_index*operation_value;
                     case DIV: return matrix_index/operation_value;
                     default:
-                        std::cerr<<"\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
-                        std::cerr<<"\tthe 'scalar_operation' given was invalid\n";
-                        exit(1);
+                        throw std::invalid_argument(
+                            std::string("\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                            "\tthe 'scalar_operation' given was invalid\n"
+                        );
                 }
             };
 
@@ -374,15 +398,17 @@ namespace cyfre
             #ifdef SAFECHECK
             if((row_a < 0) ^ (row_a > height-1))
             {
-                std::cerr<<"\n\nERROR : void row_swap(size_t row_a, size_t row_b)\n";
-                std::cerr<<"\tthe given row 'row_a' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void row_swap(size_t row_a, size_t row_b)\n")+
+                    "\tthe given row 'row_a' is out of bound\n"
+                );
             }
             else if((row_b < 0) ^ (row_b > height-1))
             {
-                std::cerr<<"\n\nERROR : void row_swap(size_t row_a, size_t row_b)\n";
-                std::cerr<<"\tthe given row 'row_b'  is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void row_swap(size_t row_a, size_t row_b)\n")+
+                    "\tthe given row 'row_b'  is out of bound\n"
+                );
             }
             #endif
 
@@ -405,9 +431,10 @@ namespace cyfre
             #ifdef SAFECHECK
             if((base_row < 0) ^ (base_row > height-1))
             {
-                std::cerr<<"\n\nERROR : void row_scale(S scalar, size_t base_row)\n";
-                std::cerr<<"\tthe given row 'base_row' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void row_scale(S scalar, size_t base_row)\n")+
+                    "\tthe given row 'base_row' is out of bound\n"
+                );
             }
             #endif
 
@@ -428,15 +455,17 @@ namespace cyfre
             #ifdef SAFECHECK
             if((scale_row < 0) ^ (scale_row > height-1))
             {
-                std::cerr<<"\n\nERROR : void row_scale(S scalar, size_t scale_row, size_t scale_row)\n";
-                std::cerr<<"\tthe given row 'scale_row' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void row_scale(S scalar, size_t scale_row, size_t scale_row)\n")+
+                    "\tthe given row 'scale_row' is out of bound\n"
+                );
             }
             else if((base_row < 0) ^ (base_row > height-1))
             {
-                std::cerr<<"\n\nERROR : void row_scale(S scalar, size_t scale_row, size_t base_row)\n";
-                std::cerr<<"\tthe given row 'base_row' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void row_scale(S scalar, size_t scale_row, size_t base_row)\n")+
+                    "\tthe given row 'base_row' is out of bound\n"
+                );
             }
             #endif
 
@@ -453,9 +482,10 @@ namespace cyfre
         {
             if((column_index < 0) ^ (column_index > width-1))
             {
-                std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index)\n";
-                std::cerr<<"\tthe given column index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index)\n")+
+                    "\tthe given column index is out of bound\n"
+                );
             }
 
             std::vector<typename std::vector<T>::const_iterator> column_iterator;
@@ -468,9 +498,10 @@ namespace cyfre
         {
             if((column_index < 0) ^ (column_index > width-1))
             {
-                std::cerr<<"\n\nERROR : std::vector<typename std::vector<T>::iterator> column_iterators_r(size_t column_index)\n";
-                std::cerr<<"\tthe given column index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : std::vector<typename std::vector<T>::iterator> column_iterators_r(size_t column_index)\n")+
+                    "\tthe given column index is out of bound\n"
+                );
             }
 
             std::vector<typename std::vector<T>::iterator> column_iterator;
@@ -483,9 +514,10 @@ namespace cyfre
         {
             if((column_index < 0) ^ (column_index > width-1))
             {
-                std::cerr<<"\n\nERROR : std::vector<std::vector<T>> column(size_t column_index)\n";
-                std::cerr<<"\tthe given column index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : std::vector<std::vector<T>> column(size_t column_index)\n")+
+                    "\tthe given column index is out of bound\n"
+                );
             }
 
             std::vector<std::vector<T>> column_vector;
@@ -499,9 +531,10 @@ namespace cyfre
         {
             if((column_index < 0) ^ (column_index > width-1))
             {
-                std::cerr<<"\n\nERROR : void scale_column(const size_t column_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n";
-                std::cerr<<"\tthe given column index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void scale_column(const size_t column_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n")+
+                    "\tthe given column index is out of bound\n"
+                );
             }
 
             auto operation_function = [scalar_operation](const T matrix_index,const T operation_value)
@@ -513,9 +546,10 @@ namespace cyfre
                     case MUL: return matrix_index*operation_value;
                     case DIV: return matrix_index/operation_value;
                     default:
-                        std::cerr<<"\n\nERROR : scale_column(const size_t column_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n";
-                        std::cerr<<"\tscale_column was given an invalid operation\n";
-                        exit(1);
+                        throw std::invalid_argument(
+                            std::string("\n\nERROR : scale_column(const size_t column_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n")+
+                            "\tscale_column was given an invalid scalar operation\n"
+                        );
                 }
             };
 
@@ -529,15 +563,17 @@ namespace cyfre
         {
             if((output_index < 0) ^ (output_index > width-1))
             {
-                std::cerr<<"\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
-                std::cerr<<"\tthe given column 'output_index' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                    "\tthe given column 'output_index' is out of bound\n"
+                );
             }
             else if((input_index < 0) ^ (input_index > width-1))
             {
-                std::cerr<<"\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
-                std::cerr<<"\tthe given column 'input_index' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                    "\tthe given column 'input_index' is out of bound\n"
+                );
             }
 
             auto operation_function = [scalar_operation](const T matrix_index,const T operation_value)
@@ -549,9 +585,10 @@ namespace cyfre
                     case MUL: return matrix_index*operation_value;
                     case DIV: return matrix_index/operation_value;
                     default:
-                        std::cerr<<"\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n";
-                        std::cerr<<"\tthe 'scalar_operation' given was invalid\n";
-                        exit(1);
+                        throw std::invalid_argument(
+                            std::string("\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                            "\tthe 'scalar_operation' given was invalid\n"
+                        );
                 }
             };
 
@@ -567,15 +604,17 @@ namespace cyfre
             #ifdef SAFECHECK
             if((column_a < 0) ^ (column_a > width-1))
             {
-                std::cerr<<"\n\nERROR : void column_swap(size_t column_a, size_t column_b)\n";
-                std::cerr<<"\tthe given column 'column_a' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void column_swap(size_t column_a, size_t column_b)\n")+
+                    "\tthe given column 'column_a' is out of bound\n"
+                );
             }
             else if((column_b < 0) ^ (column_b > width-1))
             {
-                std::cerr<<"\n\nERROR : void column_swap(size_t column_a, size_t column_b)\n";
-                std::cerr<<"\tthe given column 'column_b'  is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void column_swap(size_t column_a, size_t column_b)\n")+
+                    "\tthe given column 'column_b'  is out of bound\n"
+                );
             }
             #endif
 
@@ -598,9 +637,10 @@ namespace cyfre
             #ifdef SAFECHECK
             if((base_column < 0) ^ (base_column > width-1))
             {
-                std::cerr<<"\n\nERROR : void column_scale(S scalar, size_t base_column)\n";
-                std::cerr<<"\tthe given column 'base_column' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void column_scale(S scalar, size_t base_column)\n")+
+                    "\tthe given column 'base_column' is out of bound\n"    
+                );
             }
             #endif
 
@@ -621,15 +661,17 @@ namespace cyfre
             #ifdef SAFECHECK
             if((scale_column < 0) ^ (scale_column > width-1))
             {
-                std::cerr<<"\n\nERROR : void column_scale(S scalar, size_t scale_column, size_t scale_column)\n";
-                std::cerr<<"\tthe given column 'scale_column' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void column_scale(S scalar, size_t scale_column, size_t scale_column)\n")+
+                    "\tthe given column 'scale_column' is out of bound\n"
+                );
             }
             else if((base_column < 0) ^ (base_column > width-1))
             {
-                std::cerr<<"\n\nERROR : void column_scale(S scalar, size_t scale_column, size_t base_column)\n";
-                std::cerr<<"\tthe given column 'base_column' is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : void column_scale(S scalar, size_t scale_column, size_t base_column)\n")+
+                    "\tthe given column 'base_column' is out of bound\n"
+                );
             }
             #endif
 
@@ -645,15 +687,17 @@ namespace cyfre
         {
             if((i < 0) ^ (i > height-1))
             {
-                std::cerr<<"\n\nERROR : T& operator()(size_t i, size_t j)\n";
-                std::cerr<<"\tthe given row index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : T& operator()(size_t i, size_t j)\n")+
+                    "\tthe given row index is out of bound\n"
+                );
             }
             else if((j < 0) ^ (j > width-1))
             {
-                std::cerr<<"\n\nERROR : T& operator()(size_t i, size_t j)\n";
-                std::cerr<<"\tthe given column index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : T& operator()(size_t i, size_t j)\n")+
+                    "\tthe given column index is out of bound\n"
+                );
             }
             return matrix[i][j];
         }
@@ -662,15 +706,17 @@ namespace cyfre
         {
             if((i < 0) ^ (i > height-1))
             {
-                std::cerr<<"\n\nERROR : const T& operator()(size_t i, size_t j)\n";
-                std::cerr<<"\tthe given row index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : const T& operator()(size_t i, size_t j)\n")+
+                    "\tthe given row index is out of bound\n"
+                );
             }
             else if((j < 0) ^ (j > width-1))
             {
-                std::cerr<<"\n\nERROR : const T& operator()(size_t i, size_t j)\n";
-                std::cerr<<"\tthe given column index is out of bound\n";
-                exit(1);
+                throw std::out_of_range(
+                    std::string("\n\nERROR : const T& operator()(size_t i, size_t j)\n")+
+                    "\tthe given column index is out of bound\n"
+                );
             }
             return matrix[i][j];
         }
@@ -683,9 +729,10 @@ namespace cyfre
         {
             if(this->width!=that.width || this->height!=that.height)
             {
-                std::cerr<<"\n\nERROR : mat operator+(const mat& that) const\n";
-                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : mat operator+(const mat& that) const\n")+
+                    "\taddition of two different shaped matrix is not allowed\n"
+                );
             }
             
             mat answer = *this;
@@ -701,9 +748,10 @@ namespace cyfre
         {
             if(this->width!=that.width || this->height!=that.height)
             {
-                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
-                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : mat operator+=(const mat& that) const\n")+
+                    "\taddition of two different shaped matrix is not allowed\n"
+                );
             }
             
             for(size_t i=0; i<height; ++i)
@@ -755,9 +803,10 @@ namespace cyfre
         {
             if(this->width!=that.width || this->height!=that.height)
             {
-                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
-                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : mat operator-(const mat& that) const\n")+
+                    "\taddition of two different shaped matrix is not allowed\n"
+                );
             }
             
             mat answer = *this;
@@ -773,9 +822,10 @@ namespace cyfre
         {
             if(this->width!=that.width || this->height!=that.height)
             {
-                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
-                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : mat operator-=(const mat& that) const\n")+
+                    "\taddition of two different shaped matrix is not allowed\n"
+                );
             }
             
             for(size_t i=0; i<height; ++i)
@@ -827,9 +877,10 @@ namespace cyfre
         {
             if(this->width!=that.width || this->height!=that.height)
             {
-                std::cerr<<"\n\nERROR : mat operator/(const mat& that) const\n";
-                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : mat operator/(const mat& that) const\n")+
+                    "\taddition of two different shaped matrix is not allowed\n"
+                );
             }
             
             mat answer = *this;
@@ -845,9 +896,10 @@ namespace cyfre
         {
             if(this->width!=that.width || this->height!=that.height)
             {
-                std::cerr<<"\n\nERROR : mat operator-(const mat& that) const\n";
-                std::cerr<<"\taddition of two different shaped matrix is not allowed\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : mat operator/=(const mat& that) const\n")+
+                    "\taddition of two different shaped matrix is not allowed\n"
+                );
             }
             
             for(size_t i=0; i<height; ++i)
@@ -899,10 +951,11 @@ namespace cyfre
         {
             if(this->width!=that.height)
             {
-                std::cerr<<"\n\nERROR : mat operator*(const mat& that) const\n";
-                std::cerr<<"\tmultiplication of incompatible matrix shapes\n";
-                std::cerr<<"\tmat_a columns is not equal to the mat_b rows\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : mat operator*(const mat& that) const\n")+
+                    std::string("\tmultiplication of incompatible matrix shapes\n")+
+                    "\tmat_a columns is not equal to the mat_b rows\n"
+                );
             }
 
             mat answer(height,that.width,0);
@@ -934,9 +987,10 @@ namespace cyfre
         {
             if(this->width!=that.width || this->height!=that.height)
             {
-                std::cerr<<"\n\nERROR : static mat hadamard(const mat& left, const mat& that) const\n";
-                std::cerr<<"\thadamard multiplication of two different shaped matrix is not allowed\n";
-                exit(1);
+                throw std::length_error(
+                    std::string("\n\nERROR : static mat hadamard(const mat& left, const mat& that) const\n")+
+                    "\thadamard multiplication of two different shaped matrix is not allowed\n"
+                );
             }
             
             for(size_t i=0; i<height; ++i)
@@ -990,13 +1044,11 @@ namespace cyfre
         {
             if(width!=height)
             {
-                std::cerr<<"\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n";
-                exit(1);
+                throw std::length_error("\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n");
             }
             else if(p<0)
             {
-                std::cerr<<"\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n";
-                exit(1);
+                throw std::domain_error("\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n");
             }
             if(p==0)
             {
@@ -1050,7 +1102,7 @@ namespace cyfre
         /// converts matrix to it's inverse form
         void inv()
         {
-            if(height!=width) throw std::length_error("cyfre::mat::inv() - cannot inverse a non-square matrix");
+            if(height!=width) throw std::length_error("\n\nERROR : cyfre::mat::inv() - cannot inverse a non-square matrix");
 
             mat inverse(IDENTITY,height);
 
@@ -1111,7 +1163,7 @@ namespace cyfre
 
             for(size_t i=0; i<height; ++i)
             {
-                if(matrix[i][i]==0) throw std::domain_error("cyfre::mat::inv() - matrix determinant is zero, cannot invert matrix");
+                if(matrix[i][i]==0) throw std::domain_error("\n\nERROR: cyfre::mat::inv() - matrix determinant is zero, cannot invert matrix");
             }
 
             matrix = inverse.matrix;
@@ -1215,6 +1267,18 @@ namespace cyfre
                 fix_pivot(*this,cpi,cpj);
                 cpi++;
                 cpj++;
+            }
+        }
+
+        // ================ applying function
+        void apply(std::function<T(T)> function_name)
+        {
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    matrix[i][j] = function_name(matrix[i][j]);
+                }
             }
         }
 

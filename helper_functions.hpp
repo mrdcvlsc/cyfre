@@ -39,13 +39,10 @@ namespace cyfre::helpers
         }
         catch(size_t NO_VALUE_ERROR)
         {
-            std::cerr<<"\n\x1B[31mbignum ERROR\033[0m [check] : NUMBER HAS NO VALUE\n";
             return {false,false};
         }
         catch(std::string VALUE_ERROR)
         {
-
-            std::cerr<<"\nERROR : YOU ASSIGNED AN INVALID NUMBER FORMAT("<<VALUE_ERROR<<")\n";
             return {false,false};
         }
         return {true,rational_true};
