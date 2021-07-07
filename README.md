@@ -601,7 +601,9 @@ X = [[529 144  2809 1156 529],
 
 */
 ```
-**NOTE: the function should only have one parameter, and... it's parameter type and return type should be of the same type**
+**NOTE:**
+  - the function should only have one parameter
+  - the function's return type, and parameter type should be the same as the matrix type
 
 </details>
 
