@@ -9,13 +9,7 @@ namespace cyfre
     template<typename T>
     mat<T> transpose(mat<T> input)
     {
-        for(size_t i=0; i<input.height; ++i)
-        {
-            for(size_t j=0; j<input.width; ++j)
-            {
-                input.matrix[j][i] = input.matrix[i][j]; 
-            }
-        }
+        input.transpose();
         return input;
     }
 
