@@ -12,7 +12,7 @@ This library uses cpp stl's std::vector intensively
 --------------------------------------------------
 
 <details>
-<summary><b><i>CONSTRUCTORS</i></b></summary>
+<summary><b><i>matrix initializations (CONSTRUCTORS)</i></b></summary>
 <br>
 
 <!--=====================================================================================-->
@@ -22,16 +22,16 @@ This library uses cpp stl's std::vector intensively
   
   **defined** :
   ```c++
-  cyfre::MATRIX_TYPES{IDENTITY,NULLZERO,SCALAR}
+  enum TYPE {IDENTITY,NULLZERO,SCALAR};
   ```
 
   <br>
 
   **use :**
-  *cyfre::MATRIX_TYPES*
+  *cyfre::TYPE*
   ex:
   ```c++
-  cyfre::NULLZERO // to select
+  cyfre::TYPE::NULLZERO // to select
   ```
 </details>
 
@@ -43,7 +43,7 @@ This library uses cpp stl's std::vector intensively
   **construct an identity matrix**
 
   ```c++
-  cyfre::mat<int> mat_object(cyfre::IDENTITY,3);  /*
+  cyfre::mat<int> mat_object(cyfre::TYPE::IDENTITY,3);  /*
 
   mat_object = [[1,0,0],
                 [0,1,0],
@@ -62,7 +62,7 @@ This library uses cpp stl's std::vector intensively
   **construct an scalar matrix**
 
   ```c++
-  cyfre::mat<int> mat_object(cyfre::SCALAR,3,7);  /*
+  cyfre::mat<int> mat_object(cyfre::TYPE::SCALARMATRIX,3,7);  /*
 
   mat_object = [[7,0,0],
                 [0,7,0],
@@ -81,7 +81,7 @@ This library uses cpp stl's std::vector intensively
   **construct an zero/null matrix**
 
   ```c++
-  cyfre::mat<int> mat_object(cyfre::NULLZERO,3);  /*
+  cyfre::mat<int> mat_object(cyfre::TYPE::NULLZERO,3);  /*
 
   mat_object = [[0,0,0],
                 [0,0,0],
@@ -94,7 +94,7 @@ This library uses cpp stl's std::vector intensively
 
 <!--=====================================================================================-->
 <details>
-<summary><b>shaped matrix with values</b></summary>
+<summary><b>shaped matrix with initial value</b></summary>
 <br>
   
   **construct an costum shaped matrix, with initial values**
@@ -107,6 +107,25 @@ This library uses cpp stl's std::vector intensively
                 [5]]
 
   */
+  ```
+
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>shaped matrix with random values</b></summary>
+<br>
+  
+  **ex. constructs a 4x5 matrix with random integer values ranging from 10-99**
+
+  ```c++
+  cyfre::mat<int> INT_MATRIX(4,5,cyfre::RANDOM::INTEGER,10,99);
+  ```
+
+  **ex. constructs a 3x3 matrix with random real values ranging from 0.0-1.0**
+
+  ```c++
+  cyfre::mat<double> FLOAT_MATRIX(4,5,cyfre::RANDOM::REAL,0,1);
   ```
 
 </details>

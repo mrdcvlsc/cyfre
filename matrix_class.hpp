@@ -7,8 +7,10 @@
 #include <limits>
 #include <cstdio>
 #include <exception>
+#include <random>
 #include <functional>
 #include "helper_functions.hpp"
+#include "randomizer.hpp"
 
 #define SAFECHECK 1
 
@@ -18,20 +20,21 @@
 
 namespace cyfre
 {
-    enum MATRIX_TYPES{
-        /// @arg - a square matrix where every elements in the main diagonal has a value of '1'
-        IDENTITY,
+    /// MATRIX TYPES FOR CONSTRUCTING A MATRIX
+    enum TYPE{
         /// @arg - a square matrix where every element is '0'
         NULLZERO,
+        /// @arg - a square matrix where every elements in the main diagonal has a value of '1'
+        IDENTITY,
         /// @arg - a square matrix where every elements in the main diagonal has a value of a given 'N'
-        SCALAR,
-        /// @arg - a nx1 matrix
-        COLUMN,
-        /// @arg - a 1xn matrix
-        ROW
+        SCALARMATRIX
     };
 
-    enum SCALAR_OPERATIONS { ADD, SUB, MUL, DIV };
+    /// enum type for random value constructor
+    enum RANDOM{ INTEGER, REAL };
+
+    /// SCALAR OPERATIONS
+    enum SCALAR { ADD, SUB, MUL, DIV };
 
     template<typename T>
     class mat
@@ -186,10 +189,38 @@ namespace cyfre
             while(i--) matrix.push_back(row);
         }
 
-        /// initializes a square matrix with a given 'x' scalar values of elements in the main diagonal
-        mat(const MATRIX_TYPES matrix_type, const size_t n, T scalar)
+        /// initializes a matrix given a @arg height, @arg width for the matrix shape, that have a random values form the given @arg lower_bound to @arg upper_bound
+        mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound)
         {
-            if(matrix_type==IDENTITY) scalar = 1;
+            this->height = height;
+            this->width  = width;
+
+            for(size_t i=0; i<height; ++i)
+            {
+                std::vector<T> row;
+                row.reserve(width);
+                for(size_t j=0; j<width; ++j)
+                {
+                    switch(typechoice)
+                    {
+                        case RANDOM::INTEGER:
+                            row.push_back(randomize::integer<long long int,std::mt19937_64>(lower_bound,upper_bound));
+                            break;
+                        case RANDOM::REAL:
+                            row.push_back(randomize::real<long double,std::mt19937_64>(lower_bound,upper_bound));
+                            break;
+                        default:
+                            throw std::invalid_argument("\n\nERROR : mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound)\n\tinvalid random type");
+                    }
+                }
+                matrix.push_back(row);
+            }
+        }
+
+        /// initializes a square matrix with a given 'x' scalar values of elements in the main diagonal
+        mat(const TYPE matrix_type, const size_t n, T scalar)
+        {
+            if(matrix_type==TYPE::IDENTITY) scalar = 1;
 
             size_t i=n, j=n;
             height = width = n;
@@ -204,19 +235,19 @@ namespace cyfre
             for(size_t i=0; i<n; ++i) matrix[i][i] = scalar;
         }
         
-        mat(const MATRIX_TYPES matrix_type, const size_t n) : mat(matrix_type,n,0)
+        mat(const TYPE matrix_type, const size_t n) : mat(matrix_type,n,0)
         {
             switch(matrix_type)
             {
-                case IDENTITY: break;
-                case NULLZERO: break;
-                case SCALAR  :
+                case TYPE::IDENTITY: break;
+                case TYPE::NULLZERO: break;
+                case TYPE::SCALARMATRIX  :
                     throw std::invalid_argument(
-                        std::string("\n\nERROR : mat(MATRIX_TYPES matrix_type, size_t n, T scalar)\n")+
+                        std::string("\n\nERROR : mat(TYPE matrix_type, size_t n, T scalar)\n")+
                         "\tSCALAR matrix initialization, missing argument\n"
                     );
                 default:
-                    throw std::invalid_argument("\n\nERROR : mat()\n\tmatrix initialization - constructor invalid given an invalid MATRIX_TYPES\n");
+                    throw std::invalid_argument("\n\nERROR : mat()\n\tmatrix initialization - constructor invalid given an invalid TYPE\n");
             }
         }
 
@@ -321,12 +352,12 @@ namespace cyfre
         }
 
         /// 'ADD,SUB,MUL, or DIV' a given 'const T value' to all elements of a selected 'const size_t row_index' 
-        void scale_row(const size_t row_index, const SCALAR_OPERATIONS scalar_operation, const T value)
+        void scale_row(const size_t row_index, const SCALAR scalar_operation, const T value)
         {
             if((row_index < 0) ^ (row_index > height-1))
             {
                 throw std::out_of_range(
-                    std::string("\n\nERROR : void scale_row(const size_t row_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n")+
+                    std::string("\n\nERROR : void scale_row(const size_t row_index, const SCALAR scalar_operation, const T value)\n")+
                     "\tthe given row index is out of bound\n"
                 );
             }
@@ -341,7 +372,7 @@ namespace cyfre
                     case DIV: return matrix_index/operation_value;
                     default:
                         throw std::invalid_argument(
-                            std::string("\n\nERROR : scale_row(const size_t row_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n")+
+                            std::string("\n\nERROR : scale_row(const size_t row_index, const SCALAR scalar_operation, const T value)\n")+
                             "\tscale_row was given an invalid operation\n"
                         );
                 }
@@ -353,19 +384,19 @@ namespace cyfre
             }
         }
 
-        void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)
+        void row_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)
         {
             if((output_index < 0) ^ (output_index > height-1))
             {
                 throw std::out_of_range(
-                    std::string("\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                    std::string("\n\nERROR : void row_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)\n")+
                     "\tthe given row 'output_index' is out of bound\n"
                 );
             }
             else if((input_index < 0) ^ (input_index > height-1))
             {
                 throw std::out_of_range(
-                    std::string("\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                    std::string("\n\nERROR : void row_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)\n")+
                     "\tthe given row 'input_index'  is out of bound\n"
                 );
             }
@@ -380,7 +411,7 @@ namespace cyfre
                     case DIV: return matrix_index/operation_value;
                     default:
                         throw std::invalid_argument(
-                            std::string("\n\nERROR : void row_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                            std::string("\n\nERROR : void row_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)\n")+
                             "\tthe 'scalar_operation' given was invalid\n"
                         );
                 }
@@ -527,12 +558,12 @@ namespace cyfre
         }
 
         /// 'ADD,SUB,MUL, or DIV' a given 'const T value' to all elements of a selected 'const size_t column_index'
-        void scale_column(const size_t column_index, const SCALAR_OPERATIONS scalar_operation, const T value)
+        void scale_column(const size_t column_index, const SCALAR scalar_operation, const T value)
         {
             if((column_index < 0) ^ (column_index > width-1))
             {
                 throw std::out_of_range(
-                    std::string("\n\nERROR : void scale_column(const size_t column_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n")+
+                    std::string("\n\nERROR : void scale_column(const size_t column_index, const SCALAR scalar_operation, const T value)\n")+
                     "\tthe given column index is out of bound\n"
                 );
             }
@@ -547,7 +578,7 @@ namespace cyfre
                     case DIV: return matrix_index/operation_value;
                     default:
                         throw std::invalid_argument(
-                            std::string("\n\nERROR : scale_column(const size_t column_index, const SCALAR_OPERATIONS scalar_operation, const T value)\n")+
+                            std::string("\n\nERROR : scale_column(const size_t column_index, const SCALAR scalar_operation, const T value)\n")+
                             "\tscale_column was given an invalid scalar operation\n"
                         );
                 }
@@ -559,19 +590,19 @@ namespace cyfre
             }
         }
 
-        void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)
+        void column_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)
         {
             if((output_index < 0) ^ (output_index > width-1))
             {
                 throw std::out_of_range(
-                    std::string("\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                    std::string("\n\nERROR : void column_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)\n")+
                     "\tthe given column 'output_index' is out of bound\n"
                 );
             }
             else if((input_index < 0) ^ (input_index > width-1))
             {
                 throw std::out_of_range(
-                    std::string("\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                    std::string("\n\nERROR : void column_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)\n")+
                     "\tthe given column 'input_index' is out of bound\n"
                 );
             }
@@ -586,7 +617,7 @@ namespace cyfre
                     case DIV: return matrix_index/operation_value;
                     default:
                         throw std::invalid_argument(
-                            std::string("\n\nERROR : void column_operation(const size_t output_index, const SCALAR_OPERATIONS scalar_operation, size_t input_index)\n")+
+                            std::string("\n\nERROR : void column_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)\n")+
                             "\tthe 'scalar_operation' given was invalid\n"
                         );
                 }
@@ -1052,7 +1083,7 @@ namespace cyfre
             }
             if(p==0)
             {
-                mat<T> identity(IDENTITY,width);
+                mat<T> identity(TYPE::IDENTITY,width);
                 *this = identity;
             }
             else if(p>=2)
@@ -1104,7 +1135,7 @@ namespace cyfre
         {
             if(height!=width) throw std::length_error("\n\nERROR : cyfre::mat::inv() - cannot inverse a non-square matrix");
 
-            mat inverse(IDENTITY,height);
+            mat inverse(TYPE::IDENTITY,height);
 
             auto nonzrow = [](const mat<T>& input, size_t i, size_t j) -> long long int
             {
@@ -1270,7 +1301,7 @@ namespace cyfre
             }
         }
 
-        // ================ applying function
+        // ================ applying function ==============================
         void apply(std::function<T(T)> function_name)
         {
             for(size_t i=0; i<height; ++i)
