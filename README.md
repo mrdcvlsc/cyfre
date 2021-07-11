@@ -7,7 +7,7 @@
 
 **```#include "cyfre/cyfre.hpp"```**
 
-This library uses cpp stl's std::vector intensively
+This library uses cpp stl's std::vector intensively, please don't use this in production, I suggest using Eigen instead
 
 --------------------------------------------------
 
