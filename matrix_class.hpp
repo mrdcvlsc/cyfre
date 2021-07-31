@@ -437,6 +437,44 @@ namespace cyfre
             return trace_total;
         }
 
+        T max()
+        {
+            size_t n = height*width;
+
+            if(!n)
+            {
+                throw std::range_error("ERROR : T max() - the matrix is empty, there is no maximum");
+            }
+
+            T maximum = matrix[0];
+            for(size_t i=1; i<n; ++i)
+            {
+                if(matrix[i]>maximum)
+                {
+                    maximum = matrix[i];
+                }
+            }
+        }
+
+        T min()
+        {
+            size_t n = height*width;
+            
+            if(!n)
+            {
+                throw std::range_error("ERROR : T min() - the matrix is empty, there is no minimum");
+            }
+
+            T minimum = matrix[0];
+            for(size_t i=1; i<n; ++i)
+            {
+                if(matrix[i]<minimum)
+                {
+                    minimum = matrix[i];
+                }
+            }
+        }
+
         // ============================== ROW ==============================
 
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a row
@@ -1583,7 +1621,7 @@ namespace cyfre
                 {
                     for(size_t k=0; k<this->width; ++k)
                     {
-                        answer(i,j) = matrix[i*width+k] * that.matrix[k*that.width+j];
+                        answer(i,j) += matrix[i*width+k] * that.matrix[k*that.width+j];
                     }
                 }
             }
@@ -2037,36 +2075,91 @@ namespace cyfre
     template<typename T>
     void display(const mat<T>& input)
     {
+
+        // 100 width can still be displayed
+        // 60 height can still be displayed
+
         #ifdef DISPLAY_FUNC_CALLS
         auto start = std::chrono::high_resolution_clock::now();
         std::cout<<"void display(const mat<T>& input)\n";
         #endif
 
-        std::cout<<"[";
+        std::vector<std::string> matrixstr;
+
+        size_t n = input.height*input.width;
+
+        for(size_t i=0; i<n; ++i) matrixstr.push_back(std::to_string(input.matrix[i]));
+
+        auto maxcol_len = [&input,&matrixstr](size_t j) -> size_t
+        {
+            size_t maxlen = matrixstr[0].size();
+            for(size_t i=1; i<input.height; ++i)
+            {
+                if(matrixstr[i*input.width+j].size()>maxlen) maxlen = matrixstr[i*input.width+j].size();
+            }
+            return maxlen;
+        };
+
+        std::vector<std::string> display_nums;
+        display_nums.reserve(n);
+
+        size_t pad_space = 0;
         for(size_t i=0; i<input.height; ++i)
         {
-            std::cout<<"[";
             for(size_t j=0; j<input.width; ++j)
             {
-                if(input.matrix[i*input.width+j]==0)
-                    std::cout<<std::abs(input.matrix[i*input.width+j]);
-                else
-                    std::cout<<input.matrix[i*input.width+j];
-
-                if(j!=input.width-1) std::cout<<' ';
+                size_t maxlen = maxcol_len(j);
+                pad_space = maxlen-matrixstr[i*input.width+j].size();
+                std::string strpad(pad_space,' ');
+                std::string padded;
+                padded.insert(0,matrixstr[i*input.width+j]);
+                padded.insert(0,strpad);
+                display_nums.push_back(padded);
+                matrixstr[i*input.width+j].clear();
             }
-            std::cout<<"]";
+        }
+
+        for(size_t i=0; i<input.height; ++i)
+        {
+            if(i==0) std::cout<<"[[";
+            else std::cout<<" [";
+            for(size_t j=0; j<input.width; ++j)
+            {
+                std::cout<<display_nums[i*input.width+j];
+                if(j!=input.width-1) std::cout<<", ";
+                else std::cout<<"]";
+            }
             if(i!=input.height-1) std::cout<<",\n";
             else std::cout<<"]\n";
         }
 
-        if(input.height==0 && input.width==0) std::cout<<"]\n";
+        // std::cout<<"[";
+        // for(size_t i=0; i<input.height; ++i)
+        // {
+        //     std::cout<<"[";
+        //     for(size_t j=0; j<input.width; ++j)
+        //     {
+        //         if(input.matrix[i*input.width+j]==0)
+        //             std::cout<<std::abs(input.matrix[i*input.width+j]);
+        //         else
+        //             std::cout<<input.matrix[i*input.width+j];
+
+        //         if(j!=input.width-1) std::cout<<' ';
+        //     }
+        //     std::cout<<"]";
+        //     if(i!=input.height-1) std::cout<<",\n";
+        //     else std::cout<<"]\n";
+        // }
+
+        // if(input.height==0 && input.width==0) std::cout<<"]\n";
 
         #ifdef DISPLAY_FUNC_CALLS
         auto finish = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
         std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
         #endif
+
+        std::cout.width(0);
     }
 }
 

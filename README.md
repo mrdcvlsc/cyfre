@@ -14,31 +14,13 @@ This library uses cpp stl's std::vector intensively
 <details>
 <summary><b><i>matrix initializations (CONSTRUCTORS)</i></b></summary>
 <br>
-
-<!--=====================================================================================-->
-<details>
-<summary><b>cyfre::MATRIX_TYPES</b></summary>
-<br>
-  
-  **defined** :
-  ```c++
-  enum TYPE {IDENTITY,NULLZERO,SCALAR};
-  ```
-
-  <br>
-
-  **use :**
-  *cyfre::TYPE*
-  ex:
-  ```c++
-  cyfre::TYPE::NULLZERO // to select
-  ```
-</details>
+<ul>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>identity matrix</b></summary>
 <br>
+<ul>
   
   **construct an identity matrix**
 
@@ -52,12 +34,14 @@ This library uses cpp stl's std::vector intensively
   */
   ```
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>scalar matrix</b></summary>
 <br>
+<ul>
   
   **construct an scalar matrix**
 
@@ -71,12 +55,14 @@ This library uses cpp stl's std::vector intensively
   */
   ```
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>zero/null matrix</b></summary>
 <br>
+<ul>
   
   **construct an zero/null matrix**
 
@@ -90,12 +76,14 @@ This library uses cpp stl's std::vector intensively
   */
   ```
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>shaped matrix with initial value</b></summary>
 <br>
+<ul>
   
   **construct an costum shaped matrix, with initial values**
 
@@ -109,12 +97,14 @@ This library uses cpp stl's std::vector intensively
   */
   ```
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>shaped matrix with random values</b></summary>
 <br>
+<ul>
   
   **ex. constructs a 4x5 matrix with random integer values ranging from 10-99**
 
@@ -128,12 +118,14 @@ This library uses cpp stl's std::vector intensively
   cyfre::mat<double> FLOAT_MATRIX(4,5,cyfre::RANDOM::REAL,0,1);
   ```
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>defined matrix (row)</b></summary>
 <br>
+<ul>
   
   **construct and define a matrix**
 
@@ -143,12 +135,14 @@ This library uses cpp stl's std::vector intensively
   // mat_object = [[5,10,15,20,25]] <-- (1x5 matrix)
   ```
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>defined matrix (2D)</b></summary>
 <br>
+<ul>
   
   **construct and define a matrix**
 
@@ -166,12 +160,14 @@ This library uses cpp stl's std::vector intensively
   */
   ```
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>read matrix from a txt file</b></summary>
 <br>
+<ul>
 
   *matrix1.txt*
 
@@ -197,8 +193,10 @@ This library uses cpp stl's std::vector intensively
   */
   ```
 
+</ul>
 </details>
 
+</ul>
 </details>
 
 --------------------------------------------------
@@ -206,13 +204,15 @@ This library uses cpp stl's std::vector intensively
 <details>
 <summary><b><i>ELEMENTARY ROW/COLUMN OPERATIONS</i></b></summary>
 <br>
+<ul>
 
-### 3 basic elementary row/column operations
-
+- **basic elementary row/column operations**
+<ul>
 <!--=====================================================================================-->
 <details>
 <summary><b>swaping rows/columns</b></summary>
 <br>
+<ul>
 
 **row_swap(row1,row2)**
 
@@ -231,12 +231,14 @@ mat_object = [[ 1, 2, 3],
 
 */
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>scaling rows/columns</b></summary>
 <br>
+<ul>
 
 **row_scale(scalar_value,row_to_scale)**
 
@@ -255,12 +257,14 @@ mat_object = [[ 5,10,15],
 
 */
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>scale a row/column then add the products to another row/column</b></summary>
 <br>
+<ul>
 
 **row_scale(scalar_value,row_to_scale,base_row)**
 
@@ -279,14 +283,19 @@ mat_object = [[ 1, 2, 3],
 
 */
 ```
+</ul>
 </details>
+</ul>
 
-### costum row/column operations : NOTE - anything these methods can do, the 3 elementary basic row/column operations can also do, just keep this in mind... the following methods are just more straigth forward
+- **costum row/column operations**
 
+_: NOTE - anything these methods can do, the 3 elementary basic row/column operations can also do, just keep this in mind... the following methods are just more straigth forward_
+<ul>
 <!--=====================================================================================-->
 <details>
 <summary><b>row scalar operation</b></summary>
 <br>
+<ul>
 
 **scales all the elements of the row using a scalar value [changes the matrix itself]**
 
@@ -306,12 +315,14 @@ mat_object = [[2,4],
 
 multiply all elements of the row '0' to 3, changes the original matrix
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>column scalar operation</b></summary>
 <br>
+<ul>
 
 **scales all the elements of the column using a scalar value [changes the matrix itself]**
 
@@ -331,12 +342,14 @@ mat_object = [[2,2],
 
 divides all elements of the column '1' to 2, changes the original matrix
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>row to row operation</b></summary>
 <br>
+<ul>
 
 **scale a row using another row [changes the matrix itself]**
 
@@ -357,12 +370,14 @@ mat_object = [[ 1, 2, 3],
 ```
 __int mat_object(0,1) we multiply the value of mat_object(0,2) which is 7, into the previous value of mat_object(0,1) which is 4, the answer is 4*7 = 28, hench the 28 in mat_object(0,1)__
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>column to column operation</b></summary>
 <br>
+<ul>
 
 **scale a column using another column [changes the matrix itself]**
 
@@ -381,9 +396,13 @@ mat_object = [[ 1, 2, 1],
 
 */
 ```
+</ul>
 </details>
 
+</ul>
 
+
+</ul>
 </details>
 
 --------------------------------------------------
@@ -391,32 +410,14 @@ mat_object = [[ 1, 2, 1],
 <details>
 <summary><b><i>SCALAR OPERATIONS</i></b></summary>
 <br>
+<ul>
 
 <!--=====================================================================================-->
-<details>
-<summary><b>selecting a scalar operation</b></summary>
-<br>
-  
-  **defined** :
-  ```c++
-  cyfre::SCALAR_OPERATIONS{ADD,SUB,MUL,DIV}
-  ```
-
-  <br>
-
-  **use :**
-  *cyfre::SCALAR_OPERATION* <br>
-  ex:
-  ```c++
-  cyfre::ADD // to select addition
-  ```
-
-<!--=====================================================================================-->
-</details>
 
 <details>
 <summary><b>matrix scalar operation</b></summary>
 <br>
+<ul>
 
 **returns a copy scaled matrix of the original one**
 
@@ -436,12 +437,14 @@ NOTE : cyfre::mat<int> a = 2+mat_object;  <-- is also a valid expression
 */
 ```
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>matrix scalar operation [self]</b></summary>
 <br>
+<ul>
 
 **scales all the elements of the matrix using a scalar value [changes the matrix itself]**
 
@@ -459,8 +462,10 @@ mat_object = [[-1,0],
 */
 ```
 
+</ul>
 </details>
 
+</ul>
 </details>
 
 --------------------------------------------------
@@ -468,11 +473,13 @@ mat_object = [[-1,0],
 <details>
 <summary><b><i>MATRIX OPERATIONS</i></b></summary>
 <br>
+<ul>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>matrix addition</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> A({{ 1, 2, 3},
@@ -488,12 +495,14 @@ C = [[ 0, 0, 0],
 
 */
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>matrix subtraction</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> A({{10, 1,33},
@@ -509,12 +518,14 @@ C = [[ 3,-18,28],
 
 */
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>matrix element-by-element division</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> A({{2,4,6},
@@ -530,12 +541,14 @@ C = [[2,1,2],
 
 */
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>hadamard product</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> A({{2,4,6},
@@ -558,12 +571,14 @@ A = [[ 2,16,18],
 
 */
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>multiplying matrices (dot product)</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> X({
@@ -578,8 +593,10 @@ cyfre::mat<int> Y = X*W;
 
 // C = [[3731,2336,-183]]
 ```
+</ul>
 </details>
 
+</ul>
 </details>
 
 --------------------------------------------------
@@ -587,11 +604,13 @@ cyfre::mat<int> Y = X*W;
 <details>
 <summary><b><i>METHODS</i></b></summary>
 <br>
+<ul>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>Applying functions to all elements of the matrix</b></summary>
 <br>
+<ul>
 
 **.apply() is a shortcut method for applying a function to all elements of a matrix**
 
@@ -621,12 +640,14 @@ X = [[529 144  2809 1156 529],
   - the function should only have one parameter
   - the function's return type, and parameter type should be the same as the matrix type
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>sum of all elements</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> X({
@@ -640,12 +661,14 @@ int sum = X.total();
 // sum = 45
 
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>sum of the main-diagonal</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> X({
@@ -659,12 +682,14 @@ int diag_sum = X.trace();
 // diag_sum = 15
 
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>getting row/column as std::vector</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> plane({
@@ -683,12 +708,14 @@ y = [2,5,8]
 
 */
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>getting row/column as std::vector of std::iterators</b></summary>
 <br>
+<ul>
 
 - **you can modify values of rows and columns using a vector of iterator from a matrix**
 
@@ -723,12 +750,14 @@ std::vector<typename std::vector<int>::const_iterator> xaxis = P.row_iterators(1
 std::vector<typename std::vector<int>::const_iterator> yaxis = P.column_iterators(1);
 ```
 
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>Transpose of a Matrix</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> X({
@@ -748,12 +777,14 @@ X = [[1,5],
 */
 
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>rasing a matrix to a certain power</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<int> X({
@@ -781,12 +812,14 @@ X_squared = [[1047 666  239],
 */
 
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>Determinant of a Matrix</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<long double> X({
@@ -803,12 +836,14 @@ determiant = -720000
 */
 
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>Inverse of a Matrix</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<long double> X({
@@ -826,12 +861,14 @@ X = [[0.00196078 -0.00460101 0.0127211],
 */
 
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>Echelon Forms (ref & rref)</b></summary>
 <br>
+<ul>
 
 **R***educe* **R***ow* **E***chelon* **F***orm*
 
@@ -857,8 +894,10 @@ X = [[1 0 0 -1],
 
 **R***ow* **E***echelon* **F***orm* : **```X.ref()```** *or* **```X = cyfre::ref(X)```**
 
+</ul>
 </details>
 
+</ul>
 </details>
   
 --------------------------------------------------
@@ -866,6 +905,7 @@ X = [[1 0 0 -1],
 <details>
 <summary><b>mat members: matrix, height, & width</b></summary>
 <br>
+<ul>
 
 **operator(i,j)** - performs check of indices, terminates program if indices are out of range
 
@@ -882,18 +922,11 @@ X = [[1 0 0 -1],
   {
     for(size_t j=0; j<nums.width; ++j)
     {
-      /* operator() */
+      /* use the operator() for matrix indexing */
 
       nums(i,j)*=2;
       std::cout<<nums(i,j)<<'\t';
 
-
-      /* direct access
-
-      nums.matrix[i][j]*=2;
-      std::cout<<nums.matrix[i][j]<<'\t';
-
-      */
     }
     std::cout<<'\n';
   }
@@ -907,6 +940,7 @@ X = [[1 0 0 -1],
 14      16      18
 ```
   
+</ul>
 </details>
 
 --------------------------------------------------
@@ -914,11 +948,13 @@ X = [[1 0 0 -1],
 <details>
 <summary><b><i>STATISTICS</i></b></summary>
 <br>
+<ul>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>mean, median, mode</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<short> X({
@@ -946,12 +982,14 @@ std::vector<short> modes = getmode.second;
 */
 
 ```
+</ul>
 </details>
 
 <!--=====================================================================================-->
 <details>
 <summary><b>sum of squares, variance, standard deviation</b></summary>
 <br>
+<ul>
 
 ```c++
 cyfre::mat<short> X({7,2,4,3,9});
@@ -969,6 +1007,8 @@ long double
   for population use 'cyfre::POPULATION' instead
 */
 ```
+</ul>
 </details>
 
+</ul>
 </details>

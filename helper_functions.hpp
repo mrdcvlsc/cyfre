@@ -78,5 +78,40 @@ namespace cyfre::helpers
         }
         return indecies;
     }
+
+    template<typename Integer>
+    size_t digit_counter(Integer num)
+    {
+        Integer origin_num = num;
+
+        size_t count = 0;
+        while(num>=1)
+        {
+            num = num / 10;
+            ++count;
+        }
+
+        if(num==0) return count;
+
+        size_t cut = origin_num;
+
+        Integer decimals = origin_num-cut;
+
+        std::cout<<"decimals\n";
+        while(decimals!=0)
+        {
+            std::cout<<decimals<<'\n';
+            decimals*=10;
+            std::cout<<decimals<<'\n';
+            size_t cutinner = decimals;
+            std::cout<<cutinner<<'\n';
+            decimals = decimals - (size_t)cutinner;
+            std::cout<<decimals<<'\n';
+            ++count;
+            std::cout<<"-----------------\n";
+        }
+        
+        return count;
+    }
 }
 #endif
