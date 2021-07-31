@@ -10,17 +10,19 @@ namespace cyfre
     template<typename T>
     mat<T> hadamard(const mat<T>& left, const mat<T>& right)
     {
+        #ifndef CHECK_SHAPE_DISABLE
         if(left.width!=right.width || left.height!=right.height)
         {
             std::cerr<<"\n\nERROR : static mat hadamard(const mat& left, const mat& right) const\n";
             std::cerr<<"\thadamard multiplication of two different shaped matrix is not allowed\n";
             exit(1);
         }
+        #endif
         
         mat<T> answer = left;
         for(size_t i=0; i<answer.height; ++i)
         {
-            for(size_t j=0; j<answer.width; ++j) answer.matrix[i][j]*=right.matrix[i][j];
+            for(size_t j=0; j<answer.width; ++j) answer.matrix[i*answer.width+j]*=right.matrix[i*right.width+j];
         }
 
         return answer;
@@ -31,6 +33,7 @@ namespace cyfre
     template<typename T>
     mat<T> power(mat<T> base, const int p)
     {
+        #ifndef CHECK_SHAPE_DISABLE
         if(base.width!=base.height)
         {
             std::cerr<<"\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n";
@@ -41,6 +44,8 @@ namespace cyfre
             std::cerr<<"\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n";
             exit(1);
         }
+        #endif
+
         if(p==0)
         {
             mat<T> identity(IDENTITY,base.width);

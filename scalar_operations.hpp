@@ -12,6 +12,7 @@ namespace cyfre
     {
         size_t length = tuple1.size();
 
+        #ifndef CHECK_SHAPE_DISABLE
         if(length!=tuple2.size())
         {
             std::cerr<<"\n\nERROR : T dot(std::vector<typename std::vector<T>> tuple1, std::vector<typename std::vector<T>> tuple2)\n";
@@ -20,6 +21,7 @@ namespace cyfre
             std::cout<<"\ttuple2 length : "<<tuple2.size()<<'\n';
             exit(1); 
         }
+        #endif
         
         T summation = (T)0;
 
@@ -43,15 +45,17 @@ namespace cyfre
     template<typename T>
     T trace(const mat<T>& input)
     {
+        #ifndef CHECK_SHAPE_DISABLE
         if(input.width!=input.height)
         {
             std::cerr<<"\n\nERROR : mat.trace()\n";
             std::cerr<<"\tthe matrix is not a square matrix, cannot get trace\n";
             exit(1);
         }
+        #endif
 
         T trace_total = 0;
-        for(size_t i=0; i<input.height; ++i) trace_total+=input.matrix[i][i];
+        for(size_t i=0; i<input.height; ++i) trace_total+=input.matrix[i*input.width+i];
         return trace_total;
     }
 

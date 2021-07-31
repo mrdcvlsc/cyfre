@@ -26,17 +26,19 @@ namespace cyfre
     template<typename T>
     T det(mat<T> input)
     {
+        #ifndef CHECK_SHAPE_DISABLE
         if(input.width!=input.height)
         {
             std::cerr<<"\n\nERROR : T det(mat<T> input) - non-square matricies has no determinant\n";
             exit(1);
         }
+        #endif
 
         auto nonzrow = [](const mat<T>& input, size_t i, size_t j) -> long long int
         {
             for(size_t r=i; r<input.height; ++r)
             {
-                if(input.matrix[r][j]!=0)
+                if(input.matrix[r*input.width+j]!=0)
                 {
                     return r;
                 }
@@ -48,7 +50,7 @@ namespace cyfre
         {
             for(size_t i=pi+1; i<input.height; ++i)
             {
-                input.row_scale(-(input.matrix[i][pj]/input.matrix[pi][pj]),pi,i);
+                input.row_scale(-(input.matrix[i*input.width+pj]/input.matrix[pi*input.width+pj]),pi,i);
             }
         };
 
@@ -57,7 +59,7 @@ namespace cyfre
             T diagonal_product = 1;
             for(size_t i=0; i<input.height && i<input.width; ++i)
             {
-                diagonal_product*=input.matrix[i][i];
+                diagonal_product*=input.matrix[i*input.width+i];
             }
             return diagonal_product;
         };

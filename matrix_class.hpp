@@ -9,10 +9,15 @@
 #include <exception>
 #include <random>
 #include <functional>
+#include <iterator>
 #include "helper_functions.hpp"
 #include "randomizer.hpp"
 
-#define SAFECHECK 1
+#ifdef DISPLAY_FUNC_CALLS
+#include <chrono>
+#endif
+
+// #define SAFECHECK 1
 
 /*
         CONTAINS ALL CYFRE LIBRARY TYPES from classes, to enums, and typedefs
@@ -44,32 +49,54 @@ namespace cyfre
         size_t height;
         size_t width;
 
-        std::vector<std::vector<T>> matrix;
+        std::vector<T> matrix;
         
         // ============================== constructors ==============================
 
         /// initializes a 1x1 matrix with a value of zero
         mat()
         {
-            height = 1;
-            width = 1;
-            std::vector<T> default_index;
-            default_index.push_back(T(0));
-            matrix.push_back(default_index);
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"mat()\n";
+            #endif
+
+            height = 0;
+            width = 0;
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         mat(T one_value)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"mat(T one_value)\n";
+            #endif
+
             height = 1;
             width = 1;
-            std::vector<T> default_index;
-            default_index.push_back(one_value);
-            matrix.push_back(default_index);
+            matrix.push_back(one_value);
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// initializes a matrix from a text file
         mat(std::string text_file, char separator)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"mat(std::string text_file, char separator)\n";
+            #endif
+
             std::ifstream filereader;
             filereader.open(text_file.c_str());
 
@@ -120,26 +147,33 @@ namespace cyfre
                 }
             }
 
-            std::vector<std::vector<T>> fmat;
             for(size_t i=0; i<matrix_strings.size(); ++i)
             {
-                std::vector<T> tmp;
-                fmat.push_back(tmp);
                 for(size_t j=0; j<matrix_strings[i].size(); ++j)
                 {
-                    if(an_integer) fmat[i].push_back((T)std::stoll(matrix_strings[i][j]));
-                    else fmat[i].push_back((T)std::stold(matrix_strings[i][j]));
+                    if(an_integer) matrix.push_back((T)std::stoll(matrix_strings[i][j]));
+                    else matrix.push_back((T)std::stold(matrix_strings[i][j]));
                 }
             }
 
-            this->height = fmat.size();
-            this->width  = fmat[0].size();
-            this->matrix = fmat;
+            this->height = matrix_strings.size();
+            this->width  = matrix_strings[0].size();
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// initializes a matrix using a 2 dimension vector : @arg std::vector<std::vector<T>> matrix
         mat(const std::vector<std::vector<T>>& matrix)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"mat(const std::vector<std::vector<T>>& matrix)\n";
+            #endif
+
             if(matrix.empty())
             {
                 throw std::length_error(
@@ -164,79 +198,139 @@ namespace cyfre
             height = matrix.size();
             width  = matrix[0].size();
             this->matrix = matrix;
+
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    this->matrix.push_back(matrix[i][j]);
+                }
+            }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// initializes a matrix using a vector : @arg std::vector<T> matrix
         mat(const std::vector<T>& array_vector)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"mat(const std::vector<T>& array_vector)\n";
+            #endif
+
             height = 1;
             width = array_vector.size();
             matrix.push_back(array_vector);
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// initializes a matrix given a @arg height, @arg width for the matrix shape, and a @arg default_value of all elements in the matrix
         mat(const size_t height, const size_t width, const T default_value)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"mat(const size_t height, const size_t width, const T default_value)\n";
+            #endif
+
             size_t i=height, j=width;
             this->height = height;
             this->width  = width;
 
-            matrix.reserve(height);
-            std::vector<T> row;
-            row.reserve(width);
+            size_t n = height*width;
 
-            while(j--) row.push_back(default_value);
-            while(i--) matrix.push_back(row);
+            std::vector<T> def(n,default_value);
+            matrix = def;
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// initializes a matrix given a @arg height, @arg width for the matrix shape, that have a random values form the given @arg lower_bound to @arg upper_bound
         mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound)\n";
+            #endif
+
             this->height = height;
             this->width  = width;
 
+            unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
+            std::mt19937_64 rand_engine(seed);
+            std::uniform_real_distribution<T> random_number_int(lower_bound,upper_bound);
+            std::uniform_int_distribution<T> random_number_float(lower_bound,upper_bound);
+
             for(size_t i=0; i<height; ++i)
             {
-                std::vector<T> row;
-                row.reserve(width);
                 for(size_t j=0; j<width; ++j)
                 {
                     switch(typechoice)
                     {
                         case RANDOM::INTEGER:
-                            row.push_back(randomize::integer<long long int,std::mt19937_64>(lower_bound,upper_bound));
+                            matrix.push_back(random_number_int(rand_engine));
                             break;
                         case RANDOM::REAL:
-                            row.push_back(randomize::real<long double,std::mt19937_64>(lower_bound,upper_bound));
+                            matrix.push_back(random_number_float(rand_engine));
                             break;
                         default:
                             throw std::invalid_argument("\n\nERROR : mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound)\n\tinvalid random type");
                     }
                 }
-                matrix.push_back(row);
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// initializes a square matrix with a given 'x' scalar values of elements in the main diagonal
         mat(const TYPE matrix_type, const size_t n, T scalar)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"mat(const TYPE matrix_type, const size_t n, T scalar)\n";
+            #endif
+
             if(matrix_type==TYPE::IDENTITY) scalar = 1;
 
             size_t i=n, j=n;
             height = width = n;
 
-            std::vector<T> row;
-            row.reserve(n);
-            matrix.reserve(n);
-
-            while(j--) row.push_back(0);            
-            while(i--) matrix.push_back(row);
+            std::vector<T> def(height*width,0);
             
-            for(size_t i=0; i<n; ++i) matrix[i][i] = scalar;
+            for(size_t i=0; i<n; ++i) def(i,i) = scalar;
+
+            matrix = def;
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
         
         mat(const TYPE matrix_type, const size_t n) : mat(matrix_type,n,0)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"mat(const TYPE matrix_type, const size_t n) : mat(matrix_type,n,0)\n";
+            #endif
+
             switch(matrix_type)
             {
                 case TYPE::IDENTITY: break;
@@ -249,6 +343,12 @@ namespace cyfre
                 default:
                     throw std::invalid_argument("\n\nERROR : mat()\n\tmatrix initialization - constructor invalid given an invalid TYPE\n");
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// initialize a matrix from an openCV Mat object
@@ -260,8 +360,14 @@ namespace cyfre
         /// it accepts a vector of iterators that points to row or column elements or a matrix
         inline static T dot(std::vector<typename std::vector<T>::const_iterator> iter_tuple1, std::vector<typename std::vector<T>::const_iterator> iter_tuple2)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline static mat::dot()\n";
+            #endif
+
             size_t length = iter_tuple1.size();
 
+            #ifndef CHECK_SHAPE_DISABLE
             if(length!=iter_tuple2.size())
             {
                 throw std::length_error(
@@ -269,10 +375,17 @@ namespace cyfre
                     "\tarray don't have the same lenght\n"
                 ); 
             }
+            #endif
             
             T summation = (T)0;
 
             for(size_t i=0; i<length; ++i) summation += (*iter_tuple1[i])*(*iter_tuple2[i]);
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
 
             return summation;
         }
@@ -280,14 +393,32 @@ namespace cyfre
         /// @returns T total, the total sum of all the elements of the matrix
         T total() const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"T total() const\n";
+            #endif
+
             T total = 0, zero = 0;
             for(auto row: matrix) total+=std::accumulate(row.begin(),row.end(),zero);
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return total;
         }
 
         /// @returns T trace_total, the total sum of the main diagonal
         T trace() const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"T trace() const\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(width!=height)
             {
                 throw std::length_error(
@@ -295,9 +426,18 @@ namespace cyfre
                     "\tthe matrix is not a square matrix, cannot get trace\n"
                 );
             }
+            #endif
 
             T trace_total = 0;
             for(size_t i=0; i<height; ++i) trace_total+=matrix[i][i];
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
+            return trace_total;
         }
 
         // ============================== ROW ==============================
@@ -305,6 +445,12 @@ namespace cyfre
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a row
         std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"std::vector<typename std::vector<T>::const_iterator> row_iterators(size_t row_index) const\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((row_index < 0) ^ (row_index > height-1))
             {
                 throw std::out_of_range(
@@ -312,15 +458,29 @@ namespace cyfre
                     "\tthe given row index is out of bound\n"
                 );
             }
+            #endif
 
             std::vector<typename std::vector<T>::const_iterator> row_iterator;
             for(size_t i=0; i<width; ++i) row_iterator.push_back(matrix[row_index].begin()+i);
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return row_iterator;
         }
 
         /// @returns std::vector<typename std::vector<T>::iterator> of a row
         std::vector<typename std::vector<T>::iterator> row_iterators_r(size_t row_index)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"std::vector<typename std::vector<T>::iterator> row_iterators_r(size_t row_index)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((row_index < 0) ^ (row_index > height-1))
             {
                 throw std::out_of_range(
@@ -328,15 +488,29 @@ namespace cyfre
                     "\tthe given row index is out of bound\n"
                 );
             }
+            #endif
 
             std::vector<typename std::vector<T>::iterator> row_iterator;
             for(size_t i=0; i<width; ++i) row_iterator.push_back(matrix[row_index].begin()+i);
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return row_iterator;
         }
 
         /// @returns std::vector<std::vector<T>> of a row
         std::vector<std::vector<T>> row(size_t row_index) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"std::vector<std::vector<T>> row(size_t row_index) const\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((row_index < 0) ^ (row_index > height-1))
             {
                 throw std::out_of_range(
@@ -344,16 +518,30 @@ namespace cyfre
                     "\tthe given row index is out of bound\n"
                 );
             }
+            #endif
 
             std::vector<std::vector<T>> row_vector;
             row_vector.reserve(width);
             row_vector.insert(row_vector.end(),matrix[row_index].begin(),matrix[row_index].end());
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return row_vector;
         }
 
         /// 'ADD,SUB,MUL, or DIV' a given 'const T value' to all elements of a selected 'const size_t row_index' 
         void scale_row(const size_t row_index, const SCALAR scalar_operation, const T value)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void scale_row(const size_t row_index, const SCALAR scalar_operation, const T value)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((row_index < 0) ^ (row_index > height-1))
             {
                 throw std::out_of_range(
@@ -361,6 +549,7 @@ namespace cyfre
                     "\tthe given row index is out of bound\n"
                 );
             }
+            #endif
 
             auto operation_function = [scalar_operation](const T matrix_index,const T operation_value)
             {
@@ -382,10 +571,23 @@ namespace cyfre
             {
                 matrix[row_index][i] = operation_function(matrix[row_index][i],value);
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
         }
 
         void row_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void row_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((output_index < 0) ^ (output_index > height-1))
             {
                 throw std::out_of_range(
@@ -400,6 +602,7 @@ namespace cyfre
                     "\tthe given row 'input_index'  is out of bound\n"
                 );
             }
+            #endif
 
             auto operation_function = [scalar_operation](const T matrix_index,const T operation_value)
             {
@@ -421,12 +624,23 @@ namespace cyfre
             {
                 matrix[output_index][i] = operation_function(matrix[output_index][i],matrix[input_index][i]);
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// @note: swaps the values of a row to another row :: a<-->b
         void row_swap(size_t row_a, size_t row_b)
         {
-            #ifdef SAFECHECK
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void row_swap(size_t row_a, size_t row_b)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((row_a < 0) ^ (row_a > height-1))
             {
                 throw std::out_of_range(
@@ -450,6 +664,12 @@ namespace cyfre
                 matrix[row_a][i] = matrix[row_b][i];
                 matrix[row_b][i] = temp;
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// @note: multiply all the values of a row to a non-zero constant
@@ -459,7 +679,12 @@ namespace cyfre
         template<typename S>
         void row_scale(S scalar, size_t base_row)
         {
-            #ifdef SAFECHECK
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void row_scale(S scalar, size_t base_row)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((base_row < 0) ^ (base_row > height-1))
             {
                 throw std::out_of_range(
@@ -473,6 +698,12 @@ namespace cyfre
             {
                 matrix[base_row][i]*=scalar;
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// @note: multiply all the values of a row to a non-zero constant, then add the result to another row
@@ -483,7 +714,12 @@ namespace cyfre
         template<typename S>
         void row_scale(S scalar, size_t scale_row, size_t base_row)
         {
-            #ifdef SAFECHECK
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void row_scale(S scalar, size_t scale_row, size_t base_row)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((scale_row < 0) ^ (scale_row > height-1))
             {
                 throw std::out_of_range(
@@ -504,6 +740,12 @@ namespace cyfre
             {
                 matrix[base_row][i] += scalar*matrix[scale_row][i];
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         // ============================== COLUMN ==============================
@@ -511,6 +753,12 @@ namespace cyfre
         /// @returns std::vector<typename std::vector<T>::const_iterator> of a column
         std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"std::vector<typename std::vector<T>::const_iterator> column_iterators(size_t column_index) const\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((column_index < 0) ^ (column_index > width-1))
             {
                 throw std::out_of_range(
@@ -518,15 +766,29 @@ namespace cyfre
                     "\tthe given column index is out of bound\n"
                 );
             }
+            #endif
 
             std::vector<typename std::vector<T>::const_iterator> column_iterator;
             for(size_t i=0; i<height; ++i) column_iterator.push_back(matrix[i].begin()+column_index);
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return column_iterator;
         }
 
         /// @returns std::vector<typename std::vector<T>::iterator> of a column
         std::vector<typename std::vector<T>::iterator> column_iterators_r(size_t column_index)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"std::vector<typename std::vector<T>::iterator> column_iterators_r(size_t column_index)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((column_index < 0) ^ (column_index > width-1))
             {
                 throw std::out_of_range(
@@ -534,15 +796,29 @@ namespace cyfre
                     "\tthe given column index is out of bound\n"
                 );
             }
+            #endif
 
             std::vector<typename std::vector<T>::iterator> column_iterator;
             for(size_t i=0; i<height; ++i) column_iterator.push_back(matrix[i].begin()+column_index);
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+            
             return column_iterator;
         }
 
         /// @returns std::vector<std::vector<T>> of a column
         std::vector<std::vector<T>> column(size_t column_index) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"std::vector<std::vector<T>> column(size_t column_index) const\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((column_index < 0) ^ (column_index > width-1))
             {
                 throw std::out_of_range(
@@ -550,16 +826,30 @@ namespace cyfre
                     "\tthe given column index is out of bound\n"
                 );
             }
+            #endif
 
             std::vector<std::vector<T>> column_vector;
             column_vector.reserve(height);
             for(size_t i=0; i<height; ++i) column_vector.push_back(matrix[column_index][i]);
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return column_vector;
         }
 
         /// 'ADD,SUB,MUL, or DIV' a given 'const T value' to all elements of a selected 'const size_t column_index'
         void scale_column(const size_t column_index, const SCALAR scalar_operation, const T value)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void scale_column(const size_t column_index, const SCALAR scalar_operation, const T value)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((column_index < 0) ^ (column_index > width-1))
             {
                 throw std::out_of_range(
@@ -567,6 +857,7 @@ namespace cyfre
                     "\tthe given column index is out of bound\n"
                 );
             }
+            #endif
 
             auto operation_function = [scalar_operation](const T matrix_index,const T operation_value)
             {
@@ -588,10 +879,22 @@ namespace cyfre
             {
                 matrix[i][column_index] = operation_function(matrix[i][column_index],value);
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         void column_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void column_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((output_index < 0) ^ (output_index > width-1))
             {
                 throw std::out_of_range(
@@ -606,6 +909,7 @@ namespace cyfre
                     "\tthe given column 'input_index' is out of bound\n"
                 );
             }
+            #endif
 
             auto operation_function = [scalar_operation](const T matrix_index,const T operation_value)
             {
@@ -627,12 +931,23 @@ namespace cyfre
             {
                 matrix[i][output_index] = operation_function(matrix[i][output_index],matrix[i][input_index]);
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// @note: swaps the values of a column to another column :: a<-->b
         void column_swap(size_t column_a, size_t column_b)
         {
-            #ifdef SAFECHECK
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void column_swap(size_t column_a, size_t column_b)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((column_a < 0) ^ (column_a > width-1))
             {
                 throw std::out_of_range(
@@ -656,6 +971,12 @@ namespace cyfre
                 matrix[i][column_a] = matrix[i][column_b];
                 matrix[i][column_b] = temp;
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// @note: multiply all the values of a column to a non-zero constant
@@ -665,7 +986,12 @@ namespace cyfre
         template<typename S>
         void column_scale(S scalar, size_t base_column)
         {
-            #ifdef SAFECHECK
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void column_scale(S scalar, size_t base_column)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((base_column < 0) ^ (base_column > width-1))
             {
                 throw std::out_of_range(
@@ -679,6 +1005,12 @@ namespace cyfre
             {
                 matrix[i][base_column]*=scalar;
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// @note: multiply all the values of a column to a non-zero constant, then add the result to another column
@@ -689,7 +1021,12 @@ namespace cyfre
         template<typename S>
         void column_scale(S scalar, size_t scale_column, size_t base_column)
         {
-            #ifdef SAFECHECK
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void column_scale(S scalar, size_t scale_column, size_t base_column)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((scale_column < 0) ^ (scale_column > width-1))
             {
                 throw std::out_of_range(
@@ -710,12 +1047,24 @@ namespace cyfre
             {
                 matrix[i][base_column] += scalar*matrix[i][scale_column];
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         // ============================== SAFE INDEXING ================================
 
-        T& operator()(size_t i, size_t j)
+        inline T& operator()(size_t i, size_t j)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"T& operator()(size_t i, size_t j)\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((i < 0) ^ (i > height-1))
             {
                 throw std::out_of_range(
@@ -730,11 +1079,25 @@ namespace cyfre
                     "\tthe given column index is out of bound\n"
                 );
             }
-            return matrix[i][j];
+            #endif
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
+            return matrix[i*width+j];
         }
         
-        const T& operator()(size_t i, size_t j) const
+        inline const T& operator()(size_t i, size_t j) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"const T& operator()(size_t i, size_t j) const\n";
+            #endif
+
+            #ifndef CHECK_RANGE_DISABLE
             if((i < 0) ^ (i > height-1))
             {
                 throw std::out_of_range(
@@ -749,15 +1112,30 @@ namespace cyfre
                     "\tthe given column index is out of bound\n"
                 );
             }
-            return matrix[i][j];
+            #endif
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
+            return matrix[i*width+j];
         }
 
         // ============================== MATRIX OPERATIONS ==============================
 
         /// ---------------------- Addition -----------------------------
-        /// @returns element by element addition
+
+        /// @returns element by element addition - old
         inline mat operator+(const mat& that) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline mat operator+(const mat& that) const\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(this->width!=that.width || this->height!=that.height)
             {
                 throw std::length_error(
@@ -765,18 +1143,31 @@ namespace cyfre
                     "\taddition of two different shaped matrix is not allowed\n"
                 );
             }
+            #endif
             
             mat answer = *this;
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) answer.matrix[i][j]+=that.matrix[i][j];
+                for(size_t j=0; j<width; ++j) answer.matrix[i*answer.width+j]+=that.matrix[i*that.width+j];
             }
 
             return answer;
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         inline void operator+=(const mat& that)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline void operator+=(const mat& that)\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(this->width!=that.width || this->height!=that.height)
             {
                 throw std::length_error(
@@ -784,47 +1175,89 @@ namespace cyfre
                     "\taddition of two different shaped matrix is not allowed\n"
                 );
             }
+            #endif
             
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) matrix[i][j]+=that.matrix[i][j];
+                for(size_t j=0; j<width; ++j) matrix[i*width+j]+=that.matrix[i*that.width+j];
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         inline mat operator+(const T scalar) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline mat operator+(const T scalar) const\n";
+            #endif
+
             mat scaled_addition = *this;
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    scaled_addition.matrix[i][j]+=scalar;
+                    scaled_addition.matrix[i*scaled_addition.width+j]+=scalar;
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return scaled_addition;
         }
 
         inline void operator+=(const T scalar)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline void operator+=(const T scalar)\n";
+            #endif
+
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    matrix[i][j]+=scalar;
+                    matrix[i*width+j]+=scalar;
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         template<typename S> inline friend mat operator+(const S scalar, const mat& that)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"template<typename S> inline friend mat operator+(const S scalar, const mat& that)\n";
+            #endif
+
             mat scaled_addition = that;
             for(size_t i=0; i<scaled_addition.height; ++i)
             {
                 for(size_t j=0; j<scaled_addition.width; ++j)
                 {
-                    scaled_addition.matrix[i][j] = scalar+scaled_addition.matrix[i][j];
+                    scaled_addition.matrix[i*scaled_addition.width+j] = scalar+scaled_addition.matrix[i*scaled_addition.width+j];
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return scaled_addition;
         }
 
@@ -832,6 +1265,12 @@ namespace cyfre
         /// @returns element by element subtraction
         inline mat operator-(const mat& that) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline mat operator-(const mat& that) const\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(this->width!=that.width || this->height!=that.height)
             {
                 throw std::length_error(
@@ -839,18 +1278,31 @@ namespace cyfre
                     "\taddition of two different shaped matrix is not allowed\n"
                 );
             }
+            #endif
             
             mat answer = *this;
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) answer.matrix[i][j]-=that.matrix[i][j];
+                for(size_t j=0; j<width; ++j) answer.matrix[i*answer.width+j]-=that.matrix[i*that.width+j];
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
 
             return answer;
         }
 
         inline void operator-=(const mat& that)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline void operator-=(const mat& that)\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(this->width!=that.width || this->height!=that.height)
             {
                 throw std::length_error(
@@ -858,47 +1310,89 @@ namespace cyfre
                     "\taddition of two different shaped matrix is not allowed\n"
                 );
             }
+            #endif
             
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) matrix[i][j]-=that.matrix[i][j];
+                for(size_t j=0; j<width; ++j) matrix[i*width+j]-=that.matrix[i*that.width+j];
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         inline mat operator-(const T scalar) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline mat operator-(const T scalar) const\n";
+            #endif
+
             mat scaled_addition = *this;
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    scaled_addition.matrix[i][j]-=scalar;
+                    scaled_addition.matrix[i*scaled_addition.width+j]-=scalar;
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return scaled_addition;
         }
 
         inline void operator-=(const T scalar)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline void operator-=(const T scalar)\n";
+            #endif
+
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    matrix[i][j]-=scalar;
+                    matrix[i*width+j]-=scalar;
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         template<typename S> inline friend mat operator-(const S scalar, const mat& that)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"template<typename S> inline friend mat operator-(const S scalar, const mat& that)\n";
+            #endif
+
             mat scaled_addition = that;
             for(size_t i=0; i<scaled_addition.height; ++i)
             {
                 for(size_t j=0; j<scaled_addition.width; ++j)
                 {
-                    scaled_addition.matrix[i][j] = scalar-scaled_addition.matrix[i][j];
+                    scaled_addition.matrix[i*scaled_addition.width+j] = scalar-scaled_addition.matrix[i*scaled_addition.width+j];
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return scaled_addition;
         }
 
@@ -906,6 +1400,12 @@ namespace cyfre
         /// @returns element by element division
         inline mat operator/(const mat& that) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline mat operator/(const mat& that) const\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(this->width!=that.width || this->height!=that.height)
             {
                 throw std::length_error(
@@ -913,18 +1413,31 @@ namespace cyfre
                     "\taddition of two different shaped matrix is not allowed\n"
                 );
             }
+            #endif
             
             mat answer = *this;
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) answer.matrix[i][j]/=that.matrix[i][j];
+                for(size_t j=0; j<width; ++j) answer.matrix[i*answer.width+j]/=that.matrix[i*that.width+j];
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
 
             return answer;
         }
 
         inline void operator/=(const mat& that)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline void operator/=(const mat& that)\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(this->width!=that.width || this->height!=that.height)
             {
                 throw std::length_error(
@@ -932,47 +1445,89 @@ namespace cyfre
                     "\taddition of two different shaped matrix is not allowed\n"
                 );
             }
+            #endif
             
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) matrix[i][j]/=that.matrix[i][j];
+                for(size_t j=0; j<width; ++j) matrix[i*width+j]/=that.matrix[i*that.width+j];
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         inline mat operator/(const T scalar) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline mat operator/(const T scalar) const\n";
+            #endif
+
             mat scaled_addition = *this;
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    scaled_addition.matrix[i][j]/=scalar;
+                    scaled_addition.matrix[i*scaled_addition.width+j]/=scalar;
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return scaled_addition;
         }
 
         inline void operator/=(const T scalar)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline void operator/=(const T scalar)\n";
+            #endif
+            
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    matrix[i][j]/=scalar;
+                    matrix[i*width+j]/=scalar;
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         template<typename S> inline friend mat operator/(const S scalar, const mat& that)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"template<typename S> inline friend mat operator/(const S scalar, const mat& that)\n";
+            #endif
+
             mat scaled_addition = that;
             for(size_t i=0; i<scaled_addition.height; ++i)
             {
                 for(size_t j=0; j<scaled_addition.width; ++j)
                 {
-                    scaled_addition.matrix[i][j] = scalar/scaled_addition.matrix[i][j];
+                    scaled_addition.matrix[i*scaled_addition.width+j] = scalar/scaled_addition.matrix[i*scaled_addition.width+j];
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return scaled_addition;
         }
 
@@ -980,6 +1535,12 @@ namespace cyfre
         /// @returns matrix multiplication / dot product
         inline mat operator*(const mat& that) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline mat operator*(const mat& that) const\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(this->width!=that.height)
             {
                 throw std::length_error(
@@ -988,34 +1549,55 @@ namespace cyfre
                     "\tmat_a columns is not equal to the mat_b rows\n"
                 );
             }
+            #endif
 
             mat answer(height,that.width,0);
-
-            std::vector<std::vector<typename std::vector<T>::const_iterator>> row_tuple_iter;
-            std::vector<std::vector<typename std::vector<T>::const_iterator>> col_tuple_iter;
-
-            for(size_t i=0; i<height; ++i)     row_tuple_iter.push_back(this->row_iterators(i));
-            for(size_t i=0; i<that.width; ++i) col_tuple_iter.push_back(that.column_iterators(i));
 
             for(size_t i=0; i<answer.height; ++i)
             {
                 for(size_t j=0; j<answer.width; ++j)
                 {
-                    answer.matrix[i][j] = mat::dot((row_tuple_iter[i]),(col_tuple_iter[j]));
+                    for(size_t k=0; k<this->width; ++k)
+                    {
+                        answer(i,j) = matrix[i*width+k] * that.matrix[k*that.width+j];
+                    }
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
 
             return answer;
         }
 
         inline void operator*=(const mat& that)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline void operator*=(const mat& that)\n";
+            #endif
+
             *this = *this * that;
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// @returns hadamard matrix product - element by element multiplication, not to be confused with matrix multiplication
-        void hadamard(const mat& that)
+        inline void hadamard(const mat& that)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void hadamard(const mat& that)\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(this->width!=that.width || this->height!=that.height)
             {
                 throw std::length_error(
@@ -1023,47 +1605,89 @@ namespace cyfre
                     "\thadamard multiplication of two different shaped matrix is not allowed\n"
                 );
             }
+            #endif
             
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) matrix[i][j]*=that.matrix[i][j];
+                for(size_t j=0; j<width; ++j) matrix[i*width+j]*=that.matrix[i*that.width+j];
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         inline mat operator*(const T scalar) const
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline mat operator*(const T scalar) const\n";
+            #endif
+
             mat scaled_addition = *this;
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    scaled_addition.matrix[i][j]*=scalar;
+                    scaled_addition.matrix[i*scaled_addition.width+j]*=scalar;
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return scaled_addition;
         }
 
         inline void operator*=(const T scalar)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"inline void operator*=(const T scalar)\n";
+            #endif
+
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    matrix[i][j]*=scalar;
+                    matrix[i*width+j]*=scalar;
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
         
         template<typename S> inline friend mat operator*(const S scalar, const mat& that)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"template<typename S> inline friend mat operator*(const S scalar, const mat& that)\n";
+            #endif
+
             mat scaled_addition = that;
             for(size_t i=0; i<scaled_addition.height; ++i)
             {
                 for(size_t j=0; j<scaled_addition.width; ++j)
                 {
-                    scaled_addition.matrix[i][j] = scalar*scaled_addition.matrix[i][j];
+                    scaled_addition.matrix[i*scaled_addition.width+j] = scalar*scaled_addition.matrix[i*scaled_addition.width+j];
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
+
             return scaled_addition;
         }
 
@@ -1073,6 +1697,12 @@ namespace cyfre
         /// @note raising to a negative integer(inverse) is not supported yet but will be in the future
         void power(size_t p)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void power(size_t p)\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(width!=height)
             {
                 throw std::length_error("\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n");
@@ -1081,6 +1711,8 @@ namespace cyfre
             {
                 throw std::domain_error("\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n");
             }
+            #endif
+
             if(p==0)
             {
                 mat<T> identity(TYPE::IDENTITY,width);
@@ -1094,6 +1726,12 @@ namespace cyfre
                     *this*=multiplier;
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         // ============================== MATRIX TRANSFORMATION ==============================
@@ -1101,6 +1739,11 @@ namespace cyfre
         /// transpose self
         void transpose()
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void transpose()\n";
+            #endif
+
             if(height==width)
             {
                 // to be change
@@ -1109,7 +1752,7 @@ namespace cyfre
                 {
                     for(size_t j=0; j<width; ++j)
                     {
-                        answer.matrix[j][i] = matrix[i][j]; 
+                        answer.matrix[j*answer.width+i] = matrix[i*width+j]; 
                     }
                 }
                 *this = answer;
@@ -1121,11 +1764,17 @@ namespace cyfre
                 {
                     for(size_t j=0; j<width; ++j)
                     {
-                        answer.matrix[j][i] = matrix[i][j]; 
+                        answer.matrix[j*answer.width+i] = matrix[i*width+j]; 
                     }
                 }
                 *this = answer;
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         // ============================= INVERSE MATRIX ================================
@@ -1133,7 +1782,14 @@ namespace cyfre
         /// converts matrix to it's inverse form
         void inv()
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void inv()\n";
+            #endif
+
+            #ifndef CHECK_SHAPE_DISABLE
             if(height!=width) throw std::length_error("\n\nERROR : cyfre::mat::inv() - cannot inverse a non-square matrix");
+            #endif
 
             mat inverse(TYPE::IDENTITY,height);
 
@@ -1141,7 +1797,7 @@ namespace cyfre
             {
                 for(size_t r=i; r<input.height; ++r)
                 {
-                    if(input.matrix[r][j]!=0)
+                    if(input.matrix[r*input.width+j]!=0)
                     {
                         return r;
                     }
@@ -1155,16 +1811,16 @@ namespace cyfre
                 {
                     if(i!=pi)
                     {
-                        inverse.row_scale(-input.matrix[i][pj],pi,i);
-                        input.row_scale(-input.matrix[i][pj],pi,i);
+                        inverse.row_scale(-input.matrix[i*input.width+pj],pi,i);
+                        input.row_scale(-input.matrix[i*input.width+pj],pi,i);
                     }
                 }
             };
 
             auto make_pivot = [&inverse](mat<T>& input, size_t pi, size_t pj)
             {
-                inverse.scale_row(pi,DIV,input.matrix[pi][pj]);
-                input.scale_row(pi,DIV,input.matrix[pi][pj]);
+                inverse.scale_row(pi,DIV,input.matrix[pi*input.width+pj]);
+                input.scale_row(pi,DIV,input.matrix[pi*input.width+pj]);
             };
             
             size_t cpi = 0;
@@ -1198,6 +1854,12 @@ namespace cyfre
             }
 
             matrix = inverse.matrix;
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         // ============================= ECHELON FORM ================================
@@ -1205,11 +1867,16 @@ namespace cyfre
         /// converts matrix to row echelon form of a matrix
         void ref()
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void ref()\n";
+            #endif
+
             auto nonzrow = [](const mat<T>& input, const size_t i, const size_t j) -> long long int
             {
                 for(size_t r=i; r<input.height; ++r)
                 {
-                    if(input.matrix[r][j]!=0)
+                    if(input.matrix[r*input.width+j]!=0)
                     {
                         return r;
                     }
@@ -1221,7 +1888,7 @@ namespace cyfre
             {
                 for(size_t i=pi+1; i<input.height; ++i)
                 {
-                    input.row_scale(-(input.matrix[i][pj]/input.matrix[pi][pj]),pi,i);
+                    input.row_scale(-(input.matrix[i*input.width+pj]/input.matrix[pi*input.width+pj]),pi,i);
                 }
             };
 
@@ -1247,16 +1914,27 @@ namespace cyfre
                 cpi++;
                 cpj++;
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         /// converts matrix to reduced row echelon form of a matrix
         void rref()
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void rref()\n";
+            #endif
+
             auto nonzrow = [](const mat<T>& input, size_t i, size_t j) -> long long int
             {
                 for(size_t r=i; r<input.height; ++r)
                 {
-                    if(input.matrix[r][j]!=0)
+                    if(input.matrix[r*input.width+j]!=0)
                     {
                         return r;
                     }
@@ -1270,14 +1948,14 @@ namespace cyfre
                 {
                     if(i!=pi)
                     {
-                        input.row_scale(-input.matrix[i][pj],pi,i);
+                        input.row_scale(-input.matrix[i*input.width+pj],pi,i);
                     }
                 }
             };
 
             auto make_pivot = [](mat<T>& input, size_t pi, size_t pj)
             {
-                input.scale_row(pi,DIV,input.matrix[pi][pj]);
+                input.scale_row(pi,DIV,input.matrix[pi*input.width+pj]);
             };
             
             size_t cpi = 0;
@@ -1299,18 +1977,35 @@ namespace cyfre
                 cpi++;
                 cpj++;
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
         // ================ applying function ==============================
         void apply(std::function<T(T)> function_name)
         {
+            #ifdef DISPLAY_FUNC_CALLS
+            auto start = std::chrono::high_resolution_clock::now();
+            std::cout<<"void apply(std::function<T(T)> function_name\n";
+            #endif
+
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    matrix[i][j] = function_name(matrix[i][j]);
+                    matrix[i*width+j] = function_name(matrix[i*width+j]);
                 }
             }
+
+            #ifdef DISPLAY_FUNC_CALLS
+            auto finish = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+            std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+            #endif
         }
 
     };// end of mat class
@@ -1318,16 +2013,21 @@ namespace cyfre
     template<typename T>
     void display(const mat<T>& input)
     {
+        #ifdef DISPLAY_FUNC_CALLS
+        auto start = std::chrono::high_resolution_clock::now();
+        std::cout<<"void display(const mat<T>& input)\n";
+        #endif
+
         std::cout<<"\n[";
         for(size_t i=0; i<input.height; ++i)
         {
             std::cout<<"[";
             for(size_t j=0; j<input.width; ++j)
             {
-                if(input.matrix[i][j]==0)
-                    std::cout<<std::abs(input.matrix[i][j]);
+                if(input.matrix[i*input.width+j]==0)
+                    std::cout<<std::abs(input.matrix[i*input.width+j]);
                 else
-                    std::cout<<input.matrix[i][j];
+                    std::cout<<input.matrix[i*input.width+j];
 
                 if(j!=input.width-1) std::cout<<' ';
             }
@@ -1335,6 +2035,12 @@ namespace cyfre
             if(i!=input.height-1) std::cout<<",\n";
             else std::cout<<"]\n";
         }
+
+        #ifdef DISPLAY_FUNC_CALLS
+        auto finish = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+        #endif
     }
 }
 
