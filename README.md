@@ -100,7 +100,7 @@ This library uses cpp stl's std::vector intensively
   **construct an costum shaped matrix, with initial values**
 
   ```c++
-  cyfre::mat<int> mat_object(1,3,5);  /*
+  cyfre::mat<int> mat_object(3,1,5);  /*
 
   mat_object = [[5],
                 [5],
@@ -207,15 +207,7 @@ This library uses cpp stl's std::vector intensively
 <summary><b><i>ELEMENTARY ROW/COLUMN OPERATIONS</i></b></summary>
 <br>
 
-**ROWS**
-- row_swap(size_t,size_t)
-- row_scale(S,size_t)
-- row_scale(S,size_t,size_t)
-
-**COLUMNS**
-- column_swap(size_t,size_t)
-- column_scale(S,size_t)
-- column_scale(S,size_t,size_t)
+### 3 basic elementary row/column operations
 
 <!--=====================================================================================-->
 <details>
@@ -267,7 +259,7 @@ mat_object = [[ 5,10,15],
 
 <!--=====================================================================================-->
 <details>
-<summary><b>scale a row/column then add the products to another row</b></summary>
+<summary><b>scale a row/column then add the products to another row/column</b></summary>
 <br>
 
 **row_scale(scalar_value,row_to_scale,base_row)**
@@ -289,82 +281,7 @@ mat_object = [[ 1, 2, 3],
 ```
 </details>
 
-</details>
-
---------------------------------------------------
-
-<details>
-<summary><b><i>ADDITIONAL SCALAR OPERATIONS</i></b></summary>
-<br>
-
-<!--=====================================================================================-->
-<details>
-<summary><b>selecting a scalar operation</b></summary>
-<br>
-  
-  **defined** :
-  ```c++
-  cyfre::SCALAR_OPERATIONS{ADD,SUB,MUL,DIV}
-  ```
-
-  <br>
-
-  **use :**
-  *cyfre::SCALAR_OPERATION* <br>
-  ex:
-  ```c++
-  cyfre::ADD // to select addition
-  ```
-
-<!--=====================================================================================-->
-</details>
-
-<details>
-<summary><b>matrix scalar operation</b></summary>
-<br>
-
-**returns a copy scaled matrix of the original one**
-
-```c++
-cyfre::mat<int> mat_object({
-  {1,2},
-  {3,4}
-});
-
-cyfre::mat<int> a = mat_object+2;  /*
-
-a = [[3,4],
-     [5,6]]
-
-NOTE : cyfre::mat<int> a = 2+mat_object;  <-- is also a valid expression
-
-*/
-```
-
-</details>
-
-<!--=====================================================================================-->
-<details>
-<summary><b>matrix scalar operation [self]</b></summary>
-<br>
-
-**scales all the elements of the matrix using a scalar value [changes the matrix itself]**
-
-```c++
-cyfre::mat<int> mat_object({
-  {1,2},
-  {3,4}
-});
-
-mat_object-=2;  /*
-
-mat_object = [[-1,0],
-              [ 1,2]]
-
-*/
-```
-
-</details>
+### costum row/column operations : NOTE - anything these methods can do, the 3 elementary basic row/column operations can also do, just keep this in mind... the following methods are just more straigth forward
 
 <!--=====================================================================================-->
 <details>
@@ -438,6 +355,8 @@ mat_object = [[ 1, 2, 3],
 
 */
 ```
+__int mat_object(0,1) we multiply the value of mat_object(0,2) which is 7, into the previous value of mat_object(0,1) which is 4, the answer is 4*7 = 28, hench the 28 in mat_object(0,1)__
+
 </details>
 
 <!--=====================================================================================-->
@@ -462,6 +381,84 @@ mat_object = [[ 1, 2, 1],
 
 */
 ```
+</details>
+
+
+</details>
+
+--------------------------------------------------
+
+<details>
+<summary><b><i>SCALAR OPERATIONS</i></b></summary>
+<br>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>selecting a scalar operation</b></summary>
+<br>
+  
+  **defined** :
+  ```c++
+  cyfre::SCALAR_OPERATIONS{ADD,SUB,MUL,DIV}
+  ```
+
+  <br>
+
+  **use :**
+  *cyfre::SCALAR_OPERATION* <br>
+  ex:
+  ```c++
+  cyfre::ADD // to select addition
+  ```
+
+<!--=====================================================================================-->
+</details>
+
+<details>
+<summary><b>matrix scalar operation</b></summary>
+<br>
+
+**returns a copy scaled matrix of the original one**
+
+```c++
+cyfre::mat<int> mat_object({
+  {1,2},
+  {3,4}
+});
+
+cyfre::mat<int> a = mat_object+2;  /*
+
+a = [[3,4],
+     [5,6]]
+
+NOTE : cyfre::mat<int> a = 2+mat_object;  <-- is also a valid expression
+
+*/
+```
+
+</details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>matrix scalar operation [self]</b></summary>
+<br>
+
+**scales all the elements of the matrix using a scalar value [changes the matrix itself]**
+
+```c++
+cyfre::mat<int> mat_object({
+  {1,2},
+  {3,4}
+});
+
+mat_object-=2;  /*
+
+mat_object = [[-1,0],
+              [ 1,2]]
+
+*/
+```
+
 </details>
 
 </details>

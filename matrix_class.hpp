@@ -197,7 +197,6 @@ namespace cyfre
 
             height = matrix.size();
             width  = matrix[0].size();
-            this->matrix = matrix;
 
             for(size_t i=0; i<height; ++i)
             {
@@ -224,7 +223,7 @@ namespace cyfre
 
             height = 1;
             width = array_vector.size();
-            matrix.push_back(array_vector);
+            matrix = array_vector;
 
             #ifdef DISPLAY_FUNC_CALLS
             auto finish = std::chrono::high_resolution_clock::now();
@@ -241,7 +240,6 @@ namespace cyfre
             std::cout<<"mat(const size_t height, const size_t width, const T default_value)\n";
             #endif
 
-            size_t i=height, j=width;
             this->height = height;
             this->width  = width;
 
@@ -308,12 +306,11 @@ namespace cyfre
 
             if(matrix_type==TYPE::IDENTITY) scalar = 1;
 
-            size_t i=n, j=n;
             height = width = n;
 
             std::vector<T> def(height*width,0);
             
-            for(size_t i=0; i<n; ++i) def(i,i) = scalar;
+            for(size_t i=0; i<n; ++i) def[i*width+i] = scalar;
 
             matrix = def;
 
@@ -569,7 +566,7 @@ namespace cyfre
 
             for(size_t i=0; i<width; ++i)
             {
-                matrix[row_index][i] = operation_function(matrix[row_index][i],value);
+                matrix[row_index*width+i] = operation_function(matrix[row_index*width+i],value);
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -660,9 +657,9 @@ namespace cyfre
             T temp;
             for(size_t i=0; i<width; ++i)
             {
-                temp = matrix[row_a][i];
-                matrix[row_a][i] = matrix[row_b][i];
-                matrix[row_b][i] = temp;
+                temp = matrix[row_a*width+i];
+                matrix[row_a*width+i] = matrix[row_b*width+i];
+                matrix[row_b*width+i] = temp;
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -696,7 +693,7 @@ namespace cyfre
 
             for(size_t i=0; i<width; ++i)
             {
-                matrix[base_row][i]*=scalar;
+                matrix[base_row*width+i] *= scalar;
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -738,7 +735,7 @@ namespace cyfre
 
             for(size_t i=0; i<width; ++i)
             {
-                matrix[base_row][i] += scalar*matrix[scale_row][i];
+                matrix[base_row*width+i] += scalar*matrix[scale_row*width+i];
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -877,7 +874,7 @@ namespace cyfre
 
             for(size_t i=0; i<height; ++i)
             {
-                matrix[i][column_index] = operation_function(matrix[i][column_index],value);
+                matrix[i*width+column_index] = operation_function(matrix[i*width+column_index],value);
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -967,9 +964,9 @@ namespace cyfre
             T temp;
             for(size_t i=0; i<height; ++i)
             {
-                temp = matrix[i][column_a];
-                matrix[i][column_a] = matrix[i][column_b];
-                matrix[i][column_b] = temp;
+                temp = matrix[i*width+column_a];
+                matrix[i*width+column_a] = matrix[i*width+column_b];
+                matrix[i*width+column_b] = temp;
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -1003,7 +1000,7 @@ namespace cyfre
 
             for(size_t i=0; i<height; ++i)
             {
-                matrix[i][base_column]*=scalar;
+                matrix[i*width+base_column]*=scalar;
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -1045,7 +1042,7 @@ namespace cyfre
 
             for(size_t i=0; i<height; ++i)
             {
-                matrix[i][base_column] += scalar*matrix[i][scale_column];
+                matrix[i*width+base_column] += scalar*matrix[i*width+scale_column];
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -1331,12 +1328,12 @@ namespace cyfre
             std::cout<<"inline mat operator-(const T scalar) const\n";
             #endif
 
-            mat scaled_addition = *this;
+            mat scaled_subtraction = *this;
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    scaled_addition.matrix[i*scaled_addition.width+j]-=scalar;
+                    scaled_subtraction.matrix[i*scaled_subtraction.width+j]-=scalar;
                 }
             }
 
@@ -1346,7 +1343,7 @@ namespace cyfre
             std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
             #endif
 
-            return scaled_addition;
+            return scaled_subtraction;
         }
 
         inline void operator-=(const T scalar)
@@ -1378,12 +1375,12 @@ namespace cyfre
             std::cout<<"template<typename S> inline friend mat operator-(const S scalar, const mat& that)\n";
             #endif
 
-            mat scaled_addition = that;
-            for(size_t i=0; i<scaled_addition.height; ++i)
+            mat scaled_subtraction = that;
+            for(size_t i=0; i<scaled_subtraction.height; ++i)
             {
-                for(size_t j=0; j<scaled_addition.width; ++j)
+                for(size_t j=0; j<scaled_subtraction.width; ++j)
                 {
-                    scaled_addition.matrix[i*scaled_addition.width+j] = scalar-scaled_addition.matrix[i*scaled_addition.width+j];
+                    scaled_subtraction.matrix[i*scaled_subtraction.width+j] = scalar-scaled_subtraction.matrix[i*scaled_subtraction.width+j];
                 }
             }
 
@@ -1393,7 +1390,7 @@ namespace cyfre
             std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
             #endif
 
-            return scaled_addition;
+            return scaled_subtraction;
         }
 
         /// ---------------------- Division -----------------------------
@@ -1418,7 +1415,14 @@ namespace cyfre
             mat answer = *this;
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) answer.matrix[i*answer.width+j]/=that.matrix[i*that.width+j];
+                for(size_t j=0; j<width; ++j)
+                {
+                    if(that.matrix[i*that.width+j]==0)
+                    {
+                        throw std::domain_error("ERROR : inline mat operator/(const mat& that) const - divide by zero");
+                    }
+                    answer.matrix[i*answer.width+j]/=that.matrix[i*that.width+j];
+                }
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -1449,7 +1453,14 @@ namespace cyfre
             
             for(size_t i=0; i<height; ++i)
             {
-                for(size_t j=0; j<width; ++j) matrix[i*width+j]/=that.matrix[i*that.width+j];
+                for(size_t j=0; j<width; ++j)
+                {
+                    if(that.matrix[i*that.width+j]==0)
+                    {
+                        throw std::domain_error("ERROR : inline void operator/=(const mat& that) - divide by zero");
+                    }
+                    matrix[i*width+j]/=that.matrix[i*that.width+j];
+                }
             }
 
             #ifdef DISPLAY_FUNC_CALLS
@@ -1466,12 +1477,17 @@ namespace cyfre
             std::cout<<"inline mat operator/(const T scalar) const\n";
             #endif
 
-            mat scaled_addition = *this;
+            if(scalar==0)
+            {
+                throw std::domain_error("ERROR : inline mat operator/(const T scalar) const - divide by zero");
+            }
+
+            mat scaled_division = *this;
             for(size_t i=0; i<height; ++i)
             {
                 for(size_t j=0; j<width; ++j)
                 {
-                    scaled_addition.matrix[i*scaled_addition.width+j]/=scalar;
+                    scaled_division.matrix[i*scaled_division.width+j]/=scalar;
                 }
             }
 
@@ -1481,7 +1497,7 @@ namespace cyfre
             std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
             #endif
 
-            return scaled_addition;
+            return scaled_division;
         }
 
         inline void operator/=(const T scalar)
@@ -1495,6 +1511,10 @@ namespace cyfre
             {
                 for(size_t j=0; j<width; ++j)
                 {
+                    if(scalar==0)
+                    {
+                        throw std::domain_error("ERROR : inline void operator/=(const T scalar) - divide by zero");
+                    }
                     matrix[i*width+j]/=scalar;
                 }
             }
@@ -1513,12 +1533,16 @@ namespace cyfre
             std::cout<<"template<typename S> inline friend mat operator/(const S scalar, const mat& that)\n";
             #endif
 
-            mat scaled_addition = that;
-            for(size_t i=0; i<scaled_addition.height; ++i)
+            mat scaled_division = that;
+            for(size_t i=0; i<scaled_division.height; ++i)
             {
-                for(size_t j=0; j<scaled_addition.width; ++j)
+                for(size_t j=0; j<scaled_division.width; ++j)
                 {
-                    scaled_addition.matrix[i*scaled_addition.width+j] = scalar/scaled_addition.matrix[i*scaled_addition.width+j];
+                    if(scaled_division.matrix[i*scaled_division.width+j]==0)
+                    {
+                        throw std::domain_error("ERROR : template<typename S> inline friend mat operator/(const S scalar, const mat& that) - divide by zero");
+                    }
+                    scaled_division.matrix[i*scaled_division.width+j] = scalar/scaled_division.matrix[i*scaled_division.width+j];
                 }
             }
 
@@ -1528,7 +1552,7 @@ namespace cyfre
             std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
             #endif
 
-            return scaled_addition;
+            return scaled_division;
         }
 
         /// ---------------------- Multiplication -----------------------------
@@ -2018,7 +2042,7 @@ namespace cyfre
         std::cout<<"void display(const mat<T>& input)\n";
         #endif
 
-        std::cout<<"\n[";
+        std::cout<<"[";
         for(size_t i=0; i<input.height; ++i)
         {
             std::cout<<"[";
@@ -2035,6 +2059,8 @@ namespace cyfre
             if(i!=input.height-1) std::cout<<",\n";
             else std::cout<<"]\n";
         }
+
+        if(input.height==0 && input.width==0) std::cout<<"]\n";
 
         #ifdef DISPLAY_FUNC_CALLS
         auto finish = std::chrono::high_resolution_clock::now();
