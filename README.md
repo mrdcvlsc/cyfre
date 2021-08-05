@@ -928,8 +928,6 @@ X = [[1 0 0 -1],
 
 **operator(i,j)** - performs check of indices, terminates program if indices are out of range
 
-**.matrix[i][j]** - direct access, no checks, faster way
-
 ```c++
   cyfre::mat<int> nums(
     {{1,2,3},
