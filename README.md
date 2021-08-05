@@ -1,7 +1,7 @@
 # cyfre
 ## Under Development
 
-### a C++ matrix library
+### a Templated C++ matrix library
 
 ### cyfre aims to provide an easy to use c++ matrix library with basic matrix operations.
 
@@ -20,6 +20,9 @@
 
 - ### **for full performance you can disable checks and enable OpenMP multi-threading :**
   - ```-DCHECK_RANGE_DISABLE -DCHECK_SHAPE_DISABLE -DOMPTHREAD -fopenmp```
+
+- ### **Don't forget the optimization flags for more speed-up :**
+  - ```-O3 -march=native```
 
 --------------------------------------------------
 
