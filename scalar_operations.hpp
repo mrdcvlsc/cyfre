@@ -5,30 +5,30 @@
 
 namespace cyfre
 {
-    /// @arg accepts a vector of iterators that
-    /// @returns a copy of the dot product of two std::vector
-    template<typename T>
-    inline T dot(std::vector<T> tuple1, std::vector<T> tuple2)
-    {
-        size_t length = tuple1.size();
+    // /// @arg accepts a vector of iterators that
+    // /// @returns a copy of the dot product of two std::vector
+    // template<typename T>
+    // inline T dot(std::vector<T> tuple1, std::vector<T> tuple2)
+    // {
+    //     size_t length = tuple1.size();
 
-        #ifndef CHECK_SHAPE_DISABLE
-        if(length!=tuple2.size())
-        {
-            std::cerr<<"\n\nERROR : T dot(std::vector<typename std::vector<T>> tuple1, std::vector<typename std::vector<T>> tuple2)\n";
-            std::cerr<<"\tarray don't have the same lenght\n";
-            std::cout<<"\ttuple1 length : "<<tuple1.size()<<'\n';
-            std::cout<<"\ttuple2 length : "<<tuple2.size()<<'\n';
-            exit(1); 
-        }
-        #endif
+    //     #ifndef CHECK_SHAPE_DISABLE
+    //     if(length!=tuple2.size())
+    //     {
+    //         std::cerr<<"\n\nERROR : T dot(std::vector<typename std::vector<T>> tuple1, std::vector<typename std::vector<T>> tuple2)\n";
+    //         std::cerr<<"\tarray don't have the same lenght\n";
+    //         std::cout<<"\ttuple1 length : "<<tuple1.size()<<'\n';
+    //         std::cout<<"\ttuple2 length : "<<tuple2.size()<<'\n';
+    //         exit(1); 
+    //     }
+    //     #endif
         
-        T summation = (T)0;
+    //     T summation = (T)0;
 
-        for(size_t i=0; i<length; ++i) summation += tuple1[i]*tuple2[i];
+    //     for(size_t i=0; i<length; ++i) summation += tuple1[i]*tuple2[i];
 
-        return summation;
-    }
+    //     return summation;
+    // }
 
     /// @arg accepts a cyfre::mat<T> objects
     /// @returns T total, the total sum of all the elements of the matrix

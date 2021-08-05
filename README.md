@@ -5,9 +5,21 @@
 
 ### cyfre aims to provide an easy to use c++ matrix library with basic matrix operations.
 
-**```#include "cyfre/cyfre.hpp"```**
+--------------------------------------------------
 
-This library uses cpp stl's std::vector intensively
+- ### **To use, include the main header in your code**
+  - ```#include "cyfre/cyfre.hpp"```
+
+- ### **compilation ```-D``` flags**
+  - ```CHECK_RANGE_DISABLE```  -  Disable internal range checking, slightly speeds up the program (do not use in development)
+  - ```CHECK_SHAPE_DISABLE```  -  Disable internal shape checking of matricies in matrix operations, slightly speeds up the program (do not use in development)
+  - ```OMPTHREAD```            -  Enable OpenMP multi-threading / must include the openmp library -fopenmp
+
+- ### **compile with OpenMP multi-threading :**
+  - ```-DOMPTHREAD -fopenmp```
+
+- ### **for full performance you can disable checks and enable OpenMP multi-threading :**
+  - ```-DCHECK_RANGE_DISABLE -DCHECK_SHAPE_DISABLE -DOMPTHREAD -fopenmp```
 
 --------------------------------------------------
 
@@ -685,7 +697,7 @@ int diag_sum = X.trace();
 </ul>
 </details>
 
-<!--=====================================================================================-->
+<!--===================================================================================== ->
 <details>
 <summary><b>getting row/column as std::vector</b></summary>
 <br>
@@ -711,7 +723,8 @@ y = [2,5,8]
 </ul>
 </details>
 
-<!--=====================================================================================-->
+<!--===================================================================================== ->
+
 <details>
 <summary><b>getting row/column as std::vector of std::iterators</b></summary>
 <br>

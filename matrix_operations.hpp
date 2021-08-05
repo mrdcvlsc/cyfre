@@ -13,19 +13,26 @@ namespace cyfre
         #ifndef CHECK_SHAPE_DISABLE
         if(left.width!=right.width || left.height!=right.height)
         {
-            std::cerr<<"\n\nERROR : static mat hadamard(const mat& left, const mat& right) const\n";
-            std::cerr<<"\thadamard multiplication of two different shaped matrix is not allowed\n";
-            exit(1);
+            throw std::length_error(
+                "\n\nERROR : static mat hadamard(const mat& left, const mat& right) const\n"
+                "\thadamard multiplication of two different shaped matrix is not allowed\n"
+            )
         }
         #endif
         
-        mat<T> answer = left;
-        for(size_t i=0; i<answer.height; ++i)
+        size_t n = left.height*left.width;
+
+        mat<T> hproduct;
+        hproduct.height = left.height;
+        hproduct.width = left.width;
+        hproduct.matrix = new T[n];
+
+        for(size_t i=0; i<n; ++i)
         {
-            for(size_t j=0; j<answer.width; ++j) answer.matrix[i*answer.width+j]*=right.matrix[i*right.width+j];
+            hproduct.matrix[i] = left.matrix[i] * right.matrix[i];
         }
 
-        return answer;
+        return hproduct;
     }
 
     /// @returns raised matrix to a certain number 'p'
@@ -36,13 +43,11 @@ namespace cyfre
         #ifndef CHECK_SHAPE_DISABLE
         if(base.width!=base.height)
         {
-            std::cerr<<"\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n";
-            exit(1);
+            throw std::length_error("\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n");
         }
         else if(p<0)
         {
-            std::cerr<<"\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n";
-            exit(1);
+            throw std::length_error("\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n");
         }
         #endif
 
