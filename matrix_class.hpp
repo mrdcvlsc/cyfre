@@ -17,8 +17,6 @@
 #include <chrono>
 #endif
 
-// #define SAFECHECK 1
-
 /*
         CONTAINS ALL CYFRE LIBRARY TYPES from classes, to enums, and typedefs
 */
