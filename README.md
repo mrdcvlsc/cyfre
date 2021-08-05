@@ -305,7 +305,7 @@ cyfre::mat<int> mat_object({
   {3,4}
 });
 
-mat_object.scale_row(0,cyfre::MUL,2);  /*
+mat_object.scale_row(0,cyfre::SCALAR::MUL,2);  /*
 
 mat_object = [[2,4],
               [3,4]]
@@ -332,7 +332,7 @@ cyfre::mat<int> mat_object({
   {6,8}
 });
 
-mat_object.scale_column(1,cyfre::DIV,2);  /*
+mat_object.scale_column(1,cyfre::SCALAR::DIV,2);  /*
 
 mat_object = [[2,2],
               [6,4]]
@@ -360,7 +360,7 @@ cyfre::mat<int> mat_object({
   {7,8,9}
 });
 
-mat_object.row_operation(1,cyfre::MUL,2);  /*
+mat_object.row_operation(1,cyfre::SCALAR::MUL,2);  /*
 
 mat_object = [[ 1, 2, 3],
               [28,40,54],
@@ -388,7 +388,7 @@ cyfre::mat<int> mat_object({
   {7,8,9}
 });
 
-mat_object.column_operation(2,cyfre::DIV,3); /*
+mat_object.column_operation(2,cyfre::SCALAR::DIV,3); /*
 
 mat_object = [[ 1, 2, 1],
               [ 4, 4, 2],
@@ -974,7 +974,7 @@ size_t modes_occurrence  = getmode.first;
 std::vector<short> modes = getmode.second;
 
 /*
-  mean = 3.22222
+  mean = 5.55556
   median = 7
   numbers_of_modes = 2
   modes_occurrence = 3
@@ -995,9 +995,9 @@ std::vector<short> modes = getmode.second;
 cyfre::mat<short> X({7,2,4,3,9});
 
 long double
-  sum_of_square      = cyfre::sts::sofs(X,cyfre::SAMPLE),
-  variance           = cyfre::sts::variance(X,cyfre::SAMPLE),
-  standard_deviation = cyfre::sts::stddvn(X,cyfre::SAMPLE);;
+sum_of_square      = cyfre::sts::sofs(X),
+variance           = cyfre::sts::variance(X,cyfre::sts::SAMPLE),
+standard_deviation = cyfre::sts::stddvn(X,cyfre::sts::SAMPLE);;
 
 /*
   sum_of_square = 34

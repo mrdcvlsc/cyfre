@@ -395,8 +395,15 @@ namespace cyfre
             std::cout<<"T total() const\n";
             #endif
 
-            T total = 0, zero = 0;
-            for(auto row: matrix) total+=std::accumulate(row.begin(),row.end(),zero);
+            T total = 0;
+
+            for(size_t i=0; i<height; ++i)
+            {
+                for(size_t j=0; j<width; ++j)
+                {
+                    total += matrix[i*width+j];
+                }
+            }
 
             #ifdef DISPLAY_FUNC_CALLS
             auto finish = std::chrono::high_resolution_clock::now();
@@ -426,7 +433,7 @@ namespace cyfre
             #endif
 
             T trace_total = 0;
-            for(size_t i=0; i<height; ++i) trace_total+=matrix[i][i];
+            for(size_t i=0; i<height; ++i) trace_total+=matrix[i*width+i];
 
             #ifdef DISPLAY_FUNC_CALLS
             auto finish = std::chrono::high_resolution_clock::now();
@@ -1904,7 +1911,7 @@ namespace cyfre
                     inverse.row_swap(cpi,nonzerorow);
                 }
 
-                if(matrix[cpi][cpj]!=1) make_pivot(*this,cpi,cpj);
+                if(matrix[cpi*width+cpj]!=1) make_pivot(*this,cpi,cpj);
                 fix_pivot(*this,cpi,cpj);
                 cpi++;
                 cpj++;
@@ -1912,7 +1919,7 @@ namespace cyfre
 
             for(size_t i=0; i<height; ++i)
             {
-                if(matrix[i][i]==0) throw std::domain_error("\n\nERROR: cyfre::mat::inv() - matrix determinant is zero, cannot invert matrix");
+                if(matrix[i*width+i]==0) throw std::domain_error("\n\nERROR: cyfre::mat::inv() - matrix determinant is zero, cannot invert matrix");
             }
 
             matrix = inverse.matrix;
@@ -1967,7 +1974,7 @@ namespace cyfre
                     continue;
                 }
 
-                if(nonzerorow!=cpi)
+                if(nonzerorow!=(long long int)cpi)
                 {
                     row_swap(cpi,nonzerorow);
                 }
@@ -2033,8 +2040,8 @@ namespace cyfre
                     continue;
                 }
 
-                if(nonzerorow!=cpi) this->row_swap(cpi,nonzerorow);
-                if(matrix[cpi][cpj]!=1) make_pivot(*this,cpi,cpj);
+                if(nonzerorow!=(long long int)cpi) this->row_swap(cpi,nonzerorow);
+                if(matrix[cpi*width+cpj]!=1) make_pivot(*this,cpi,cpj);
                 fix_pivot(*this,cpi,cpj);
                 cpi++;
                 cpj++;
@@ -2090,32 +2097,16 @@ namespace cyfre
 
         for(size_t i=0; i<n; ++i) matrixstr.push_back(std::to_string(input.matrix[i]));
 
-        auto maxcol_len = [&input,&matrixstr](size_t j) -> size_t
-        {
-            size_t maxlen = matrixstr[0].size();
-            for(size_t i=1; i<input.height; ++i)
-            {
-                if(matrixstr[i*input.width+j].size()>maxlen) maxlen = matrixstr[i*input.width+j].size();
-            }
-            return maxlen;
-        };
+        std::vector<size_t> max_cols_len(input.width,0);
 
-        std::vector<std::string> display_nums;
-        display_nums.reserve(n);
-
-        size_t pad_space = 0;
-        for(size_t i=0; i<input.height; ++i)
+        for(size_t j=0; j<input.width; ++j)
         {
-            for(size_t j=0; j<input.width; ++j)
+            for(size_t i=0; i<input.height; ++i)
             {
-                size_t maxlen = maxcol_len(j);
-                pad_space = maxlen-matrixstr[i*input.width+j].size();
-                std::string strpad(pad_space,' ');
-                std::string padded;
-                padded.insert(0,matrixstr[i*input.width+j]);
-                padded.insert(0,strpad);
-                display_nums.push_back(padded);
-                matrixstr[i*input.width+j].clear();
+                if(matrixstr[i*input.width+j].size()>max_cols_len[j])
+                {
+                    max_cols_len[j] = matrixstr[i*input.width+j].size();
+                }
             }
         }
 
@@ -2123,9 +2114,12 @@ namespace cyfre
         {
             if(i==0) std::cout<<"[[";
             else std::cout<<" [";
+
             for(size_t j=0; j<input.width; ++j)
             {
-                std::cout<<display_nums[i*input.width+j];
+                size_t front_space = max_cols_len[j]-matrixstr[i*input.width+j].size();
+                while(front_space--) std::cout<<' ';
+                std::cout<<matrixstr[i*input.width+j];
                 if(j!=input.width-1) std::cout<<", ";
                 else std::cout<<"]";
             }

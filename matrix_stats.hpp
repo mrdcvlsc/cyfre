@@ -36,30 +36,30 @@ namespace cyfre
                 size_t hh = (input.height/2)-1;
                 size_t hw = (input.width/2)-1;
 
-                return ((long double)input.matrix[hh][hw]+(long double)input.matrix[hh][hw+1]+
-                    (long double)input.matrix[hh+1][hw]+(long double)input.matrix[hh+1][hw+1])/(long double)4;
+                return ((long double)input.matrix[hh*input.width+hw]+(long double)input.matrix[hh*input.width+hw+1]+
+                    (long double)input.matrix[(hh+1)*input.width+hw]+(long double)input.matrix[(hh+1)*input.width+(hw+1)])/(long double)4;
             }
             else if(input.height%2!=0 && input.width%2==0)
             {
                 size_t hh = oddmiddle(input.height);
                 size_t hw = (input.width/2)-1;
-                return ((long double)input.matrix[hh][hw]+(long double)input.matrix[hh][hw+1])/(long double)2;
+                return ((long double)input.matrix[hh*input.width+hw]+(long double)input.matrix[hh*input.width+hw+1])/(long double)2;
             }
             else if(input.height%2==0 && input.width%2!=0)
             {
                 size_t hh = (input.height/2)-1;
                 size_t hw = oddmiddle(input.width);
-                return ((long double)input.matrix[hh][hw]+(long double)input.matrix[hh+1][hw])/(long double)2;
+                return ((long double)input.matrix[hh*input.width+hw]+(long double)input.matrix[(hh+1)*input.width+hw])/(long double)2;
             }
             else if(input.height%2!=0 && input.width%2!=0)
             {
                 size_t hh = oddmiddle(input.height);
                 size_t hw = oddmiddle(input.width);
-                return (long double)input.matrix[hh][hw];
+                return (long double)input.matrix[hh*input.width+hw];
             }
             else if((input.height==1)&&(input.height==input.width))
             {
-                return (long double)input.matrix[0][0];
+                return (long double)input.matrix[0*input.width+0];
             }
             return 0;
         }
@@ -72,14 +72,14 @@ namespace cyfre
             {
                 for(size_t j=0; j<input.width; ++j)
                 {
-                    auto curr = e_counts.find(input.matrix[i][j]);
+                    auto curr = e_counts.find(input.matrix[i*input.width+j]);
                     if(curr==e_counts.end())
                     {
-                        e_counts.insert({input.matrix[i][j],1});
+                        e_counts.insert({input.matrix[i*input.width+j],1});
                     }
                     else
                     {
-                        e_counts[input.matrix[i][j]]++;
+                        e_counts[input.matrix[i*input.width+j]]++;
                     }
                 }
             }
@@ -128,7 +128,7 @@ namespace cyfre
             {
                 for(size_t j=0; j<input.width; ++j)
                 {
-                    sum_of_squares+= (input.matrix[i][j]-input_mean)*(input.matrix[i][j]-input_mean);
+                    sum_of_squares+= (input.matrix[i*input.width+j]-input_mean)*(input.matrix[i*input.width+j]-input_mean);
                 }
             }
             return sum_of_squares;
@@ -138,7 +138,7 @@ namespace cyfre
         template<typename T>
         long double variance(const mat<T>& input, const OBSERVATIONS type)
         {
-            long double input_mean = mean(input);
+            // long double input_mean = mean(input);
             long double sum_of_squares = sofs(input);
             long double n = input.height*input.width;
 

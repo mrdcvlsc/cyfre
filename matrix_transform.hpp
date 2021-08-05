@@ -5,7 +5,7 @@
 
 namespace cyfre
 {
-    /// @returns a transposed self copy
+    /// @returns a transposed matrix copy
     template<typename T>
     mat<T> transpose(mat<T> input)
     {
@@ -76,7 +76,7 @@ namespace cyfre
                 continue;
             }
 
-            if(nonzerorow!=cpi)
+            if(nonzerorow!=(long long int)cpi)
             {
                 input.row_swap(cpi,nonzerorow);
             }

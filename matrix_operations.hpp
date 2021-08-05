@@ -31,7 +31,7 @@ namespace cyfre
     /// @returns raised matrix to a certain number 'p'
     /// @note raising to a negative integer(inverse) is not supported yet but will be in the future
     template<typename T>
-    mat<T> power(mat<T> base, const int p)
+    mat<T> power(mat<T> base, size_t p)
     {
         #ifndef CHECK_SHAPE_DISABLE
         if(base.width!=base.height)
