@@ -2,7 +2,11 @@
 
 ### a Templated C++ matrix library
 
-### cyfre aims to provide an easy to use c++ matrix library with basic matrix operations, this repository started in Dec of 2020.
+### cyfre aims to provide an easy to use c++ matrix library with basic matrix operations.
+
+--------------------------------------------------
+
+_started : Dec 2020_
 
 --------------------------------------------------
 
