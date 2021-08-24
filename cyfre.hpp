@@ -1,11 +1,7 @@
 #ifndef CYFRE_HPP
 #define CYFRE_HPP
 
-#include "matrix_class.hpp"
-#include "matrix_operations.hpp"
-#include "matrix_transform.hpp"
-#include "matrix_stats.hpp"
-#include "scalar_operations.hpp"
+#include "classes/matrix_class.hpp"
 
 /*
         INCLUDES ALL FILES IN THE CYFRE LIBRARY

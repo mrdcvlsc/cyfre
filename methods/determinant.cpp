@@ -1,28 +1,11 @@
-#ifndef MATRIX_TRANSFORM_HPP
-#define MATRIX_TRANSFORM_HPP
+#ifndef CYFRE_DETERMINANT_CPP
+#define CYFRE_DETERMINANT_CPP
 
-#include "matrix_class.hpp"
+#include <iostream>
+#include "../classes/matrix_class.hpp"
 
 namespace cyfre
 {
-    /// @returns a transposed matrix copy
-    template<typename T>
-    mat<T> transpose(mat<T> input)
-    {
-        input.transpose();
-        return input;
-    }
-
-    // rotate left - 90 degree
-
-    // rotate right - 90 degree
-
-    // rotate 180 degree
-
-    // mirror/reflect x,y,main-diagonal & left-diagonal axis
-
-    // flaten into x axis, or y axis
-
     template<typename T>
     T det(mat<T> input)
     {
@@ -86,30 +69,6 @@ namespace cyfre
             cpj++;
         }
         return diag_product(input);
-    }
-
-    /// @returns reduced row echelon form of a matrix
-    template<typename T>
-    mat<T> ref(mat<T> input)
-    {
-        input.ref();
-        return input;
-    }
-
-    /// @returns reduced row echelon form of a matrix
-    template<typename T>
-    mat<T> rref(mat<T> input)
-    {
-        input.rref();
-        return input;
-    }
-
-    /// @returns inverse of a matrix
-    template<typename T>
-    mat<T> inv(mat<T> input)
-    {
-        input.inv();
-        return input;
     }
 }
 
