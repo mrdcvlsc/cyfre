@@ -20,5 +20,8 @@ check: $(OBJ)
 # -------------------------- test program compilation ---------------------------
 
 $(SRC)/%.o: $(SRC)/%.cpp
-	@echo "compiling test programs"
+	@echo "compiling test program"
 	@g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
+
+clean:
+	rm test/test*.o
