@@ -1,5 +1,5 @@
-#ifndef HELPER_FUNCTIONS_HPP
-#define HELPER_FUNCTIONS_HPP
+#ifndef CYFRE_HELPER_FUNCTIONS_HPP
+#define CYFRE_HELPER_FUNCTIONS_HPP
 
 #include <iostream>
 #include <string>

@@ -6,7 +6,7 @@
 #include <map>
 #include <set>
 #include <utility>
-#include "matrix_class.hpp"
+#include "../classes/matrix_class.hpp"
 
 namespace cyfre
 {

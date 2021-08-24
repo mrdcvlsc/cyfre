@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "chrono": "cpp",
+        "iostream": "cpp",
+        "*.tcc": "cpp",
+        "string": "cpp",
+        "tuple": "cpp",
+        "stdexcept": "cpp",
+        "iterator": "cpp"
+    }
+}

@@ -1,0 +1,10 @@
+
+    // rotate left - 90 degree
+
+    // rotate right - 90 degree
+
+    // rotate 180 degree
+
+    // mirror/reflect x,y,main-diagonal & left-diagonal axis
+
+    // flaten into x axis, or y axis

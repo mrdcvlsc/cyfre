@@ -1,5 +1,5 @@
-#ifndef RANDOMIZER_HPP
-#define RANDOMIZER_HPP
+#ifndef CYFRE_RANDOMIZER_HPP
+#define CYFRE_RANDOMIZER_HPP
 
 #include <iostream>
 #include <vector>
