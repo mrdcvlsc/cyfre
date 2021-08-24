@@ -106,11 +106,11 @@ _started : Dec 2020_
   **construct an costum shaped matrix, with initial values**
 
   ```c++
-  cyfre::mat<int> mat_object(3,1,5);  /*
+  cyfre::mat<int> mat_object(3,2,5);  /*
 
-  mat_object = [[5],
-                [5],
-                [5]]
+  mat_object = [[5,5],
+                [5,5],
+                [5,5]]
 
   */
   ```
@@ -406,11 +406,11 @@ cyfre::mat<int> mat_object({
   {7,8,9}
 });
 
-mat_object.column_operation(2,cyfre::SCALAR::DIV,3); /*
+mat_object.column_operation(1,cyfre::SCALAR::DIV,2); /*
 
-mat_object = [[ 1, 2, 1],
-              [ 4, 4, 2],
-              [ 7, 8, 3]]
+mat_object = [[1, 0, 3],
+              [4, 0, 6],
+              [7, 0, 9]]
 
 */
 ```
@@ -815,18 +815,18 @@ cyfre::mat<int> X({
 
 cyfre::mat<int> X_cubed = cyfre::power(X,3);  /*
 
-X_cubed = [[32427  23838 25975],
-           [37818  28389 38636],
-           [128454 83358 17402]]
+X_cubed = [[35599	28068	26659],
+          [38210	31505	39196],
+          [130302	85590	20042]]
 
 */
 
 cyfre::mat<int> X_squared = X;
 X_squared.power(2); /*
 
-X_squared = [[1047 666  239],
-             [1488 1005 202],
-             [786  702  1714]]
+X_squared = [[1075 690	 279],
+            [1488	1033	 202],
+            [786	 834	1714]]
 
 */
 

@@ -22,9 +22,9 @@ namespace cyfre
         T* rht = new T[width*height];
 
         #ifndef OMPTHREAD
-        for(size_t j=0; j<width; ++j)
+        for(j=0; j<width; ++j)
         {
-            for(size_t i=0; i<height; ++i)
+            for(i=0; i<height; ++i)
             {
                 rht[k++] = matrix[i*width+j];
             }
@@ -32,9 +32,9 @@ namespace cyfre
         #else
         if(height*width<=TRANSPOSE_MT_TREASHOLD)
         {
-            for(size_t j=0; j<width; ++j)
+            for(j=0; j<width; ++j)
             {
-                for(size_t i=0; i<height; ++i)
+                for(i=0; i<height; ++i)
                 {
                     rht[k++] = matrix[i*width+j];
                 }

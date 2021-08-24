@@ -46,6 +46,19 @@ namespace cyfre
                 at[k++] = matrix[i*width+j];
             }
         }
+
+        for(size_t i=0; i<height; ++i)
+        {
+            for(size_t j=0; j<that.width; ++j)
+            {
+                product.matrix[i*height+j] = 0;
+                for(size_t k=0; k<width; ++k)
+                {
+                    product.matrix[i*height+j] *= matrix[i*height+k]*that.matrix[k*that.width+j];
+                }
+            }
+        }
+
         #else
         if(height*width<=TRANSPOSE_MT_TREASHOLD)
         {
@@ -69,10 +82,14 @@ namespace cyfre
             }
         }
         #endif
-
-        T dot_sum;
         
         #ifdef OMPTHREAD
+        size_t n=product.height*product.width;
+        for(size_t m=0; m<n; ++m)
+        {
+            product.matrix[m] = 0;
+        }
+        
         #pragma omp parallel private(i,j,k)
         #endif
         {

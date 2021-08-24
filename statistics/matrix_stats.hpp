@@ -17,7 +17,7 @@ namespace cyfre
         template<typename T>
         long double mean(const mat<T>& input)
         {
-            T total = input.total();
+            T total = input.sum();
             size_t n = input.height*input.width;
             return (long double)total/(long double)n;
         }

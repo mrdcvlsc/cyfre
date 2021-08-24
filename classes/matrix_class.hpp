@@ -44,7 +44,7 @@ namespace cyfre
     /// SCALAR OPERATIONS
     enum SCALAR { ADD, SUB, MUL, DIV };
 
-    template<class T>
+    template<typename T>
     class mat
     {   
         public:
@@ -62,12 +62,16 @@ namespace cyfre
         mat(const size_t height, const size_t width, const T default_value);
         mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound);
         mat(const TYPE matrix_type, const size_t n, T scalar);
-        mat(const TYPE matrix_type, const size_t n) : mat(matrix_type,n,0);
+        mat(const TYPE matrix_type, const size_t n);
         mat(const mat& original);
         ~mat();
 
         // copy operator
         mat& operator=(const mat& original);
+
+        // compare matrix
+        inline bool operator==(const mat& that) const;
+        inline bool operator!=(const mat& that) const;
 
         // =============================== methods ===================================
         /// @returns T sum, the total sum of all the elements of the matrix
@@ -75,6 +79,7 @@ namespace cyfre
         T trace() const;
 
         T max();
+
         T min();
 
         void scale_row(const size_t row_index, const SCALAR scalar_operation, const T value);
@@ -104,7 +109,9 @@ namespace cyfre
 
         inline mat operator+(const T scalar) const;
         inline void operator+=(const T scalar);
-        inline friend mat operator+(const T scalar, const mat& that);
+
+        template<class S>
+        inline friend mat operator+(const S scalar, const mat& that);
 
         /// --------------------------- subtraction ---------------------------------
 
@@ -114,7 +121,9 @@ namespace cyfre
 
         inline mat operator-(const T scalar) const;
         inline void operator-=(const T scalar);
-        inline friend mat operator-(const T scalar, const mat& that);
+
+        template<class S>
+        inline friend mat operator-(const S scalar, const mat& that);
 
         /// ---------------------- Division -----------------------------
         /// @returns element by element division
@@ -123,7 +132,9 @@ namespace cyfre
 
         inline mat operator/(const T scalar) const;
         inline void operator/=(const T scalar);
-        inline friend mat operator/(const T scalar, const mat& that);
+
+        template<class S>
+        inline friend mat operator/(const S scalar, const mat& that);
 
         /// ---------------------- Multiplication -----------------------------
         /// @returns matrix multiplication / dot product
@@ -131,10 +142,15 @@ namespace cyfre
         inline void operator*=(const mat& that);
         inline void hadamard(const mat& that);
 
-        /// ---------------------- Division -----------------------------
+        /// ---------------------- Division ----------------------------------
         inline mat operator*(const T scalar) const;
         inline void operator*=(const T scalar);
-        inline friend mat operator*(const T scalar, const mat& that);
+
+        template<class S>
+        inline friend mat operator*(const S scalar, const mat& that);
+
+        /// ---------------------- comparison --------------------------------
+        int compare(const mat& with) const;
 
         // ============================== MATRIX EXPOENTIAL ==============================
 
@@ -154,6 +170,38 @@ namespace cyfre
 }
 
 #ifndef MAKE_BUILD
+
+#include "constructors.cpp"
+#include "comparison.cpp"
+#include "indexing.cpp"
+#include "display.cpp"
+#include "assign.cpp"
+
+#include "../matrix-elementary-operation/col_operations.cpp"
+#include "../matrix-elementary-operation/row_operations.cpp"
+
+#include "../matrix-matrix/mm_addition.cpp"
+#include "../matrix-matrix/mm_subtraction.cpp"
+#include "../matrix-matrix/mm_division.cpp"
+#include "../matrix-matrix/mm_multiplication.cpp"
+#include "../matrix-matrix/mm_hadamard.cpp"
+
+#include "../matrix-scalar/ms_addition.cpp"
+#include "../matrix-scalar/ms_subtraction.cpp"
+#include "../matrix-scalar/ms_division.cpp"
+#include "../matrix-scalar/ms_multiplication.cpp"
+
+#include "../methods/determinant.cpp"
+#include "../methods/minmax.cpp"
+#include "../methods/sum.cpp"
+#include "../methods/trace.cpp"
+
+#include "../transform/apply.cpp"
+#include "../transform/inverse.cpp"
+#include "../transform/power.cpp"
+#include "../transform/ref.cpp"
+#include "../transform/rref.cpp"
+#include "../transform/transpose.cpp"
 
 #endif
 

@@ -157,7 +157,7 @@ namespace cyfre
     /// @param 1 scalar : template S type value that you want to multiply to all the elements of the column
     /// @param 2 base_column : size_t index of the column you want to perform scaling
     template<class T>
-    void column_scale(T scalar, size_t base_column)
+    void mat<T>::column_scale(T scalar, size_t base_column)
     {
         #ifdef DISPLAY_FUNC_CALLS
         auto start = std::chrono::high_resolution_clock::now();
@@ -193,7 +193,7 @@ namespace cyfre
     /// @param 2 scale_column : size_t index of the column you want to scale
     /// @param 3 base_column : size_t index of the column you want to add the results of the scaled column
     template<class T>
-    void column_scale(T scalar, size_t scale_column, size_t base_column)
+    void mat<T>::column_scale(T scalar, size_t scale_column, size_t base_column)
     {
         #ifdef DISPLAY_FUNC_CALLS
         auto start = std::chrono::high_resolution_clock::now();
