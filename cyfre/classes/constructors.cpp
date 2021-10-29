@@ -179,6 +179,9 @@ namespace cyfre
 
         matrix = new T[height*width];
 
+        #ifdef OMPTHREAD
+        #pragma omp parallel for num_threads(omp_get_max_threads())
+        #endif
         for(size_t i=0; i<width; ++i)
         {
             matrix[i] = array_vector[i];
@@ -202,6 +205,9 @@ namespace cyfre
 
         size_t n = height*width;
 
+        #ifdef OMPTHREAD
+        #pragma omp parallel for num_threads(omp_get_max_threads())
+        #endif
         for(size_t i=0; i<n; ++i)
         {
             matrix[i] = default_value;
@@ -269,6 +275,9 @@ namespace cyfre
         matrix = new T[n*n];
         
         size_t N = n*n;
+        #ifdef OMPTHREAD
+        #pragma omp parallel for num_threads(omp_get_max_threads())
+        #endif
         for(size_t i=0; i<N; ++i)
         {
             matrix[i] = 0;

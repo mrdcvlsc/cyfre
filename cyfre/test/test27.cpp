@@ -23,9 +23,11 @@ int main()
 
     subject1.padding(2,1);
 
-    if(subject1!=target1) throw std::logic_error("test 27 error in padding output");
-
-    cyfre::display(subject1);
+    if(subject1!=target1)
+    {
+        cyfre::display(subject1);
+        throw std::logic_error("test 27 error in padding output");
+    }
 
     return 0;
 }

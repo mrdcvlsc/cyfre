@@ -11,6 +11,7 @@
 #include <functional>
 #include <iterator>
 #include <chrono>
+#include <cstring>
 
 #ifdef OMPTHREAD
 #include <omp.h>
