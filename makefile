@@ -27,4 +27,7 @@ clean:
 	rm cyfre/test/test*.out
 
 install:
-	@ln -s $(dir $(abspath $(lastword $(MAKEFILE_LIST)))) /usr/local/include/
+	@ln -s $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/cyfre /usr/local/include/
+
+uninstall:
+	@unlink /usr/local/include/cyfre
