@@ -152,12 +152,16 @@ namespace cyfre
         /// ---------------------- comparison --------------------------------
         int compare(const mat& with) const;
 
+        // ============================== SHAPING ==============================
+        void transpose();
+        void padding(size_t pad_length);
+        void padding(size_t pad_height, size_t pad_width);
+
         // ============================== MATRIX EXPOENTIAL ==============================
 
         /// @returns raised matrix to a certain number 'p'
         /// @note raising to a negative integer(inverse) is not supported yet but will be in the future
         void power(size_t p);
-        void transpose();
         void inv();
         void ref();
         void rref();
@@ -201,7 +205,9 @@ namespace cyfre
 #include "../transform/power.cpp"
 #include "../transform/ref.cpp"
 #include "../transform/rref.cpp"
-#include "../transform/transpose.cpp"
+
+#include "../shaping/padding.cpp"
+#include "../shaping/transpose.cpp"
 
 #endif
 

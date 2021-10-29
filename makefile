@@ -9,19 +9,19 @@ endif
 
 SRC := test
 SRC_FILES := $(wildcard $(SRC)/*.cpp)
-OBJ := $(patsubst $(SRC)/%.cpp,$(SRC)/%.o,$(SRC_FILES))
+OBJ := $(patsubst $(SRC)/%.cpp,$(SRC)/%.out,$(SRC_FILES))
 
 # -------------------------- run test programs ---------------------------
 
 check: $(OBJ)
 	@echo "running test programs"
-	@for o in $(SRC)/*.o; do ./$$o; done
+	@for o in $(SRC)/*.out; do ./$$o; done
 
 # -------------------------- test program compilation ---------------------------
 
-$(SRC)/%.o: $(SRC)/%.cpp
+$(SRC)/%.out: $(SRC)/%.cpp
 	@echo "compiling test program"
 	@g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
 
 clean:
-	rm test/test*.o
+	rm test/test*.out
