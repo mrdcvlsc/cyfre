@@ -6,8 +6,6 @@
 
 namespace cyfre
 {
-    // ============================== MATRIX TRANSFORMATION ==============================
-
     /// transpose self
     template<class T>
     void mat<T>::transpose()

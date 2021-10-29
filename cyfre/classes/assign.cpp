@@ -26,13 +26,17 @@ namespace cyfre
         height = original.height;
         width =  original.width;
 
-        #ifdef OMPTHREAD
-        #pragma omp parallel for num_threads(omp_get_max_threads())
-        #endif
-        for(size_t i=0; i<n; ++i)
-        {
-            matrix[i] = original.matrix[i];
-        }
+        // previous copy:
+        // #ifdef OMPTHREAD
+        // #pragma omp parallel for num_threads(omp_get_max_threads())
+        // #endif
+        // for(size_t i=0; i<n; ++i)
+        // {
+        //     matrix[i] = original.matrix[i];
+        // }
+
+        // new copy: it seems a single thread memcpy is faster than m-threaded assignments for memory <= 8GB
+        std::memcpy(matrix,original.matrix,sizeof(T)*n);
 
         #ifdef DISPLAY_FUNC_CALLS
         auto finish = std::chrono::high_resolution_clock::now();
