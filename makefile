@@ -7,7 +7,7 @@ ifeq ($(OS), Linux)
 CPPFLAGS += -fsanitize=address
 endif
 
-SRC := test
+SRC := cyfre/test
 SRC_FILES := $(wildcard $(SRC)/*.cpp)
 OBJ := $(patsubst $(SRC)/%.cpp,$(SRC)/%.out,$(SRC_FILES))
 
@@ -24,4 +24,7 @@ $(SRC)/%.out: $(SRC)/%.cpp
 	@g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
 
 clean:
-	rm test/test*.out
+	rm cyfre/test/test*.out
+
+install:
+	@ln -s $(dir $(abspath $(lastword $(MAKEFILE_LIST)))) /usr/local/include/
