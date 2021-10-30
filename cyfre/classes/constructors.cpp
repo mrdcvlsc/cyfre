@@ -335,13 +335,14 @@ namespace cyfre
         size_t n = original.height*original.width;
         matrix = new T[n];
 
-        #ifdef OMPTHREAD
-        #pragma omp parallel for num_threads(omp_get_max_threads())
-        #endif
-        for(size_t i=0; i<n; ++i)
-        {
-            matrix[i] = original.matrix[i];
-        }
+        // #ifdef OMPTHREAD
+        // #pragma omp parallel for num_threads(omp_get_max_threads())
+        // #endif
+        // for(size_t i=0; i<n; ++i)
+        // {
+        //     matrix[i] = original.matrix[i];
+        // }
+        std::memcpy(matrix,original.matrix,sizeof(T)*n);
 
         height = original.height;
         width = original.width;
