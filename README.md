@@ -35,7 +35,7 @@ _started : Dec 2020_
 ## Documentation
 
 <details>
-<summary><b><i>matrix initializations (CONSTRUCTORS)</i></b></summary>
+<summary><b><i>CREATING MATRIX (CONSTRUCTORS)</i></b></summary>
 <br>
 <ul>
 
@@ -620,45 +620,30 @@ cyfre::mat<int> Y = X*W;
 </details>
 
 
+<!--########################################################################################-->
 <details>
-<summary><b><i>METHODS</i></b></summary>
+<summary><b><i>SCALAR METHODS</i></b></summary>
 <br>
 <ul>
+
+_methods that returns a single/scalar value_
 
 <!--=====================================================================================-->
 <details>
-<summary><b>Applying functions to all elements of the matrix</b></summary>
+<summary><b>min & max</b></summary>
 <br>
 <ul>
 
-**.apply() is a shortcut method for applying a function to all elements of a matrix**
-
 ```c++
-
-int square(int x) { return x*x; }
-
 cyfre::mat<int> X({
-  {23,12,53,34,23},
-  {33,77,53,90,28},
-  {87,26,11,24,31},
-  {84,32,73,64,26},
-  {77,88,45,97,86}
+  { 1, 2, 3},
+  { 4, 5,-6},
+  {17, 8, 9}
 });
 
-X.apply(square);  /*
-
-X = [[529 144  2809 1156 529],
-    [1089 5929 2809 8100 784],
-    [7569 676  121  576  961],
-    [7056 1024 5329 4096 676],
-    [5929 7744 2025 9409 7396]]
-
-*/
+int min = X.min();  // -6
+int max = X.max();  // 17
 ```
-**NOTE:**
-  - the function should only have one parameter
-  - the function's return type, and parameter type should be the same as the matrix type
-
 </ul>
 </details>
 
@@ -703,6 +688,80 @@ int diag_sum = X.trace();
 ```
 </ul>
 </details>
+
+<!--=====================================================================================-->
+<details>
+<summary><b>Determinant of a Matrix</b></summary>
+<br>
+<ul>
+
+```c++
+cyfre::mat<long double> X({
+  { 5, 10,-15,  20},
+  {30,-35,-40, -45},
+  {55, 60, 75, -80},
+  {90, 95,100,-105}
+});
+
+long double determinant = cyfre::det(X);  /*
+
+determiant = -720000
+
+*/
+
+```
+</ul>
+</details>
+
+</ul>
+</details>
+
+<!--########################################################################################-->
+<details>
+<summary><b><i>TRANSFOM METHODS</i></b></summary>
+<br>
+<ul>
+
+_methods that transforms/changes the values, shape orientation of a matrix_
+
+<!--=====================================================================================-->
+<details>
+<summary><b>Applying functions to all elements of the matrix</b></summary>
+<br>
+<ul>
+
+**.apply() is a shortcut method for applying a function to all elements of a matrix**
+
+```c++
+
+int square(int x) { return x*x; }
+
+cyfre::mat<int> X({
+  {23,12,53,34,23},
+  {33,77,53,90,28},
+  {87,26,11,24,31},
+  {84,32,73,64,26},
+  {77,88,45,97,86}
+});
+
+X.apply(square);  /*
+
+X = [[529 144  2809 1156 529],
+    [1089 5929 2809 8100 784],
+    [7569 676  121  576  961],
+    [7056 1024 5329 4096 676],
+    [5929 7744 2025 9409 7396]]
+
+*/
+```
+**NOTE:**
+  - the function should only have one parameter
+  - the function's return type, and parameter type should be the same as the matrix type
+
+</ul>
+</details>
+
+
 
 <!--===================================================================================== ->
 <details>
@@ -837,30 +896,6 @@ X_squared = [[1075 690	 279],
 
 <!--=====================================================================================-->
 <details>
-<summary><b>Determinant of a Matrix</b></summary>
-<br>
-<ul>
-
-```c++
-cyfre::mat<long double> X({
-  { 5, 10,-15,  20},
-  {30,-35,-40, -45},
-  {55, 60, 75, -80},
-  {90, 95,100,-105}
-});
-
-long double determinant = cyfre::det(X);  /*
-
-determiant = -720000
-
-*/
-
-```
-</ul>
-</details>
-
-<!--=====================================================================================-->
-<details>
 <summary><b>Inverse of a Matrix</b></summary>
 <br>
 <ul>
@@ -917,14 +952,61 @@ X = [[1 0 0 -1],
 </ul>
 </details>
 
+<!--=====================================================================================-->
+<details>
+<summary><b>Padding</b></summary>
+<br>
+<ul>
+
+increase the size of matrix by padding zeros
+
+```c++
+cyfre::mat<int> X({
+  {1,2,3,4},
+  {5,6,7,8},
+  {-2,3,-4,1}
+});
+
+X = cyfre::padding(X,1); /*
+
+each one of the 3 methods given below has also
+the same effect with the method given above
+
+X = cyfre::padding(X,1,1);
+X.padding(1);
+X.padding(1,1);
+
+outputs:
+
+X = [[0, 0, 0, 0, 0, 0],
+     [0, 1, 2, 3, 4, 0],
+     [0, 5, 6, 7, 8, 0],
+     [0,-2, 3,-4, 1, 0],
+     [0, 0, 0, 0, 0, 0]]
+*/
+```
+
+**R***ow* **E***echelon* **F***orm* : **```X.ref()```** *or* **```X = cyfre::ref(X)```**
+
+</ul>
+</details>
+
 </ul>
 </details>
   
 
 <details>
-<summary><b>mat members: matrix, height, & width</b></summary>
+<summary><b>CYFRE::MAT MEMBERS</b></summary>
 <br>
 <ul>
+
+```
+.height
+.width
+matrix
+```
+
+_you can access the matrix values using the operator ()_
 
 **operator(i,j)** - performs check of indices, terminates program if indices are out of range
 
