@@ -309,9 +309,16 @@ mat_object = [[ 1, 2, 3],
 </details>
 </ul>
 
+<br>
+
 - **costum row/column operations**
 
+<ul>
+
 _: NOTE - anything these methods can do, the 3 elementary basic row/column operations can also do, just keep this in mind... the following methods are just more straigth forward_
+
+</ul>
+
 <ul>
 <!--=====================================================================================-->
 <details>
@@ -985,8 +992,6 @@ X = [[0, 0, 0, 0, 0, 0],
      [0, 0, 0, 0, 0, 0]]
 */
 ```
-
-**R***ow* **E***echelon* **F***orm* : **```X.ref()```** *or* **```X = cyfre::ref(X)```**
 
 </ul>
 </details>
