@@ -8,7 +8,7 @@ namespace cyfre
 {
     /// initializes a 1x1 matrix with a value of zero
     template<class T>
-    mat<T>::mat() : matrix(nullptr), height(0), width(0)
+    mat<T>::mat() : matrix(NULL), height(0), width(0)
     {
         #ifdef DISPLAY_FUNC_CALLS
         std::cout<<"mat()\n";
@@ -119,46 +119,35 @@ namespace cyfre
 
     /// initializes a matrix using a 2 dimension vector : @arg std::vector<std::vector<T>> matrix
     template<class T>
-    mat<T>::mat(const std::vector<std::vector<T>>& matrix)
+    mat<T>::mat(std::initializer_list<std::initializer_list<T>> matrix)
     {
         #ifdef DISPLAY_FUNC_CALLS
         auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(const std::vector<std::vector<T>>& matrix)\n";
+        std::cout<<"mat(std::initializer_list<std::initializer_list<T>> matrix)\n";
         #endif
 
-        if(matrix.empty())
-        {
-            throw std::length_error(
-                "\n\nERROR : mat(std::vector<std::vector<T>>)\n"
-                "\tthe outer 'std::vector<>' is empty\n"
-            );
-        }
+        auto outer_it = matrix.begin();
+        size_t prev_row_len = (*outer_it).size();
 
-        size_t prev_row_len = matrix[0].size();
-        for(size_t i=0; i<matrix.size();++i)
+        for(auto &row : matrix)
         {
-            if(matrix[i].size()!=prev_row_len)
+            if(row.size()!=prev_row_len)
             {
                 throw std::length_error(
-                    "\n\nERROR : mat(std::vector<std::vector<T>>)\n"
-                    "\tthe inner vector rows inside <std::vector'<std::vector<T>'> is not equal\n"
+                    "\n\nERROR : mat(std::initializer_list<std::initializer_list<T>> matrix)\n"
+                    "\tthe inner rows inside std::initializer_list<std::initializer_list<T>> is not equal\n"
                 );
             }
-            prev_row_len = matrix[0].size();
         }
 
         height = matrix.size();
-        width  = matrix[0].size();
+        width  = (*outer_it).size();
 
         this->matrix = new T[height*width];
 
-        size_t cnt = 0;
-        for(size_t i=0; i<height; ++i)
+        for(size_t i=0; i<height; ++i, ++outer_it)
         {
-            for(size_t j=0; j<width; ++j)
-            {
-                this->matrix[cnt++] = matrix[i][j];
-            }
+            std::copy((*outer_it).begin(),(*outer_it).end(),this->matrix+(i*width));
         }
 
         #ifdef DISPLAY_FUNC_CALLS
@@ -170,22 +159,15 @@ namespace cyfre
 
     /// initializes a matrix using a vector : @arg std::vector<T> matrix
     template<class T>
-    mat<T>::mat(const std::vector<T>& array_vector) : height(1), width(array_vector.size())
+    mat<T>::mat(std::initializer_list<T> array_vector) : height(1), width(array_vector.size())
     {
         #ifdef DISPLAY_FUNC_CALLS
         auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(const std::vector<T>& array_vector)\n";
+        std::cout<<"mat(std::initializer_list<T> array_vector)\n";
         #endif
 
         matrix = new T[height*width];
-
-        #ifdef OMPTHREAD
-        #pragma omp parallel for num_threads(omp_get_max_threads())
-        #endif
-        for(size_t i=0; i<width; ++i)
-        {
-            matrix[i] = array_vector[i];
-        }
+        std::copy(array_vector.begin(),array_vector.end(),matrix);
 
         #ifdef DISPLAY_FUNC_CALLS
         auto finish = std::chrono::high_resolution_clock::now();
@@ -329,23 +311,41 @@ namespace cyfre
     {
         #ifdef DISPLAY_FUNC_CALLS
         auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(const mat& original)\n";
+        std::cout<<"copy constructor : mat(const mat& original)\n";
         #endif
         
         size_t n = original.height*original.width;
-        matrix = new T[n];
-
-        // #ifdef OMPTHREAD
-        // #pragma omp parallel for num_threads(omp_get_max_threads())
-        // #endif
-        // for(size_t i=0; i<n; ++i)
-        // {
-        //     matrix[i] = original.matrix[i];
-        // }
-        std::memcpy(matrix,original.matrix,sizeof(T)*n);
 
         height = original.height;
         width = original.width;
+
+        matrix = new T[n];
+
+        std::memcpy(matrix,original.matrix,sizeof(T)*n);
+
+        #ifdef DISPLAY_FUNC_CALLS
+        auto finish = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+        #endif
+    }
+
+    /// move constructor
+    template<class T>
+    mat<T>::mat(mat<T>&& temporary)
+    {
+        #ifdef DISPLAY_FUNC_CALLS
+        auto start = std::chrono::high_resolution_clock::now();
+        std::cout<<"move constructor : mat(const mat& temporary)\n";
+        #endif
+        
+        height = temporary.height;
+        width = temporary.width;
+        matrix = temporary.matrix;
+
+        temporary.height = 0;
+        temporary.width = 0;
+        temporary.matrix = NULL;
 
         #ifdef DISPLAY_FUNC_CALLS
         auto finish = std::chrono::high_resolution_clock::now();

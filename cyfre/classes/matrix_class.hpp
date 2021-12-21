@@ -50,25 +50,29 @@ namespace cyfre
     {   
         public:
 
-        T* matrix;
-        size_t height;
-        size_t width;
+        T* matrix = NULL;
+        size_t height = 0;
+        size_t width = 0;
         
         // ============================== constructors ==============================
         mat();
         mat(T one_value);
         mat(std::string text_file, char separator);
-        mat(const std::vector<std::vector<T>>& matrix);
-        mat(const std::vector<T>& array_vector);
+        mat(std::initializer_list<std::initializer_list<T>> matrix);
+        mat(std::initializer_list<T> array_vector);
         mat(const size_t height, const size_t width, const T default_value);
         mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound);
         mat(const TYPE matrix_type, const size_t n, T scalar);
         mat(const TYPE matrix_type, const size_t n);
-        mat(const mat& original);
+        mat(const mat& original); // copy constructor
+        mat(mat&& temporary); // move constructor
         ~mat();
 
-        // copy operator
+        // copy assignment
         mat& operator=(const mat& original);
+
+        // move assignment
+        mat& operator=(mat&& temporary);
 
         // compare matrix
         inline bool operator==(const mat& that) const;

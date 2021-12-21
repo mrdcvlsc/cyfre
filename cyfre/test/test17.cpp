@@ -9,11 +9,11 @@ int main()
         {66,42,-4}
     });
 
-    cyfre::mat<int> W(std::vector<int>({-3,4,56}));
+    cyfre::mat<int> W {-3,4,56};
 
     cyfre::mat<int> C = W*X;
 
-    cyfre::mat<int> correct(std::vector<int>({3731,2336,-183}));
+    cyfre::mat<int> correct {3731,2336,-183};
 
     std::cout<<"a = \n";
     cyfre::display(C);
