@@ -311,17 +311,41 @@ namespace cyfre
     {
         #ifdef DISPLAY_FUNC_CALLS
         auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(const mat& original)\n";
+        std::cout<<"copy constructor : mat(const mat& original)\n";
         #endif
         
         size_t n = original.height*original.width;
-        
+
         height = original.height;
         width = original.width;
 
         matrix = new T[n];
 
         std::memcpy(matrix,original.matrix,sizeof(T)*n);
+
+        #ifdef DISPLAY_FUNC_CALLS
+        auto finish = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
+        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
+        #endif
+    }
+
+    /// move constructor
+    template<class T>
+    mat<T>::mat(mat<T>&& temporary)
+    {
+        #ifdef DISPLAY_FUNC_CALLS
+        auto start = std::chrono::high_resolution_clock::now();
+        std::cout<<"move constructor : mat(const mat& temporary)\n";
+        #endif
+        
+        height = temporary.height;
+        width = temporary.width;
+        matrix = temporary.matrix;
+
+        temporary.height = 0;
+        temporary.width = 0;
+        temporary.matrix = NULL;
 
         #ifdef DISPLAY_FUNC_CALLS
         auto finish = std::chrono::high_resolution_clock::now();

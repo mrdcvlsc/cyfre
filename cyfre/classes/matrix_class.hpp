@@ -65,10 +65,14 @@ namespace cyfre
         mat(const TYPE matrix_type, const size_t n, T scalar);
         mat(const TYPE matrix_type, const size_t n);
         mat(const mat& original); // copy constructor
+        mat(mat&& temporary); // move constructor
         ~mat();
 
         // copy assignment
         mat& operator=(const mat& original);
+
+        // move assignment
+        mat& operator=(mat&& temporary);
 
         // compare matrix
         inline bool operator==(const mat& that) const;
