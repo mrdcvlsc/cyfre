@@ -153,7 +153,7 @@ _started : Dec 2020_
   **construct and define a matrix**
 
   ```c++
-  cyfre::mat<int> mat_object({5,10,15,20,25});
+  cyfre::mat<int> mat_object {5,10,15,20,25};
 
   // mat_object = [[5,10,15,20,25]] <-- (1x5 matrix)
   ```
@@ -170,11 +170,11 @@ _started : Dec 2020_
   **construct and define a matrix**
 
   ```c++
-  cyfre::mat<int> mat_object({
+  cyfre::mat<int> mat_object {
     {1,2,3},
     {4,5,6},
     {7,8,9}
-  });
+  };
 
   /*
     mat_object = [[1,2,3],
