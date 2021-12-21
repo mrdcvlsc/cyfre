@@ -119,46 +119,35 @@ namespace cyfre
 
     /// initializes a matrix using a 2 dimension vector : @arg std::vector<std::vector<T>> matrix
     template<class T>
-    mat<T>::mat(const std::vector<std::vector<T>>& matrix)
+    mat<T>::mat(std::initializer_list<std::initializer_list<T>> matrix)
     {
         #ifdef DISPLAY_FUNC_CALLS
         auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(const std::vector<std::vector<T>>& matrix)\n";
+        std::cout<<"mat(std::initializer_list<std::initializer_list<T>> matrix)\n";
         #endif
 
-        if(matrix.empty())
-        {
-            throw std::length_error(
-                "\n\nERROR : mat(std::vector<std::vector<T>>)\n"
-                "\tthe outer 'std::vector<>' is empty\n"
-            );
-        }
+        auto outer_it = matrix.begin();
+        size_t prev_row_len = (*outer_it).size();
 
-        size_t prev_row_len = matrix[0].size();
-        for(size_t i=0; i<matrix.size();++i)
+        for(auto &row : matrix)
         {
-            if(matrix[i].size()!=prev_row_len)
+            if(row.size()!=prev_row_len)
             {
                 throw std::length_error(
-                    "\n\nERROR : mat(std::vector<std::vector<T>>)\n"
-                    "\tthe inner vector rows inside <std::vector'<std::vector<T>'> is not equal\n"
+                    "\n\nERROR : mat(std::initializer_list<std::initializer_list<T>> matrix)\n"
+                    "\tthe inner rows inside std::initializer_list<std::initializer_list<T>> is not equal\n"
                 );
             }
-            prev_row_len = matrix[0].size();
         }
 
         height = matrix.size();
-        width  = matrix[0].size();
+        width  = (*outer_it).size();
 
         this->matrix = new T[height*width];
 
-        size_t cnt = 0;
-        for(size_t i=0; i<height; ++i)
+        for(size_t i=0; i<height; ++i, ++outer_it)
         {
-            for(size_t j=0; j<width; ++j)
-            {
-                this->matrix[cnt++] = matrix[i][j];
-            }
+            std::copy((*outer_it).begin(),(*outer_it).end(),this->matrix+(i*width));
         }
 
         #ifdef DISPLAY_FUNC_CALLS
