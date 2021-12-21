@@ -50,9 +50,9 @@ namespace cyfre
     {   
         public:
 
-        T* matrix;
-        size_t height;
-        size_t width;
+        T* matrix = NULL;
+        size_t height = 0;
+        size_t width = 0;
         
         // ============================== constructors ==============================
         mat();
@@ -64,10 +64,10 @@ namespace cyfre
         mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound);
         mat(const TYPE matrix_type, const size_t n, T scalar);
         mat(const TYPE matrix_type, const size_t n);
-        mat(const mat& original);
+        mat(const mat& original); // copy constructor
         ~mat();
 
-        // copy operator
+        // copy assignment
         mat& operator=(const mat& original);
 
         // compare matrix

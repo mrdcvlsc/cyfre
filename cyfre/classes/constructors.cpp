@@ -8,7 +8,7 @@ namespace cyfre
 {
     /// initializes a 1x1 matrix with a value of zero
     template<class T>
-    mat<T>::mat() : matrix(nullptr), height(0), width(0)
+    mat<T>::mat() : matrix(NULL), height(0), width(0)
     {
         #ifdef DISPLAY_FUNC_CALLS
         std::cout<<"mat()\n";
@@ -315,19 +315,13 @@ namespace cyfre
         #endif
         
         size_t n = original.height*original.width;
-        matrix = new T[n];
-
-        // #ifdef OMPTHREAD
-        // #pragma omp parallel for num_threads(omp_get_max_threads())
-        // #endif
-        // for(size_t i=0; i<n; ++i)
-        // {
-        //     matrix[i] = original.matrix[i];
-        // }
-        std::memcpy(matrix,original.matrix,sizeof(T)*n);
-
+        
         height = original.height;
         width = original.width;
+
+        matrix = new T[n];
+
+        std::memcpy(matrix,original.matrix,sizeof(T)*n);
 
         #ifdef DISPLAY_FUNC_CALLS
         auto finish = std::chrono::high_resolution_clock::now();
