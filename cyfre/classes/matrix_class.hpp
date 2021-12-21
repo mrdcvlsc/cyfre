@@ -59,7 +59,7 @@ namespace cyfre
         mat(T one_value);
         mat(std::string text_file, char separator);
         mat(std::initializer_list<std::initializer_list<T>> matrix);
-        mat(const std::vector<T>& array_vector);
+        mat(std::initializer_list<T> array_vector);
         mat(const size_t height, const size_t width, const T default_value);
         mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound);
         mat(const TYPE matrix_type, const size_t n, T scalar);

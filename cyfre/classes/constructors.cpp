@@ -159,22 +159,15 @@ namespace cyfre
 
     /// initializes a matrix using a vector : @arg std::vector<T> matrix
     template<class T>
-    mat<T>::mat(const std::vector<T>& array_vector) : height(1), width(array_vector.size())
+    mat<T>::mat(std::initializer_list<T> array_vector) : height(1), width(array_vector.size())
     {
         #ifdef DISPLAY_FUNC_CALLS
         auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(const std::vector<T>& array_vector)\n";
+        std::cout<<"mat(std::initializer_list<T> array_vector)\n";
         #endif
 
         matrix = new T[height*width];
-
-        #ifdef OMPTHREAD
-        #pragma omp parallel for num_threads(omp_get_max_threads())
-        #endif
-        for(size_t i=0; i<width; ++i)
-        {
-            matrix[i] = array_vector[i];
-        }
+        std::copy(array_vector.begin(),array_vector.end(),matrix);
 
         #ifdef DISPLAY_FUNC_CALLS
         auto finish = std::chrono::high_resolution_clock::now();
