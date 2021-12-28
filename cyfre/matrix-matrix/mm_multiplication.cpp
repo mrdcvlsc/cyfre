@@ -54,7 +54,7 @@ namespace cyfre
                 product.matrix[i*height+j] = 0;
                 for(size_t k=0; k<width; ++k)
                 {
-                    product.matrix[i*height+j] *= matrix[i*height+k]*that.matrix[k*that.width+j];
+                    product.matrix[i*height+j] += matrix[i*height+k]*that.matrix[k*that.width+j];
                 }
             }
         }
