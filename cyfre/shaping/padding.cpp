@@ -10,11 +10,8 @@ namespace cyfre {
     void mat<T>::padding(size_t pad_height, size_t pad_width) {
         if (pad_height == 0 && pad_width == 0) {
             return;
-        } else if (pad_height < 0)
-            throw std::length_error("error in padding(): pad_height should not be < 0");
-        else if (pad_width < 0)
-            throw std::length_error("error in padding(): pad_width should not be < 0");
-
+        }
+        
         size_t new_height = height + (2 * pad_height);
         size_t new_width = width + (2 * pad_width);
         size_t dim_total = new_height * new_width;

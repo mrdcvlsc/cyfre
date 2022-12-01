@@ -9,7 +9,7 @@ namespace cyfre {
     template <class T>
     void mat<T>::scale_column(const size_t column_index, const SCALAR scalar_operation, const T value) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((column_index < 0) ^ (column_index > width - 1)) {
+        if ((column_index > width - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void scale_column(const size_t column_index, const SCALAR scalar_operation, const T "
                 "value)\n"
@@ -45,13 +45,13 @@ namespace cyfre {
     template <class T>
     void mat<T>::column_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((output_index < 0) ^ (output_index > width - 1)) {
+        if ((output_index > width - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void column_operation(const size_t output_index, const SCALAR scalar_operation, size_t "
                 "input_index)\n"
                 "\tthe given column 'output_index' is out of bound\n"
             );
-        } else if ((input_index < 0) ^ (input_index > width - 1)) {
+        } else if ((input_index > width - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void column_operation(const size_t output_index, const SCALAR scalar_operation, size_t "
                 "input_index)\n"
@@ -89,12 +89,12 @@ namespace cyfre {
     template <class T>
     void mat<T>::column_swap(size_t column_a, size_t column_b) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((column_a < 0) ^ (column_a > width - 1)) {
+        if ((column_a > width - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void column_swap(size_t column_a, size_t column_b)\n"
                 "\tthe given column 'column_a' is out of bound\n"
             );
-        } else if ((column_b < 0) ^ (column_b > width - 1)) {
+        } else if ((column_b > width - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void column_swap(size_t column_a, size_t column_b)\n"
                 "\tthe given column 'column_b'  is out of bound\n"
@@ -117,7 +117,7 @@ namespace cyfre {
     template <class T>
     void mat<T>::column_scale(T scalar, size_t base_column) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((base_column < 0) ^ (base_column > width - 1)) {
+        if ((base_column > width - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void column_scale(S scalar, size_t base_column)\n"
                 "\tthe given column 'base_column' is out of bound\n"
@@ -138,12 +138,12 @@ namespace cyfre {
     template <class T>
     void mat<T>::column_scale(T scalar, size_t scale_column, size_t base_column) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((scale_column < 0) ^ (scale_column > width - 1)) {
+        if ((scale_column > width - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void column_scale(S scalar, size_t scale_column, size_t scale_column)\n"
                 "\tthe given column 'scale_column' is out of bound\n"
             );
-        } else if ((base_column < 0) ^ (base_column > width - 1)) {
+        } else if ((base_column > width - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void column_scale(S scalar, size_t scale_column, size_t base_column)\n"
                 "\tthe given column 'base_column' is out of bound\n"

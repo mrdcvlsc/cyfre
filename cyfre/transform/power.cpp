@@ -14,10 +14,6 @@ namespace cyfre {
 #ifndef CHECK_SHAPE_DISABLE
         if (width != height) {
             throw std::length_error("\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n");
-        } else if (p < 0) {
-            throw std::domain_error(
-                "\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n"
-            );
         }
 #endif
 
@@ -39,10 +35,6 @@ namespace cyfre {
 #ifndef CHECK_SHAPE_DISABLE
         if (base.width != base.height) {
             throw std::length_error("\n\nERROR : mat.power(size_t p)\n\tcannot raise a non-square matrix\n");
-        } else if (p < 0) {
-            throw std::length_error(
-                "\n\nERROR : mat.power(size_t p)\n\trasing to a negative number(-1 inverse) is not supported yet\n"
-            );
         }
 #endif
 

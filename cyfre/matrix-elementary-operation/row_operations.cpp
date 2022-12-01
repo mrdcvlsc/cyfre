@@ -9,7 +9,7 @@ namespace cyfre {
     template <class T>
     void mat<T>::scale_row(const size_t row_index, const SCALAR scalar_operation, const T value) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((row_index < 0) ^ (row_index > height - 1)) {
+        if ((row_index > height - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void scale_row(const size_t row_index, const SCALAR scalar_operation, const T value)\n"
                 "\tthe given row index is out of bound\n"
@@ -43,13 +43,13 @@ namespace cyfre {
     template <class T>
     void mat<T>::row_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((output_index < 0) ^ (output_index > height - 1)) {
+        if ((output_index > height - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void row_operation(const size_t output_index, const SCALAR scalar_operation, size_t "
                 "input_index)\n"
                 "\tthe given row 'output_index' is out of bound\n"
             );
-        } else if ((input_index < 0) ^ (input_index > height - 1)) {
+        } else if ((input_index > height - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void row_operation(const size_t output_index, const SCALAR scalar_operation, size_t "
                 "input_index)\n"
@@ -87,12 +87,12 @@ namespace cyfre {
     template <class T>
     void mat<T>::row_swap(size_t row_a, size_t row_b) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((row_a < 0) ^ (row_a > height - 1)) {
+        if ((row_a > height - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void row_swap(size_t row_a, size_t row_b)\n"
                 "\tthe given row 'row_a' is out of bound\n"
             );
-        } else if ((row_b < 0) ^ (row_b > height - 1)) {
+        } else if ((row_b > height - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void row_swap(size_t row_a, size_t row_b)\n"
                 "\tthe given row 'row_b'  is out of bound\n"
@@ -115,7 +115,7 @@ namespace cyfre {
     template <class T>
     void mat<T>::row_scale(T scalar, size_t base_row) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((base_row < 0) ^ (base_row > height - 1)) {
+        if ((base_row > height - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void row_scale(S scalar, size_t base_row)\n"
                 "\tthe given row 'base_row' is out of bound\n"
@@ -136,12 +136,12 @@ namespace cyfre {
     template <class T>
     void mat<T>::row_scale(T scalar, size_t scale_row, size_t base_row) {
 #ifndef CHECK_RANGE_DISABLE
-        if ((scale_row < 0) ^ (scale_row > height - 1)) {
+        if ((scale_row > height - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void row_scale(S scalar, size_t scale_row, size_t scale_row)\n"
                 "\tthe given row 'scale_row' is out of bound\n"
             );
-        } else if ((base_row < 0) ^ (base_row > height - 1)) {
+        } else if ((base_row > height - 1)) {
             throw std::out_of_range(
                 "\n\nERROR : void row_scale(S scalar, size_t scale_row, size_t base_row)\n"
                 "\tthe given row 'base_row' is out of bound\n"
