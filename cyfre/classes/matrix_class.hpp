@@ -1,20 +1,20 @@
 #ifndef CYFRE_MATRIX_CLASS
 #define CYFRE_MATRIX_CLASS
 
-#include <iostream>
-#include <numeric>
-#include <fstream>
-#include <limits>
-#include <cstdio>
-#include <exception>
-#include <random>
-#include <functional>
-#include <iterator>
 #include <chrono>
+#include <cstdio>
 #include <cstring>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <limits>
+#include <numeric>
+#include <random>
 
 #ifdef OMPTHREAD
-#include <omp.h>
+    #include <omp.h>
 #endif
 
 #include "../helpers/helper_functions.hpp"
@@ -24,9 +24,8 @@
         CONTAINS ALL CYFRE LIBRARY TYPES from classes, to enums, and typedefs
 */
 
-namespace cyfre
-{
-    #define TRANSPOSE_MT_TREASHOLD 3364000
+namespace cyfre {
+#define TRANSPOSE_MT_TREASHOLD 3364000
 
     /// MATRIX TYPES FOR CONSTRUCTING A MATRIX
     enum TYPE
@@ -40,20 +39,29 @@ namespace cyfre
     };
 
     /// enum type for random value constructor
-    enum RANDOM{ INTEGER, REAL };
+    enum RANDOM
+    {
+        INTEGER,
+        REAL
+    };
 
     /// SCALAR OPERATIONS
-    enum SCALAR { ADD, SUB, MUL, DIV };
+    enum SCALAR
+    {
+        ADD,
+        SUB,
+        MUL,
+        DIV
+    };
 
-    template<typename T>
-    class mat
-    {   
+    template <typename T>
+    class mat {
         public:
 
-        T* matrix = NULL;
+        T *matrix = NULL;
         size_t height = 0;
         size_t width = 0;
-        
+
         // ============================== constructors ==============================
         mat();
         mat(T one_value);
@@ -67,20 +75,20 @@ namespace cyfre
         ~mat();
 
         // copy constructor
-        mat(const mat& original);
+        mat(const mat &original);
 
         // move constructor
-        mat(mat&& temporary);
+        mat(mat &&temporary);
 
         // copy assignment
-        mat& operator=(const mat& original);
+        mat &operator=(const mat &original);
 
         // move assignment
-        mat& operator=(mat&& temporary);
+        mat &operator=(mat &&temporary);
 
         // compare matrix
-        inline bool operator==(const mat& that) const;
-        inline bool operator!=(const mat& that) const;
+        inline bool operator==(const mat &that) const;
+        inline bool operator!=(const mat &that) const;
 
         // =============================== methods ===================================
         /// @returns T sum, the total sum of all the elements of the matrix
@@ -96,7 +104,7 @@ namespace cyfre
         void row_swap(size_t row_a, size_t row_b);
         void row_scale(T scalar, size_t base_row);
         void row_scale(T scalar, size_t scale_row, size_t base_row);
-        
+
         void scale_column(const size_t column_index, const SCALAR scalar_operation, const T value);
         void column_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index);
         void column_swap(size_t column_a, size_t column_b);
@@ -105,61 +113,61 @@ namespace cyfre
 
         // ============================== SAFE INDEXING ================================
 
-        inline T& operator()(size_t i, size_t j);
-        inline const T& operator()(size_t i, size_t j) const;
+        inline T &operator()(size_t i, size_t j);
+        inline const T &operator()(size_t i, size_t j) const;
 
         // ============================== MATRIX OPERATIONS ==============================
 
         /// --------------------------- addition ---------------------------------
 
         /// @returns element by element addition - old
-        inline mat operator+(const mat& that) const;
-        inline void operator+=(const mat& that);
+        inline mat operator+(const mat &that) const;
+        inline void operator+=(const mat &that);
 
         inline mat operator+(const T scalar) const;
         inline void operator+=(const T scalar);
 
-        template<class S>
-        inline friend mat operator+(const S scalar, const mat& that);
+        template <class S>
+        inline friend mat operator+(const S scalar, const mat &that);
 
         /// --------------------------- subtraction ---------------------------------
 
         /// @returns element by element subtraction - old
-        inline mat operator-(const mat& that) const;
-        inline void operator-=(const mat& that);
+        inline mat operator-(const mat &that) const;
+        inline void operator-=(const mat &that);
 
         inline mat operator-(const T scalar) const;
         inline void operator-=(const T scalar);
 
-        template<class S>
-        inline friend mat operator-(const S scalar, const mat& that);
+        template <class S>
+        inline friend mat operator-(const S scalar, const mat &that);
 
         /// ---------------------- Division -----------------------------
         /// @returns element by element division
-        inline mat operator/(const mat& that) const;
-        inline void operator/=(const mat& that);
+        inline mat operator/(const mat &that) const;
+        inline void operator/=(const mat &that);
 
         inline mat operator/(const T scalar) const;
         inline void operator/=(const T scalar);
 
-        template<class S>
-        inline friend mat operator/(const S scalar, const mat& that);
+        template <class S>
+        inline friend mat operator/(const S scalar, const mat &that);
 
         /// ---------------------- Multiplication -----------------------------
         /// @returns matrix multiplication / dot product
-        inline mat operator*(const mat& that) const;
-        inline void operator*=(const mat& that);
-        inline void hadamard(const mat& that);
+        inline mat operator*(const mat &that) const;
+        inline void operator*=(const mat &that);
+        inline void hadamard(const mat &that);
 
         /// ---------------------- Division ----------------------------------
         inline mat operator*(const T scalar) const;
         inline void operator*=(const T scalar);
 
-        template<class S>
-        inline friend mat operator*(const S scalar, const mat& that);
+        template <class S>
+        inline friend mat operator*(const S scalar, const mat &that);
 
         /// ---------------------- comparison --------------------------------
-        int compare(const mat& with) const;
+        int compare(const mat &with) const;
 
         // ============================== SHAPING ==============================
         void transpose();
@@ -176,47 +184,47 @@ namespace cyfre
         void rref();
         void apply(std::function<T(T)> function_name);
 
-    };// end of mat class
+    }; // end of mat class
 
-    template<typename T>
-    void display(const mat<T>& input);
-}
+    template <typename T>
+    void display(const mat<T> &input);
+} // namespace cyfre
 
 #ifndef MAKE_BUILD
 
-#include "constructors.cpp"
-#include "comparison.cpp"
-#include "indexing.cpp"
-#include "display.cpp"
-#include "assign.cpp"
+    #include "assign.cpp"
+    #include "comparison.cpp"
+    #include "constructors.cpp"
+    #include "display.cpp"
+    #include "indexing.cpp"
 
-#include "../matrix-elementary-operation/col_operations.cpp"
-#include "../matrix-elementary-operation/row_operations.cpp"
+    #include "../matrix-elementary-operation/col_operations.cpp"
+    #include "../matrix-elementary-operation/row_operations.cpp"
 
-#include "../matrix-matrix/mm_addition.cpp"
-#include "../matrix-matrix/mm_subtraction.cpp"
-#include "../matrix-matrix/mm_division.cpp"
-#include "../matrix-matrix/mm_multiplication.cpp"
-#include "../matrix-matrix/mm_hadamard.cpp"
+    #include "../matrix-matrix/mm_addition.cpp"
+    #include "../matrix-matrix/mm_division.cpp"
+    #include "../matrix-matrix/mm_hadamard.cpp"
+    #include "../matrix-matrix/mm_multiplication.cpp"
+    #include "../matrix-matrix/mm_subtraction.cpp"
 
-#include "../matrix-scalar/ms_addition.cpp"
-#include "../matrix-scalar/ms_subtraction.cpp"
-#include "../matrix-scalar/ms_division.cpp"
-#include "../matrix-scalar/ms_multiplication.cpp"
+    #include "../matrix-scalar/ms_addition.cpp"
+    #include "../matrix-scalar/ms_division.cpp"
+    #include "../matrix-scalar/ms_multiplication.cpp"
+    #include "../matrix-scalar/ms_subtraction.cpp"
 
-#include "../methods/determinant.cpp"
-#include "../methods/minmax.cpp"
-#include "../methods/sum.cpp"
-#include "../methods/trace.cpp"
+    #include "../methods/determinant.cpp"
+    #include "../methods/minmax.cpp"
+    #include "../methods/sum.cpp"
+    #include "../methods/trace.cpp"
 
-#include "../transform/apply.cpp"
-#include "../transform/inverse.cpp"
-#include "../transform/power.cpp"
-#include "../transform/ref.cpp"
-#include "../transform/rref.cpp"
+    #include "../transform/apply.cpp"
+    #include "../transform/inverse.cpp"
+    #include "../transform/power.cpp"
+    #include "../transform/ref.cpp"
+    #include "../transform/rref.cpp"
 
-#include "../shaping/padding.cpp"
-#include "../shaping/transpose.cpp"
+    #include "../shaping/padding.cpp"
+    #include "../shaping/transpose.cpp"
 
 #endif
 

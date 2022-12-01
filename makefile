@@ -26,4 +26,14 @@ uninstall:
 	@unlink /usr/local/include/cyfre
 
 style:
-	@clang-format -i -style=file *.cpp *.hpp tests/*.hpp tests/*.cpp benchmark/*.cpp
+	@clang-format -i -style=file \
+	cyfre/*.*pp \
+	cyfre/classes/*.*pp cyfre/helpers/*.*pp \
+	cyfre/matrix-elementary-operation/*.*pp \
+	cyfre/matrix-matrix/*.*pp \
+	cyfre/matrix-scalar/*.*pp \
+	cyfre/methods/*.*pp \
+	cyfre/shaping/*.*pp \
+	cyfre/statistics/*.*pp \
+	cyfre/transform/*.*pp \
+	cyfre/test/*.*pp

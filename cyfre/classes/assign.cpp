@@ -1,33 +1,32 @@
 #ifndef CYFRE_MM_ASSIGN_CPP
 #define CYFRE_MM_ASSIGN_CPP
 
-#include <iostream>
 #include "matrix_class.hpp"
+#include <iostream>
 
-namespace cyfre
-{
+namespace cyfre {
     // copy assignment
-    template<class T>
-    mat<T>& mat<T>::operator=(const mat<T>& original)
-    {
+    template <class T>
+    mat<T> &mat<T>::operator=(const mat<T> &original) {
         if (this != &original) {
-            size_t n = original.height*original.width;
+            size_t n = original.height * original.width;
             height = original.height;
-            width =  original.width;
+            width = original.width;
 
-            if(matrix!=NULL) delete [] matrix;
+            if (matrix != NULL)
+                delete[] matrix;
             matrix = new T[n];
-            std::memcpy(matrix,original.matrix,sizeof(T)*n);
+            std::memcpy(matrix, original.matrix, sizeof(T) * n);
         }
         return *this;
     }
 
     // move assignment
-    template<class T>
-    mat<T>& mat<T>::operator=(mat<T>&& temporary)
-    {
+    template <class T>
+    mat<T> &mat<T>::operator=(mat<T> &&temporary) {
         if (this != &temporary) {
-            if(matrix!=NULL) delete [] matrix;
+            if (matrix != NULL)
+                delete[] matrix;
 
             height = temporary.height;
             width = temporary.width;
@@ -39,6 +38,6 @@ namespace cyfre
         }
         return *this;
     }
-}
+} // namespace cyfre
 
 #endif
