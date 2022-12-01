@@ -10,11 +10,6 @@ namespace cyfre
     template<class T>
     void mat<T>::transpose()
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"void transpose()\n";
-        #endif
-
         size_t i,j,k=0;
 
         T* rht = new T[width*height];
@@ -54,12 +49,6 @@ namespace cyfre
         delete [] matrix;
         matrix = rht;
         std::swap(height,width);
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// @returns a transposed matrix copy

@@ -22,29 +22,13 @@ namespace cyfre
     template<class T>
     mat<T>::mat(T one_value) : matrix(new T[1]), height(1), width(1)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        std::cout<<"mat(T one_value)\n";
-        auto start = std::chrono::high_resolution_clock::now();
-        #endif
-
         matrix[0] = one_value;
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// initializes a matrix from a text file
     template<class T>
     mat<T>::mat(std::string text_file, char separator)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(std::string text_file, char separator)\n";
-        #endif
-
         std::ifstream filereader;
         filereader.open(text_file.c_str());
 
@@ -109,23 +93,12 @@ namespace cyfre
                 else matrix[cnt++] = (T)(std::stold(matrix_strings[i][j]));
             }
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// initializes a matrix using a 2 dimension vector : @arg std::vector<std::vector<T>> matrix
     template<class T>
     mat<T>::mat(std::initializer_list<std::initializer_list<T>> matrix)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(std::initializer_list<std::initializer_list<T>> matrix)\n";
-        #endif
-
         auto outer_it = matrix.begin();
         size_t prev_row_len = (*outer_it).size();
 
@@ -149,42 +122,20 @@ namespace cyfre
         {
             std::copy((*outer_it).begin(),(*outer_it).end(),this->matrix+(i*width));
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// initializes a matrix using a vector : @arg std::vector<T> matrix
     template<class T>
     mat<T>::mat(std::initializer_list<T> array_vector) : height(1), width(array_vector.size())
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(std::initializer_list<T> array_vector)\n";
-        #endif
-
         matrix = new T[height*width];
         std::copy(array_vector.begin(),array_vector.end(),matrix);
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// initializes a matrix given a @arg height, @arg width for the matrix shape, and a @arg default_value of all elements in the matrix
     template<class T>
     mat<T>::mat(const size_t height, const size_t width, const T default_value) : matrix(new T[height*width]), height(height), width(width)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        std::cout<<"mat(const size_t height, const size_t width, const T default_value)\n";
-        auto start = std::chrono::high_resolution_clock::now();
-        #endif
-
         size_t n = height*width;
 
         #ifdef OMPTHREAD
@@ -194,12 +145,6 @@ namespace cyfre
         {
             matrix[i] = default_value;
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// initializes a matrix given a @arg height, @arg width for the matrix shape, that have a random values form the given @arg lower_bound to @arg upper_bound
@@ -207,11 +152,6 @@ namespace cyfre
     mat<T>::mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound) :
     matrix(new T[height*width]), height(height), width(width)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound)\n";
-        #endif
-
         unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
         std::mt19937_64 rand_engine(seed);
         std::uniform_real_distribution<float> random_number_float(lower_bound,upper_bound);
@@ -233,23 +173,12 @@ namespace cyfre
                     throw std::invalid_argument("\n\nERROR : mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound)\n\tinvalid random type");
             }
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// initializes a square matrix with a given 'x' scalar values of elements in the main diagonal
     template<class T>
     mat<T>::mat(const TYPE matrix_type, const size_t n, T scalar)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(const TYPE matrix_type, const size_t n, T scalar)\n";
-        #endif
-
         if(matrix_type==TYPE::IDENTITY) scalar = 1;
 
         height = width = n;
@@ -269,22 +198,11 @@ namespace cyfre
         {
             matrix[i*width+i] = scalar;
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
     
     template<class T>
     mat<T>::mat(const TYPE matrix_type, const size_t n) : mat<T>(matrix_type,n,0)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"mat(const TYPE matrix_type, const size_t n) : mat(matrix_type,n,0)\n";
-        #endif
-
         switch(matrix_type)
         {
             case TYPE::IDENTITY: break;
@@ -297,23 +215,12 @@ namespace cyfre
             default:
                 throw std::invalid_argument("\n\nERROR : mat()\n\tmatrix initialization - constructor invalid given an invalid TYPE\n");
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// copy constructor
     template<class T>
     mat<T>::mat(const mat<T>& original)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"copy constructor : mat(const mat& original)\n";
-        #endif
-        
         size_t n = original.height*original.width;
 
         height = original.height;
@@ -322,23 +229,12 @@ namespace cyfre
         matrix = new T[n];
 
         std::memcpy(matrix,original.matrix,sizeof(T)*n);
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// move constructor
     template<class T>
     mat<T>::mat(mat<T>&& temporary)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"move constructor : mat(const mat& temporary)\n";
-        #endif
-        
         height = temporary.height;
         width = temporary.width;
         matrix = temporary.matrix;
@@ -346,31 +242,14 @@ namespace cyfre
         temporary.height = 0;
         temporary.width = 0;
         temporary.matrix = NULL;
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     template<class T>
     mat<T>::~mat<T>()
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"~mat()\n";
-        #endif
-
         if(height && width) delete [] matrix;
         height = 0;
         width = 0;
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 }
 

@@ -10,11 +10,6 @@ namespace cyfre
     template<class T>
     T mat<T>::trace() const
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"T trace() const\n";
-        #endif
-
         #ifndef CHECK_SHAPE_DISABLE
         if(width!=height)
         {
@@ -27,12 +22,6 @@ namespace cyfre
 
         T trace_total = 0;
         for(size_t i=0; i<height; ++i) trace_total+=matrix[i*width+i];
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
 
         return trace_total;
     }

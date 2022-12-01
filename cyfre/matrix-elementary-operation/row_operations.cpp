@@ -10,11 +10,6 @@ namespace cyfre
     template<class T>
     void mat<T>::scale_row(const size_t row_index, const SCALAR scalar_operation, const T value)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"void scale_row(const size_t row_index, const SCALAR scalar_operation, const T value)\n";
-        #endif
-
         #ifndef CHECK_RANGE_DISABLE
         if((row_index < 0) ^ (row_index > height-1))
         {
@@ -45,23 +40,11 @@ namespace cyfre
         {
             matrix[row_index*width+i] = operation_function(matrix[row_index*width+i],value);
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
-
     }
 
     template<class T>
     void mat<T>::row_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"void row_operation(const size_t output_index, const SCALAR scalar_operation, size_t input_index)\n";
-        #endif
-
         #ifndef CHECK_RANGE_DISABLE
         if((output_index < 0) ^ (output_index > height-1))
         {
@@ -99,23 +82,12 @@ namespace cyfre
         {
             matrix[output_index*width+i] = operation_function(matrix[output_index*width+i],matrix[input_index*width+i]);
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// @note: swaps the values of a row to another row :: a<-->b
     template<class T>
     void mat<T>::row_swap(size_t row_a, size_t row_b)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"void row_swap(size_t row_a, size_t row_b)\n";
-        #endif
-
         #ifndef CHECK_RANGE_DISABLE
         if((row_a < 0) ^ (row_a > height-1))
         {
@@ -140,12 +112,6 @@ namespace cyfre
             matrix[row_a*width+i] = matrix[row_b*width+i];
             matrix[row_b*width+i] = temp;
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// @note: multiply all the values of a row to a non-zero constant
@@ -155,11 +121,6 @@ namespace cyfre
     template<class T>
     void mat<T>::row_scale(T scalar, size_t base_row)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"void row_scale(S scalar, size_t base_row)\n";
-        #endif
-
         #ifndef CHECK_RANGE_DISABLE
         if((base_row < 0) ^ (base_row > height-1))
         {
@@ -174,12 +135,6 @@ namespace cyfre
         {
             matrix[base_row*width+i] *= scalar;
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// @note: multiply all the values of a row to a non-zero constant, then add the result to another row
@@ -190,11 +145,6 @@ namespace cyfre
     template<class T>
     void mat<T>::row_scale(T scalar, size_t scale_row, size_t base_row)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"void row_scale(S scalar, size_t scale_row, size_t base_row)\n";
-        #endif
-
         #ifndef CHECK_RANGE_DISABLE
         if((scale_row < 0) ^ (scale_row > height-1))
         {
@@ -216,12 +166,6 @@ namespace cyfre
         {
             matrix[base_row*width+i] += scalar*matrix[scale_row*width+i];
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 }
 

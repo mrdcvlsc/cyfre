@@ -10,11 +10,6 @@ namespace cyfre
     template<class T>
     void mat<T>::padding(size_t pad_height, size_t pad_width)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"void padding()\n";
-        #endif
-
         if(pad_height==0 && pad_width==0)
         {
             return;
@@ -52,12 +47,6 @@ namespace cyfre
         matrix = padded_matrix;
         height = new_height;
         width  = new_width;
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 
     /// padding self

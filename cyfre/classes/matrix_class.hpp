@@ -64,9 +64,13 @@ namespace cyfre
         mat(const size_t height, const size_t width, const RANDOM typechoice, const T lower_bound, const T upper_bound);
         mat(const TYPE matrix_type, const size_t n, T scalar);
         mat(const TYPE matrix_type, const size_t n);
-        mat(const mat& original); // copy constructor
-        mat(mat&& temporary); // move constructor
         ~mat();
+
+        // copy constructor
+        mat(const mat& original);
+
+        // move constructor
+        mat(mat&& temporary);
 
         // copy assignment
         mat& operator=(const mat& original);

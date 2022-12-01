@@ -12,11 +12,6 @@ namespace cyfre
     template<class T>
     inline mat<T> mat<T>::operator/(const mat<T>& that) const
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"inline mat operator/(const mat& that) const\n";
-        #endif
-
         #ifndef CHECK_SHAPE_DISABLE
         if(this->width!=that.width || this->height!=that.height)
         {
@@ -46,23 +41,12 @@ namespace cyfre
             quotient.matrix[i] = matrix[i] / that.matrix[i];
         }
 
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
-
         return quotient;
     }
 
     template<class T>
     inline void mat<T>::operator/=(const mat<T>& that)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"inline void operator/=(const mat& that)\n";
-        #endif
-
         #ifndef CHECK_SHAPE_DISABLE
         if(this->width!=that.width || this->height!=that.height)
         {
@@ -86,12 +70,6 @@ namespace cyfre
             }
             matrix[i]/=that.matrix[i];
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
     }
 }
 

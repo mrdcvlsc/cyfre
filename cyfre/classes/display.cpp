@@ -12,11 +12,6 @@ namespace cyfre
         // 100 width can still be displayed
         // 60 height can still be displayed
 
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"void display(const mat<T>& input)\n";
-        #endif
-
         std::vector<std::string> matrixstr;
 
         size_t n = input.height*input.width;
@@ -52,12 +47,6 @@ namespace cyfre
             if(i!=input.height-1) std::cout<<",\n";
             else std::cout<<"]\n";
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
 
         std::cout.width(0);
     }

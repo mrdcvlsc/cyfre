@@ -10,25 +10,15 @@ namespace cyfre
     template<class T>
     mat<T>& mat<T>::operator=(const mat<T>& original)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"copy assignement : mat(const mat& original)\n";
-        #endif
+        if (this != &original) {
+            size_t n = original.height*original.width;
+            height = original.height;
+            width =  original.width;
 
-        size_t n = original.height*original.width;
-        height = original.height;
-        width =  original.width;
-
-        if(matrix!=NULL) delete [] matrix;
-        matrix = new T[n];
-        std::memcpy(matrix,original.matrix,sizeof(T)*n);
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
-
+            if(matrix!=NULL) delete [] matrix;
+            matrix = new T[n];
+            std::memcpy(matrix,original.matrix,sizeof(T)*n);
+        }
         return *this;
     }
 
@@ -36,28 +26,17 @@ namespace cyfre
     template<class T>
     mat<T>& mat<T>::operator=(mat<T>&& temporary)
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"move assignment : mat(mat& temporary)\n";
-        #endif
+        if (this != &temporary) {
+            if(matrix!=NULL) delete [] matrix;
 
-        if(matrix!=NULL) delete [] matrix;
+            height = temporary.height;
+            width = temporary.width;
+            matrix = temporary.matrix;
 
-        height = temporary.height;
-        width = temporary.width;
-        matrix = temporary.matrix;
-
-        temporary.height = 0;
-        temporary.width = 0;
-        temporary.matrix = NULL;
-
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
-
+            temporary.height = 0;
+            temporary.width = 0;
+            temporary.matrix = NULL;
+        }
         return *this;
     }
 }

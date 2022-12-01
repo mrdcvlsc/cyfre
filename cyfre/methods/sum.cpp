@@ -10,11 +10,6 @@ namespace cyfre
     template<class T>
     T mat<T>::sum() const
     {
-        #ifdef DISPLAY_FUNC_CALLS
-        auto start = std::chrono::high_resolution_clock::now();
-        std::cout<<"T sum() const\n";
-        #endif
-
         T sum = 0;
 
         for(size_t i=0; i<height; ++i)
@@ -24,12 +19,6 @@ namespace cyfre
                 sum += matrix[i*width+j];
             }
         }
-
-        #ifdef DISPLAY_FUNC_CALLS
-        auto finish = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start);
-        std::cout<<"took "<<duration.count()<<" nanoseconds\n\n";
-        #endif
 
         return sum;
     }
