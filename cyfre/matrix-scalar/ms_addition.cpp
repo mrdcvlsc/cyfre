@@ -14,9 +14,6 @@ namespace cyfre {
         scaled_sum.width = width;
         scaled_sum.matrix = new T[n];
 
-#ifdef OMPTHREAD
-    #pragma omp parallel for num_threads(omp_get_max_threads())
-#endif
         for (size_t i = 0; i < n; ++i) {
             scaled_sum.matrix[i] = matrix[i] + scalar;
         }
@@ -28,9 +25,6 @@ namespace cyfre {
     inline void mat<T>::operator+=(const T scalar) {
         size_t n = height * width;
 
-#ifdef OMPTHREAD
-    #pragma omp parallel for num_threads(omp_get_max_threads())
-#endif
         for (size_t i = 0; i < n; ++i) {
             matrix[i] += scalar;
         }
@@ -45,9 +39,6 @@ namespace cyfre {
         scaled_sum.width = that.width;
         scaled_sum.matrix = new T[n];
 
-#ifdef OMPTHREAD
-    #pragma omp parallel for num_threads(omp_get_max_threads())
-#endif
         for (size_t i = 0; i < n; ++i) {
             scaled_sum.matrix[i] = scalar + that.matrix[i];
         }

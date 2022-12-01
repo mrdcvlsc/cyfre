@@ -18,20 +18,12 @@ namespace cyfre {
 
         T *padded_matrix = new T[dim_total];
 
-#ifdef OMPTHREAD
-    #pragma omp parallel for num_threads(omp_get_max_threads())
-#endif
         for (size_t i = 0; i < dim_total; ++i)
             padded_matrix[i] = 0;
 
         size_t i = pad_height, j = pad_width;
-#ifdef OMPTHREAD
-    #pragma omp parallel private(i, j)
-#endif
+
         for (i = pad_height; i < pad_height + height; ++i) {
-#ifdef OMPTHREAD
-    #pragma omp for
-#endif
             for (j = pad_width; j < pad_width + width; ++j) {
                 padded_matrix[i * new_width + j] = matrix[(i - pad_height) * width + (j - pad_width)];
             }

@@ -13,10 +13,6 @@
 #include <numeric>
 #include <random>
 
-#ifdef OMPTHREAD
-    #include <omp.h>
-#endif
-
 #include "../helpers/helper_functions.hpp"
 #include "../helpers/randomizer.hpp"
 

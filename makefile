@@ -1,7 +1,6 @@
 CC:=g++
 SRC := cyfre/test
 CXXFLAGS := -std=c++17 -Wall -Wextra -Og -g
-THREADED := -march=native -DOMPTHREAD -fopenmp
 
 ifeq ($(OS), Linux)
 CPPFLAGS += -fsanitize=address
@@ -9,9 +8,6 @@ endif
 
 test:
 	$(CC) $(CXXFLAGS) $(SRC)/test.cpp -o $(SRC)/test.out
-	$(SRC)/test.out
-	$(MAKE) clean
-	$(CC) $(CXXFLAGS) $(THREADED) $(SRC)/test.cpp -o $(SRC)/test.out
 	$(SRC)/test.out
 	$(MAKE) clean
 

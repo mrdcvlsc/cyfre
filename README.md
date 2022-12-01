@@ -17,15 +17,11 @@ _started : Dec 2020_
   - ```#include "cyfre/cyfre.hpp"```
 
 - ### **compilation ```-D``` flags**
-  - ```CHECK_RANGE_DISABLE```  -  Disable internal range checking, slightly speeds up the program (do not use in development)
-  - ```CHECK_SHAPE_DISABLE```  -  Disable internal shape checking of matricies in matrix operations, slightly speeds up the program (do not use in development)
-  - ```OMPTHREAD```            -  Enable OpenMP multi-threading / must include the openmp library -fopenmp
+  - ```CHECK_RANGE_DISABLE``` - Disable internal range checking, slightly speeds up the program (do not use in development)
+  - ```CHECK_SHAPE_DISABLE``` - Disable internal shape checking of matrices in matrix operations, slightly speeds up the program (do not use in development)
 
-- ### **compile with OpenMP multi-threading :**
-  - ```-DOMPTHREAD -fopenmp```
-
-- ### **for full performance you can disable checks and enable OpenMP multi-threading :**
-  - ```-DCHECK_RANGE_DISABLE -DCHECK_SHAPE_DISABLE -DOMPTHREAD -fopenmp```
+- ### **for full performance you can disable checks :**
+  - ```-DCHECK_RANGE_DISABLE -DCHECK_SHAPE_DISABLE```
 
 - ### **Don't forget the optimization flags for more speed-up :**
   - ```-O3 -march=native```
@@ -66,7 +62,7 @@ _started : Dec 2020_
 <br>
 <ul>
   
-  **construct an scalar matrix**
+  **construct a scalar matrix**
 
   ```c++
   cyfre::mat<int> mat_object(cyfre::TYPE::SCALARMATRIX,3,7);  /*
@@ -87,7 +83,7 @@ _started : Dec 2020_
 <br>
 <ul>
   
-  **construct an zero/null matrix**
+  **construct a zero/null matrix**
 
   ```c++
   cyfre::mat<int> mat_object(cyfre::TYPE::NULLZERO,3);  /*
@@ -108,7 +104,7 @@ _started : Dec 2020_
 <br>
 <ul>
   
-  **construct an costum shaped matrix, with initial values**
+  **construct a custom shaped matrix, with initial values**
 
   ```c++
   cyfre::mat<int> mat_object(3,2,5);  /*
@@ -315,7 +311,7 @@ mat_object = [[ 1, 2, 3],
 
 <ul>
 
-_: NOTE - anything these methods can do, the 3 elementary basic row/column operations can also do, just keep this in mind... the following methods are just more straigth forward_
+_: NOTE - anything these methods can do, the 3 elementary basic row/column operations can also do, just keep this in mind... the following methods are just more straight forward_
 
 </ul>
 
@@ -397,7 +393,7 @@ mat_object = [[ 1, 2, 3],
 
 */
 ```
-__int mat_object(0,1) we multiply the value of mat_object(0,2) which is 7, into the previous value of mat_object(0,1) which is 4, the answer is 4*7 = 28, hench the 28 in mat_object(0,1)__
+__int mat_object(0,1) we multiply the value of mat_object(0,2) which is 7, into the previous value of mat_object(0,1) which is 4, the answer is 4*7 = 28, hence the 28 in mat_object(0,1)__
 
 </ul>
 </details>

@@ -168,8 +168,10 @@ int main() {
     {
         cyfre::mat<int> X({{7, 12, 13}, {14, 5, 20}, {66, 42, -4}});
         cyfre::mat<int> W{-3, 4, 56};
+
         cyfre::mat<int> C = W * X;
         cyfre::mat<int> correct{3731, 2336, -183};
+
         if (C != correct)
             throw std::logic_error("error at test 17");
         std::cout << "test 17 correct\n";

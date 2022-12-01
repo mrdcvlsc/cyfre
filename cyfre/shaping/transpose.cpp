@@ -12,29 +12,11 @@ namespace cyfre {
 
         T *rht = new T[width * height];
 
-#ifndef OMPTHREAD
         for (j = 0; j < width; ++j) {
             for (i = 0; i < height; ++i) {
                 rht[k++] = matrix[i * width + j];
             }
         }
-#else
-        if (height * width <= TRANSPOSE_MT_TREASHOLD) {
-            for (j = 0; j < width; ++j) {
-                for (i = 0; i < height; ++i) {
-                    rht[k++] = matrix[i * width + j];
-                }
-            }
-        } else {
-            size_t m, o;
-    #pragma omp parallel for num_threads(omp_get_max_threads())
-            for (size_t n = 0; n < width * height; n++) {
-                m = n / width;
-                o = n % width;
-                rht[n] = matrix[height * o + m];
-            }
-        }
-#endif
 
         delete[] matrix;
         matrix = rht;

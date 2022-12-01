@@ -26,9 +26,6 @@ namespace cyfre {
         quotient.width = width;
         quotient.matrix = new T[n];
 
-#ifdef OMPTHREAD
-    #pragma omp parallel for num_threads(omp_get_max_threads())
-#endif
         for (size_t i = 0; i < n; ++i) {
             if (that.matrix[i] == 0) {
                 throw std::domain_error("ERROR : inline mat operator/(const mat& that) const - divide by zero");
@@ -51,10 +48,6 @@ namespace cyfre {
 #endif
 
         size_t n = height * width;
-
-#ifdef OMPTHREAD
-    #pragma omp parallel for num_threads(omp_get_max_threads())
-#endif
         for (size_t i = 0; i < n; ++i) {
             if (that.matrix[i] == 0) {
                 throw std::domain_error("ERROR : inline void operator/=(const mat& that) - divide by zero");

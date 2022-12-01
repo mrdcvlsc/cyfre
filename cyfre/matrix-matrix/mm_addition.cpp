@@ -26,9 +26,6 @@ namespace cyfre {
         sum.width = width;
         sum.matrix = new T[n];
 
-#ifdef OMPTHREAD
-    #pragma omp parallel for num_threads(omp_get_max_threads())
-#endif
         for (size_t i = 0; i < n; ++i) {
             sum.matrix[i] = matrix[i] + that.matrix[i];
         }
@@ -48,10 +45,6 @@ namespace cyfre {
 #endif
 
         size_t n = height * width;
-
-#ifdef OMPTHREAD
-    #pragma omp parallel for num_threads(omp_get_max_threads())
-#endif
         for (size_t i = 0; i < n; ++i) {
             matrix[i] += that.matrix[i];
         }
