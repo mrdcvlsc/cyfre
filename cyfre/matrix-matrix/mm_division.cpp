@@ -5,56 +5,56 @@
 #include <iostream>
 
 namespace cyfre {
-    /// ---------------------- Division -----------------------------
+  /// ---------------------- Division -----------------------------
 
-    /// @returns element by element division
-    template <class T>
-    inline mat<T> mat<T>::operator/(const mat<T> &that) const {
+  /// @returns element by element division
+  template <class T>
+  inline mat<T> mat<T>::operator/(const mat<T> &that) const {
 #ifndef CHECK_SHAPE_DISABLE
-        if (this->width != that.width || this->height != that.height) {
-            throw std::length_error(
-                "\n\nERROR : mat operator/(const mat& that) const\n"
-                "\taddition of two different shaped matrix is not allowed\n"
-            );
-        }
+    if (this->width != that.width || this->height != that.height) {
+      throw std::length_error(
+        "\n\nERROR : mat operator/(const mat& that) const\n"
+        "\taddition of two different shaped matrix is not allowed\n"
+      );
+    }
 #endif
 
-        size_t n = height * width;
+    size_t n = height * width;
 
-        mat quotient;
-        quotient.height = height;
-        quotient.width = width;
-        quotient.matrix = new T[n];
+    mat quotient;
+    quotient.height = height;
+    quotient.width = width;
+    quotient.matrix = new T[n];
 
-        for (size_t i = 0; i < n; ++i) {
-            if (that.matrix[i] == 0) {
-                throw std::domain_error("ERROR : inline mat operator/(const mat& that) const - divide by zero");
-            }
-            quotient.matrix[i] = matrix[i] / that.matrix[i];
-        }
-
-        return quotient;
+    for (size_t i = 0; i < n; ++i) {
+      if (that.matrix[i] == 0) {
+        throw std::domain_error("ERROR : inline mat operator/(const mat& that) const - divide by zero");
+      }
+      quotient.matrix[i] = matrix[i] / that.matrix[i];
     }
 
-    template <class T>
-    inline void mat<T>::operator/=(const mat<T> &that) {
+    return quotient;
+  }
+
+  template <class T>
+  inline void mat<T>::operator/=(const mat<T> &that) {
 #ifndef CHECK_SHAPE_DISABLE
-        if (this->width != that.width || this->height != that.height) {
-            throw std::length_error(
-                std::string("\n\nERROR : mat operator/=(const mat& that) const\n") +
-                "\taddition of two different shaped matrix is not allowed\n"
-            );
-        }
+    if (this->width != that.width || this->height != that.height) {
+      throw std::length_error(
+        std::string("\n\nERROR : mat operator/=(const mat& that) const\n") +
+        "\taddition of two different shaped matrix is not allowed\n"
+      );
+    }
 #endif
 
-        size_t n = height * width;
-        for (size_t i = 0; i < n; ++i) {
-            if (that.matrix[i] == 0) {
-                throw std::domain_error("ERROR : inline void operator/=(const mat& that) - divide by zero");
-            }
-            matrix[i] /= that.matrix[i];
-        }
+    size_t n = height * width;
+    for (size_t i = 0; i < n; ++i) {
+      if (that.matrix[i] == 0) {
+        throw std::domain_error("ERROR : inline void operator/=(const mat& that) - divide by zero");
+      }
+      matrix[i] /= that.matrix[i];
     }
+  }
 } // namespace cyfre
 
 #endif

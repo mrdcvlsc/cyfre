@@ -1,15 +1,18 @@
-CC:=g++
-SRC := cyfre/test
-CXXFLAGS := -std=c++17 -Wall -Wextra -Og -g
+CXX:=clang++
+CXXFLAGS:=-std=c++17 -Wall -Wextra
+
+HEADERS:=$(wildcard include/cyfre/*)
+SRC:=$(wildcard src/cyfre/*)
 
 ifeq ($(OS), Linux)
-CPPFLAGS += -fsanitize=address
+CXXFLAGS+=-fsanitize=address
 endif
 
-test:
-	$(CC) $(CXXFLAGS) $(SRC)/test.cpp -o $(SRC)/test.out
-	$(SRC)/test.out
-	$(MAKE) clean
+test: test/test.out
+	@./test/test.out
+
+test/test.out: test/tests.cpp $(HEADERS) $(SRC)
+	$(CXX) $(CXXFLAGS) test/tests.cpp -o test/test.out -fsanitize=address
 
 clean:
 	@echo "main makefile - clean"
@@ -32,4 +35,7 @@ style:
 	cyfre/shaping/*.*pp \
 	cyfre/statistics/*.*pp \
 	cyfre/transform/*.*pp \
-	cyfre/test/*.*pp
+	cyfre/test/*.*pp \
+	include/cyfre/*.hpp \
+	src/cyfre/*.cpp \
+	test/*.cpp

@@ -5,15 +5,15 @@
 #include <iostream>
 
 namespace cyfre {
-    // ================ applying function ==============================
-    template <class T>
-    void mat<T>::apply(std::function<T(T)> function_name) {
-        for (size_t i = 0; i < height; ++i) {
-            for (size_t j = 0; j < width; ++j) {
-                matrix[i * width + j] = function_name(matrix[i * width + j]);
-            }
-        }
+  // ================ applying function ==============================
+  template <class T>
+  void mat<T>::apply(std::function<T(T)> function_name) {
+    for (size_t i = 0; i < height; ++i) {
+      for (size_t j = 0; j < width; ++j) {
+        matrix[i * width + j] = function_name(matrix[i * width + j]);
+      }
     }
+  }
 } // namespace cyfre
 
 #endif
