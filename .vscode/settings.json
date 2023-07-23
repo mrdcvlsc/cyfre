@@ -50,6 +50,9 @@
         "iterator": "cpp",
         "memory": "cpp",
         "memory_resource": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "scoped_allocator": "cpp",
+        "iomanip": "cpp",
+        "sstream": "cpp"
     }
 }

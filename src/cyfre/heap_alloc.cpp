@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <string.h>
 
+#include "../../include/cyfre/check_operators.hpp"
 #include "../../include/cyfre/heap_alloc.hpp"
 
 namespace cyfre {
@@ -13,6 +14,7 @@ namespace cyfre {
 
   template <typename T>
   dynamic<T>::dynamic(size_t rows, size_t cols) : matrix(new T[rows * cols]), rows(rows), cols(cols) {
+    static_assert(!valid_operators<T>::value, "mat<T,...> type 'T' does not support the necessary operators");
   }
 
   // =================== DESTRUCTOR ===================
@@ -26,8 +28,7 @@ namespace cyfre {
 
   /// @brief Copy Constructor.
   template <typename T>
-  dynamic<T>::dynamic(dynamic<T> const &that)
-      : matrix(new T[that.rows * that.cols]), rows(that.rows), cols(that.cols) {
+  dynamic<T>::dynamic(dynamic<T> const &that) : dynamic<T>::dynamic(that.rows, that.cols) {
     memcpy(matrix, that.matrix, that.rows * that.cols);
   }
 

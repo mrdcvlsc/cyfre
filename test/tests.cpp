@@ -1,6 +1,10 @@
+// #include "../../extended-precision-integers/epi.hpp"
 #include "../include/cyfre/cyfre.hpp"
-#include <assert.h>
+
 #include <iostream>
+#include <type_traits>
+
+typedef unsigned long long ullint;
 
 int main() {
   using cyfre::mat;
@@ -36,8 +40,6 @@ int main() {
 
   return 0;
 }
-
-#include <iostream>
 
 #ifdef ENABLE_OLD_TEST
 

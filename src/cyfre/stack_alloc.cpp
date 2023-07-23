@@ -4,42 +4,15 @@
 #include <assert.h>
 #include <stddef.h>
 #include <string.h>
+#include <type_traits>
 
+#include "../../include/cyfre/check_operators.hpp"
 #include "../../include/cyfre/stack_alloc.hpp"
 
 namespace cyfre {
   template <typename T, size_t ROWS, size_t COLS>
   fixed<T, ROWS, COLS>::fixed() : matrix() {
-  }
-
-  /// @brief Copy Constructor.
-  template <typename T, size_t ROWS, size_t COLS>
-  fixed<T, ROWS, COLS>::fixed(fixed<T, ROWS, COLS> const &that) : matrix(new T[that.rows * that.cols]) {
-    memcpy(matrix, that.matrix, that.rows * that.cols);
-  }
-
-  /// @brief Move Constructor.
-  template <typename T, size_t ROWS, size_t COLS>
-  fixed<T, ROWS, COLS>::fixed(fixed<T, ROWS, COLS> &&that) : matrix(that.matrix) {
-    memcpy(matrix, that.matrix, that.rows * that.cols);
-  }
-
-  /// @brief Copy Assignment
-  template <typename T, size_t ROWS, size_t COLS>
-  fixed<T, ROWS, COLS> &fixed<T, ROWS, COLS>::operator=(fixed<T, ROWS, COLS> const &that) {
-    if (this != &that) {
-      memcpy(matrix, that.matrix, that.rows * that.cols);
-    }
-    return *this;
-  }
-
-  /// @brief Move Assignment
-  template <typename T, size_t ROWS, size_t COLS>
-  fixed<T, ROWS, COLS> &fixed<T, ROWS, COLS>::operator=(fixed<T, ROWS, COLS> &&that) {
-    if (this != &that) {
-      memcpy(matrix, that.matrix, that.rows * that.cols);
-    }
-    return *this;
+    static_assert(!valid_operators<T>::value, "mat<T,...> type 'T' does not support the necessary operators");
   }
 } // namespace cyfre
 
