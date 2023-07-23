@@ -5,23 +5,23 @@
 #include <iostream>
 
 namespace cyfre {
-    /// compare matrix
-    template <class T>
-    inline bool mat<T>::operator==(const mat<T> &that) const {
-        size_t n = width * height;
-        for (size_t i = 0; i < n; ++i) {
-            if (matrix[i] != that.matrix[i]) {
-                return false;
-            }
-        }
-
-        return true;
+  /// compare matrix
+  template <class T>
+  inline bool mat<T>::operator==(const mat<T> &that) const {
+    size_t n = width * height;
+    for (size_t i = 0; i < n; ++i) {
+      if (matrix[i] != that.matrix[i]) {
+        return false;
+      }
     }
 
-    template <class T>
-    inline bool mat<T>::operator!=(const mat<T> &that) const {
-        return !(*this == that);
-    }
+    return true;
+  }
+
+  template <class T>
+  inline bool mat<T>::operator!=(const mat<T> &that) const {
+    return !(*this == that);
+  }
 } // namespace cyfre
 
 #endif
