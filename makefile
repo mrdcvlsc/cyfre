@@ -1,18 +1,32 @@
+OS:=$(shell uname)
+ARCH:=$(shell uname -p)
+
+CC:=clang
 CXX:=clang++
-CXXFLAGS:=-std=c++17 -Wall -Wextra
+
+CXXFLAGS:=-std=c++20 -Wall -Wextra
+LINKING:=
 
 HEADERS:=$(wildcard include/cyfre/*)
 SRC:=$(wildcard src/cyfre/*)
 
-ifeq ($(OS), Linux)
+ifeq ($(CXX), clang++)
 CXXFLAGS+=-fsanitize=address
 endif
+
+# alternative for the above ifeq
+# CXXFLAGS+=$(and $(findstring clang++, $(CXX)), $(findstring clang, $(CC)), -fsanitize=address)
 
 test: test/test.out
 	@./test/test.out
 
 test/test.out: test/tests.cpp $(HEADERS) $(SRC)
-	$(CXX) $(CXXFLAGS) test/tests.cpp -o test/test.out -fsanitize=address
+	@echo Compiling test programs...
+	@echo Operating System : $(OS)
+	@echo Architecture     : $(ARCH)
+	@echo C Compiler       : $(CC)
+	@echo C++ Compiler     : $(CXX)
+	$(CXX) $(LINKING) $(CXXFLAGS) test/tests.cpp -o test/test.out
 
 clean:
 	@echo "main makefile - clean"

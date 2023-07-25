@@ -1,9 +1,9 @@
 # cyfre
 
-![ubuntu](https://github.com/mrdcvlsc/cyfre/actions/workflows/ubuntu_test.yml/badge.svg)
-![windows](https://github.com/mrdcvlsc/cyfre/actions/workflows/windows_test.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+![build-tests](https://github.com/mrdcvlsc/cyfre/actions/workflows/build-tests.yml/badge.svg)
 
-A Templated C++ matrix library which aims to provide an easy to use interface for basic and intermediate vector-vector, vector-matrix & matrix-matrix operations.
+A Templated **C++20** matrix library which aims to provide an easy to use interface for basic and intermediate vector-vector, vector-matrix & matrix-matrix operations.
 
 <!-- > [!NOTE]  
 > Highlights information that users should take into account, even when skimming.
@@ -14,7 +14,7 @@ A Templated C++ matrix library which aims to provide an easy to use interface fo
 > [!WARNING]  
 > Critical content demanding immediate user attention due to potential risks. -->
 
-> [!NOTE]  
+> [!IMPORTANT]  
 > This library is on an ongoing re-write to improve the api and use more modern C++ features. To see the old working implementation of this library check the [version_1.9](https://github.com/mrdcvlsc/cyfre/tree/version_1.9) branch or [download it here](https://github.com/mrdcvlsc/cyfre/tree/version_1.9).
 
 ### **Docs**

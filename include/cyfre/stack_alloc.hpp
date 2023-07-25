@@ -1,3 +1,9 @@
+/**
+ *  @file   stack_alloc.hpp
+ *  @brief  Stack Allocator Meta Functions and Class.
+ *  @author mrdcvlsc
+ ***********************************************/
+
 #ifndef MRDCVLSC_STACK_ALLOC_HPP
 #define MRDCVLSC_STACK_ALLOC_HPP
 
@@ -5,15 +11,30 @@
 
 namespace cyfre {
 
-  template <typename T, size_t ROWS, size_t COLS>
-  class fixed {
-    private:
+  /// @brief stack allocator meta-function for the matrix class.
+  /// @tparam ROWS fixed height of the matrix.
+  /// @tparam COLS fixed width of the matrix.
+  template <size_t ROWS, size_t COLS>
+  struct fixed {
+    static constexpr size_t rows = ROWS;
+    static constexpr size_t cols = COLS;
 
-    T matrix[COLS * ROWS];
+    /// @brief stack allocator type for the matrix class.
+    /// @tparam T the type of the scalar values/elements of the matrix.
+    /// @tparam Rows fixed height of the matrix.
+    /// @tparam Cols fixed width of the matrix.
+    template <typename T, size_t Rows, size_t Cols>
+    struct allocate {
+      static constexpr size_t rows = Rows;
+      static constexpr size_t cols = Cols;
 
-    public:
+      T matrix[Rows * Cols];
 
-    fixed();
+      allocate();
+
+      constexpr T &operator[](size_t i);
+      constexpr const T &operator[](size_t i) const;
+    };
   };
 
 } // namespace cyfre

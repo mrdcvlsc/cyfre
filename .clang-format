@@ -1,5 +1,6 @@
 ---
 BasedOnStyle: Microsoft
+SortIncludes: false
 IndentWidth: 2
 
 Language: Cpp

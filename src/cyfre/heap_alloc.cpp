@@ -1,79 +1,104 @@
 #ifndef MRDCVLSC_HEAP_ALLOCATION_CPP
 #define MRDCVLSC_HEAP_ALLOCATION_CPP
 
-#include <assert.h>
 #include <stddef.h>
+#include <assert.h>
 #include <string.h>
 
-#include "../../include/cyfre/check_operators.hpp"
 #include "../../include/cyfre/heap_alloc.hpp"
+#include "../../include/cyfre/type_checks.hpp"
 
 namespace cyfre {
+  namespace backend {
+    // =================== BASIC CONSTRUCTORS ===================
 
-  // =================== BASIC CONSTRUCTORS ===================
-
-  template <typename T>
-  dynamic<T>::dynamic(size_t rows, size_t cols) : matrix(new T[rows * cols]), rows(rows), cols(cols) {
-    static_assert(!valid_operators<T>::value, "mat<T,...> type 'T' does not support the necessary operators");
-  }
-
-  // =================== DESTRUCTOR ===================
-
-  template <typename T>
-  dynamic<T>::~dynamic() {
-    delete[] matrix;
-  }
-
-  // =================== SPECIAL CONSTRUCTORS ===================
-
-  /// @brief Copy Constructor.
-  template <typename T>
-  dynamic<T>::dynamic(dynamic<T> const &that) : dynamic<T>::dynamic(that.rows, that.cols) {
-    memcpy(matrix, that.matrix, that.rows * that.cols);
-  }
-
-  /// @brief Move Constructor.
-  template <typename T>
-  dynamic<T>::dynamic(dynamic<T> &&that) : matrix(that.matrix), rows(that.rows), cols(that.cols) {
-    that.matrix = NULL;
-  }
-
-  /// @brief Copy Assignment
-  template <typename T>
-  dynamic<T> &dynamic<T>::operator=(dynamic<T> const &that) {
-    if (this != &that) {
-      rows = that.rows;
-      cols = that.cols;
-
-      if (matrix) {
-        delete[] matrix;
-      }
-
-      size_t n = that.rows * that.cols;
-      matrix = new T[n];
-      memcpy(matrix, that.matrix, sizeof(T) * n);
+    template <size_t ROWS, size_t COLS>
+    template <typename T, size_t Rows, size_t Cols>
+    dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(size_t rows, size_t cols)
+        : matrix(new T[rows * cols]), rows(rows), cols(cols) {
+      static_assert(check::valid_type<T>::value, "<T, ...> Invalid Type Argument");
     }
-    return *this;
-  }
 
-  /// @brief Move Assignment
-  template <typename T>
-  dynamic<T> &dynamic<T>::operator=(dynamic<T> &&that) {
-    if (this != &that) {
-      if (matrix) {
-        delete[] matrix;
-      }
+    // =================== DESTRUCTOR ===================
 
-      rows = that.rows;
-      cols = that.cols;
-      matrix = that.matrix;
+    template <size_t ROWS, size_t COLS>
+    template <typename T, size_t Rows, size_t Cols>
+    dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::~allocate() {
+      delete[] matrix;
+    }
 
-      that.rows = 0;
-      that.cols = 0;
+    // =================== SPECIAL CONSTRUCTORS ===================
+
+    template <size_t ROWS, size_t COLS>
+    template <typename T, size_t Rows, size_t Cols>
+    dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(dynamic<ROWS, COLS>::allocate<T, Rows, Cols> const &that)
+        : allocate(that.rows, that.cols) { // or even better try this
+      static_assert(check::valid_type<T>::value, "<T, ...> Invalid Type Argument");
+      memcpy(matrix, that.matrix, that.rows * that.cols);
+    }
+
+    template <size_t ROWS, size_t COLS>
+    template <typename T, size_t Rows, size_t Cols>
+    dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(dynamic<ROWS, COLS>::allocate<T, Rows, Cols> &&that)
+        : matrix(that.matrix), rows(that.rows), cols(that.cols) {
+      static_assert(check::valid_type<T>::value, "<T, ...> Invalid Type Argument");
       that.matrix = NULL;
     }
-    return *this;
-  }
+
+    template <size_t ROWS, size_t COLS>
+    template <typename T, size_t Rows, size_t Cols>
+    typename dynamic<ROWS, COLS>::template allocate<T, Rows, Cols>
+      &dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::operator=(const dynamic<ROWS, COLS>::allocate<T, Rows, Cols> &that
+      ) {
+      if (this != &that) {
+        rows = that.rows;
+        cols = that.cols;
+
+        if (matrix) {
+          delete[] matrix;
+        }
+
+        size_t n = that.rows * that.cols;
+        matrix = new T[n];
+        memcpy(matrix, that.matrix, sizeof(T) * n);
+      }
+      return *this;
+    }
+
+    template <size_t ROWS, size_t COLS>
+    template <typename T, size_t Rows, size_t Cols>
+    typename dynamic<ROWS, COLS>::template allocate<T, Rows, Cols>
+      &dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::operator=(dynamic<ROWS, COLS>::allocate<T, Rows, Cols> &&that) {
+      if (this != &that) {
+        if (matrix) {
+          delete[] matrix;
+        }
+
+        rows = that.rows;
+        cols = that.cols;
+        matrix = that.matrix;
+
+        that.rows = 0;
+        that.cols = 0;
+        that.matrix = NULL;
+      }
+      return *this;
+    }
+
+    // =================== INDEXING OPERATOR ===================
+
+    template <size_t ROWS, size_t COLS>
+    template <typename T, size_t Rows, size_t Cols>
+    inline T &dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::operator[](size_t i) {
+      return matrix[i];
+    }
+
+    template <size_t ROWS, size_t COLS>
+    template <typename T, size_t Rows, size_t Cols>
+    inline const T &dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::operator[](size_t i) const {
+      return matrix[i];
+    }
+  } // namespace backend
 } // namespace cyfre
 
 #endif

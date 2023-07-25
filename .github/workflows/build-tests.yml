@@ -1,0 +1,52 @@
+name: build-tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  aarch64-gcc:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: update and upgrade env
+      run: sudo apt-get update && sudo apt-get upgrade
+
+    - name: Install essentials
+      run: sudo apt-get install qemu-user qemu-user-static gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu binutils-aarch64-linux-gnu-dbg build-essential
+
+    - name: Compile and Run Tests
+      run: make test CXX=aarch64-linux-gnu-g++ CC=aarch64-linux-gnu-gcc LINKING=-static
+
+  clang:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-2019, macos-latest]
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Compile and Run Tests
+      run: make test CXX=clang++ CC=clang
+
+  gcc:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-2019, macos-latest]
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Compile and Run Tests
+      run: make test CXX=g++ CC=gcc

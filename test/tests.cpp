@@ -6,35 +6,40 @@
 
 typedef unsigned long long ullint;
 
-int main() {
-  using cyfre::mat;
-  using cyfre::dynamic;
-  using cyfre::fixed;
+struct InvalidType {
+  InvalidType() {
+  }
+};
 
-  dynamic<char> a(4, 7);
+int main() {
+  cyfre::backend::dynamic<0, 0>::template allocate<char, 0, 0> a(4, 7);
   assert(a.rows == 4);
   assert(a.cols == 7);
   static_assert(sizeof(a) == sizeof(size_t) * 3, "wrong dynamic container stack size");
 
-  dynamic<char> b = a;
+  cyfre::backend::dynamic<0, 0>::template allocate<char, 0, 0> b = a;
   assert(b.rows == 4);
   assert(b.cols == 7);
   static_assert(sizeof(b) == sizeof(size_t) * 3, "wrong dynamic container stack size");
 
-  mat<dynamic<char>> c(2, 12);
-  assert(c.rows == 2);
-  assert(c.cols == 12);
+  cyfre::mat<char, cyfre::dynamic> c(2, 12);
+  assert(c.rows() == 2);
+  assert(c.cols() == 12);
   static_assert(sizeof(c) == sizeof(size_t) * 3, "wrong dynamic container stack size");
 
-  mat<fixed<char, 5, 5>> d;
-  static_assert(sizeof(d) == 25, "wrong stack size in initialization");
+  cyfre::mat<char, cyfre::fixed<4, 5>> d;
+  static_assert(d.rows() == 4);
+  static_assert(d.cols() == 5);
+  static_assert(sizeof(d) == 20, "wrong stack size in initialization");
 
-  fixed<char, 10, 10> e;
-  static_assert(sizeof(e) == 100, "wrong stack size in initialization");
+  cyfre::fixed<9, 10>::template allocate<char, 9, 10> e;
+  static_assert(e.rows == 9);
+  static_assert(e.cols == 10);
+  static_assert(sizeof(e) == 90, "wrong stack size in initialization");
 
   // matrix test
 
-  { mat<fixed<int, 4, 4>> subject1; }
+  cyfre::mat<short, cyfre::fixed<3, 4>> test;
 
   std::cout << "Tests : PASSED\n";
 

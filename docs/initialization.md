@@ -7,7 +7,7 @@ When initializing a matrix this library offers a way to either allocate on stack
 Here's how to allocate on stack, notice that we specify the dimension of the matrix inside template argument of `fixed`.
 
 ```c++
-cyfre::mat<cyfre::fixed<float, 4, 4>> matrix;
+cyfre::mat<float, cyfre::fixed<4, 4>> matrix;
 ```
 
 ### Heap allocation initialization
@@ -15,7 +15,7 @@ cyfre::mat<cyfre::fixed<float, 4, 4>> matrix;
 Similarly here's how to allocate on the heap, the difference here is we used the `dynamic` allocation type to specify that we want a matrix in the heap, **also notice here that the size is provided in the constructor instead of the template arguments**.
 
 ```c++
-cyfre::mat<cyfre::dynamic<float> matrix(4, 4);
+cyfre::mat<float, cyfre::dynamic> matrix(4, 4);
 ```
 
 ### Namespace advice
@@ -46,6 +46,6 @@ using cyfre::fixed;
 This way you can shorten the declarations like this.
 
 ```c++
-mat<fixed<float, 4, 4> matrix1;
-mat<dynamic<float> matrix2(4, 4);
+mat<float, fixed<4, 4>> matrix1;
+mat<float, dynamic> matrix2(4, 4);
 ``````
