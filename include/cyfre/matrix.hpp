@@ -27,6 +27,9 @@ namespace cyfre {
     constexpr size_t rows() const;
     constexpr size_t cols() const;
 
+    constexpr T &operator()(size_t i, size_t j);
+    constexpr const T &operator()(size_t i, size_t j) const;
+
     private:
 
     using ScalarType = T;
