@@ -30,13 +30,13 @@ namespace cyfre {
 
       T matrix[Rows * Cols];
 
-      allocate();
+      constexpr allocate();
 
       /// @brief Copy Constructor.
-      allocate(const allocate &that);
+      constexpr allocate(const allocate &that);
 
       /// @brief Copy Assignment.
-      allocate &operator=(const allocate &that);
+      constexpr allocate &operator=(const allocate &that);
 
       constexpr T &operator[](size_t i);
       constexpr const T &operator[](size_t i) const;
