@@ -9,6 +9,7 @@
 
 #include <stddef.h>
 #include <utility>
+#include "cyfre_concepts.hpp"
 #include "enums.hpp"
 #include "heap_alloc.hpp"
 #include "stack_alloc.hpp"
@@ -48,16 +49,21 @@ namespace cyfre {
     /// @returns Number of columns in the matrix.
     constexpr size_t cols() const;
 
+    /// @brief Fill the matrix with the given value.
+    constexpr void fill(T value);
+
     constexpr T &operator()(size_t i, size_t j);
     constexpr const T &operator()(size_t i, size_t j) const;
 
     /// @returns true if the matrix is equal, false otherwise.
-    constexpr bool operator==(mat const &) const;
+    template <matrix_t MatArg>
+    constexpr bool operator==(MatArg const &) const;
 
     private:
 
     using ScalarType = T;
     using AllocatorType = dim;
+    static constexpr order MajorOrder = maj_t;
 
     /// @brief allocated matrix.
     typename dim::template allocate<T, dim::rows, dim::cols> matrix;

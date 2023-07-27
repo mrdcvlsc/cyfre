@@ -1,8 +1,10 @@
 #ifndef MRDCVLSC_MATRIX_CLASS_CPP
 #define MRDCVLSC_MATRIX_CLASS_CPP
 
+#include "../../include/cyfre/cyfre_concepts.hpp"
 #include "../../include/cyfre/type_checks.hpp"
 #include "../../include/cyfre/matrix.hpp"
+#include <cstring>
 #include <type_traits>
 // #include <iostream> // remove all iostream class and function to minimize executable and compile time in the future.
 
@@ -58,36 +60,46 @@ namespace cyfre {
     return matrix.cols;
   }
 
+  /// @brief Fill the matrix with the given value.
+  template <typename T, typename dim, order maj_t>
+  constexpr void mat<T, dim, maj_t>::fill(T value) {
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      matrix[i] = value;
+    }
+  }
+
+  /////////////////////// OPERATORS ///////////////////
+
   template <typename T, typename dim, order maj_t>
   constexpr T &mat<T, dim, maj_t>::operator()(size_t i, size_t j) {
     if constexpr (maj_t == order::row_major) {
-      return matrix[i * rows() * j];
+      return matrix[i * rows() + j];
     } else {
-      return matrix[j * rows() * i];
+      return matrix[j * rows() + i];
     }
   }
 
   template <typename T, typename dim, order maj_t>
   constexpr const T &mat<T, dim, maj_t>::operator()(size_t i, size_t j) const {
     if constexpr (maj_t == order::row_major) {
-      return matrix[i * rows() * j];
+      return matrix[i * rows() + j];
     } else {
-      return matrix[j * rows() * i];
+      return matrix[j * rows() + i];
     }
   }
 
   template <typename T, typename dim, order maj_t>
-  constexpr bool mat<T, dim, maj_t>::operator==(mat const &op) const {
-
-    if constexpr (std::is_same<AllocatorType, dynamic>::value) {
-      if (rows() != op.rows() || cols() != op.cols()) {
-        return false;
-      }
+  template <matrix_t MatArg>
+  constexpr bool mat<T, dim, maj_t>::operator==(MatArg const &op) const {
+    if (rows() != op.rows() || cols() != op.cols()) {
+      return false;
     }
 
-    for (size_t i = 0; i < rows() * cols(); ++i) {
-      if (matrix[i] != op.matrix[i]) {
-        return false;
+    for (size_t i = 0; i < rows(); ++i) {
+      for (size_t j = 0; j < cols(); ++j) {
+        if (this->operator()(i, j) != op(i, j)) {
+          return false;
+        }
       }
     }
 

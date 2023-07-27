@@ -81,6 +81,16 @@ int main() {
 
   auto mat5 = std::move(mat3);
 
+  //////////////// dynamic & fixed matrix equality test ////////////////
+
+  cyfre::mat<char, cyfre::fixed<5, 5>> fixed_mat1;
+  cyfre::mat<char, cyfre::dynamic> dynamic_mat1(5, 5);
+
+  fixed_mat1.fill(0xde);
+  dynamic_mat1.fill(0xde);
+
+  assert(fixed_mat1 == dynamic_mat1);
+
   // ================================== matrix ==================================
 
   std::cout << "Tests : PASSED\n";
