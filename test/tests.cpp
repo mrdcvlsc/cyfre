@@ -1,6 +1,8 @@
 // #include "../../extended-precision-integers/epi.hpp"
 #include "../include/cyfre/cyfre.hpp"
 
+#include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <type_traits>
 
@@ -12,34 +14,74 @@ struct InvalidType {
 };
 
 int main() {
-  cyfre::backend::dynamic<0, 0>::template allocate<char, 0, 0> a(4, 7);
-  assert(a.rows == 4);
-  assert(a.cols == 7);
-  static_assert(sizeof(a) == sizeof(size_t) * 3, "wrong dynamic container stack size");
+  // ================================== allocators ==================================
 
-  cyfre::backend::dynamic<0, 0>::template allocate<char, 0, 0> b = a;
-  assert(b.rows == 4);
-  assert(b.cols == 7);
-  static_assert(sizeof(b) == sizeof(size_t) * 3, "wrong dynamic container stack size");
+  std::cout << "allocators...\n";
 
-  cyfre::mat<char, cyfre::dynamic> c(2, 12);
-  assert(c.rows() == 2);
-  assert(c.cols() == 12);
-  static_assert(sizeof(c) == sizeof(size_t) * 3, "wrong dynamic container stack size");
+  cyfre::backend::dynamic<0, 0>::template allocate<char, 0, 0> dynamic_alloc1(4, 7);
+  assert(dynamic_alloc1.rows == 4);
+  assert(dynamic_alloc1.cols == 7);
+  static_assert(sizeof(dynamic_alloc1) == sizeof(size_t) * 3, "wrong dynamic container stack size");
 
-  cyfre::mat<char, cyfre::fixed<4, 5>> d;
-  static_assert(d.rows() == 4);
-  static_assert(d.cols() == 5);
-  static_assert(sizeof(d) == 20, "wrong stack size in initialization");
+  cyfre::backend::dynamic<0, 0>::template allocate<char, 0, 0> dynamic_alloc2 = dynamic_alloc1;
+  assert(dynamic_alloc2.rows == 4);
+  assert(dynamic_alloc2.cols == 7);
+  static_assert(sizeof(dynamic_alloc2) == sizeof(size_t) * 3, "wrong dynamic container stack size");
 
-  cyfre::fixed<9, 10>::template allocate<char, 9, 10> e;
-  static_assert(e.rows == 9);
-  static_assert(e.cols == 10);
-  static_assert(sizeof(e) == 90, "wrong stack size in initialization");
+  auto dynamic_alloc3 = dynamic_alloc1;
+  assert(dynamic_alloc3.rows == 4);
+  assert(dynamic_alloc3.cols == 7);
+  static_assert(sizeof(dynamic_alloc3) == sizeof(size_t) * 3, "wrong dynamic container stack size");
 
-  // matrix test
+  auto dynamic_alloc4 = std::move(dynamic_alloc1);
+  assert(dynamic_alloc4.rows == 4);
+  assert(dynamic_alloc4.cols == 7);
+  static_assert(sizeof(dynamic_alloc4) == sizeof(size_t) * 3, "wrong dynamic container stack size");
 
-  cyfre::mat<short, cyfre::fixed<3, 4>> test;
+  constexpr cyfre::fixed<9, 10>::template allocate<char, 9, 10> fixed_alloc1;
+  static_assert(fixed_alloc1.rows == 9);
+  static_assert(fixed_alloc1.cols == 10);
+  static_assert(sizeof(fixed_alloc1) == 90, "wrong stack size in initialization");
+
+  // ================================== matrix ==================================
+
+  std::cout << "matrix...\n";
+
+  //////////////// fixed matrix equality test ////////////////
+
+  constexpr cyfre::mat<char, cyfre::fixed<4, 5>> mat1;
+  static_assert(mat1.rows() == 4);
+  static_assert(mat1.cols() == 5);
+  static_assert(sizeof(mat1) == 20, "wrong stack size in initialization");
+
+  constexpr auto mat2 = mat1;
+
+  static_assert(mat2 == mat1, "equality test 1 is wrong, should be equal");
+  static_assert(mat2 == mat1, "equality test 1 is wrong, should be equal");
+
+  cyfre::mat<short, cyfre::fixed<3, 4>> fixed_origin;
+  cyfre::mat<short, cyfre::fixed<3, 4>> fixed_copy = fixed_origin;
+  assert(fixed_origin == fixed_copy);
+
+  fixed_copy(1, 2) = 5;
+
+  assert(fixed_origin != fixed_copy);
+
+  //////////////// dynamic matrix equality test ////////////////
+
+  cyfre::mat<char, cyfre::dynamic> mat3(2, 12);
+  assert(mat3.rows() == 2);
+  assert(mat3.cols() == 12);
+  static_assert(sizeof(mat3) == sizeof(size_t) * 3, "wrong dynamic container stack size");
+
+  auto mat4 = mat3;
+  assert(mat4 == mat3);
+  mat4(1, 6) = 77;
+  assert(mat4 != mat3);
+
+  auto mat5 = std::move(mat3);
+
+  // ================================== matrix ==================================
 
   std::cout << "Tests : PASSED\n";
 
