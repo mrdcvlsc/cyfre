@@ -32,6 +32,12 @@ namespace cyfre {
 
       allocate();
 
+      /// @brief Copy Constructor.
+      allocate(const allocate &that);
+
+      /// @brief Copy Assignment.
+      allocate &operator=(const allocate &that);
+
       constexpr T &operator[](size_t i);
       constexpr const T &operator[](size_t i) const;
     };
