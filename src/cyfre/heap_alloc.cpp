@@ -16,7 +16,6 @@ namespace cyfre {
     template <typename T, size_t Rows, size_t Cols>
     dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(size_t rows, size_t cols)
         : matrix(new T[rows * cols]), rows(rows), cols(cols) {
-      static_assert(check::valid_type<T>::value, "<T, ...> Invalid Type Argument");
     }
 
     // =================== DESTRUCTOR ===================
@@ -33,15 +32,13 @@ namespace cyfre {
     template <typename T, size_t Rows, size_t Cols>
     dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(dynamic<ROWS, COLS>::allocate<T, Rows, Cols> const &that)
         : allocate(that.rows, that.cols) { // or even better try this
-      static_assert(check::valid_type<T>::value, "<T, ...> Invalid Type Argument");
-      memcpy(matrix, that.matrix, that.rows * that.cols);
+      memcpy(matrix, that.matrix, sizeof(T) * that.rows * that.cols);
     }
 
     template <size_t ROWS, size_t COLS>
     template <typename T, size_t Rows, size_t Cols>
     dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(dynamic<ROWS, COLS>::allocate<T, Rows, Cols> &&that)
         : matrix(that.matrix), rows(that.rows), cols(that.cols) {
-      static_assert(check::valid_type<T>::value, "<T, ...> Invalid Type Argument");
       that.matrix = NULL;
     }
 
