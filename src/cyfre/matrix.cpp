@@ -9,28 +9,28 @@
 namespace cyfre {
 
   /// @brief Fixed size stack allocation constructor.
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  constexpr mat<T, dim, mem_layout_t>::mat() : matrix() {
+  template <typename T, typename dim, order maj_t>
+  constexpr mat<T, dim, maj_t>::mat() : matrix() {
   }
 
   /// @brief Dynamic size heap allocation constructor.
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  mat<T, dim, mem_layout_t>::mat(size_t rows, size_t cols) : matrix(rows, cols) {
+  template <typename T, typename dim, order maj_t>
+  mat<T, dim, maj_t>::mat(size_t rows, size_t cols) : matrix(rows, cols) {
   }
 
   /// @brief Copy Constructor.
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  constexpr mat<T, dim, mem_layout_t>::mat(const mat &that) : matrix(that.matrix) {
+  template <typename T, typename dim, order maj_t>
+  constexpr mat<T, dim, maj_t>::mat(const mat &that) : matrix(that.matrix) {
   }
 
   /// @brief Move Constructor.
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  mat<T, dim, mem_layout_t>::mat(mat &&that) : matrix(std::move(that.matrix)) {
+  template <typename T, typename dim, order maj_t>
+  mat<T, dim, maj_t>::mat(mat &&that) : matrix(std::move(that.matrix)) {
   }
 
   /// @brief Copy Assignment.
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  mat<T, dim, mem_layout_t> &mat<T, dim, mem_layout_t>::operator=(const mat &that) {
+  template <typename T, typename dim, order maj_t>
+  mat<T, dim, maj_t> &mat<T, dim, maj_t>::operator=(const mat &that) {
     if (this != &that) {
       matrix = that.matrix;
     }
@@ -38,8 +38,8 @@ namespace cyfre {
   }
 
   /// @brief Move Assignment.
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  mat<T, dim, mem_layout_t> &mat<T, dim, mem_layout_t>::operator=(mat &&that) {
+  template <typename T, typename dim, order maj_t>
+  mat<T, dim, maj_t> &mat<T, dim, maj_t>::operator=(mat &&that) {
     if (this != &that) {
       matrix = std::move(that.matrix);
     }
@@ -47,37 +47,37 @@ namespace cyfre {
   }
 
   /// @returns number of rows in the matrix.
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  constexpr size_t mat<T, dim, mem_layout_t>::rows() const {
+  template <typename T, typename dim, order maj_t>
+  constexpr size_t mat<T, dim, maj_t>::rows() const {
     return matrix.rows;
   }
 
   /// @returns number of columns in the matrix.
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  constexpr size_t mat<T, dim, mem_layout_t>::cols() const {
+  template <typename T, typename dim, order maj_t>
+  constexpr size_t mat<T, dim, maj_t>::cols() const {
     return matrix.cols;
   }
 
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  constexpr T &mat<T, dim, mem_layout_t>::operator()(size_t i, size_t j) {
-    if constexpr (mem_layout_t == mem_layout::row_major) {
+  template <typename T, typename dim, order maj_t>
+  constexpr T &mat<T, dim, maj_t>::operator()(size_t i, size_t j) {
+    if constexpr (maj_t == order::row_major) {
       return matrix[i * rows() * j];
     } else {
       return matrix[j * rows() * i];
     }
   }
 
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  constexpr const T &mat<T, dim, mem_layout_t>::operator()(size_t i, size_t j) const {
-    if constexpr (mem_layout_t == mem_layout::row_major) {
+  template <typename T, typename dim, order maj_t>
+  constexpr const T &mat<T, dim, maj_t>::operator()(size_t i, size_t j) const {
+    if constexpr (maj_t == order::row_major) {
       return matrix[i * rows() * j];
     } else {
       return matrix[j * rows() * i];
     }
   }
 
-  template <typename T, typename dim, mem_layout mem_layout_t>
-  constexpr bool mat<T, dim, mem_layout_t>::operator==(mat const &op) const {
+  template <typename T, typename dim, order maj_t>
+  constexpr bool mat<T, dim, maj_t>::operator==(mat const &op) const {
 
     if constexpr (std::is_same<AllocatorType, dynamic>::value) {
       if (rows() != op.rows() || cols() != op.cols()) {

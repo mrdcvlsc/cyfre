@@ -9,8 +9,8 @@
 
 namespace cyfre {
 
-  /// @brief
-  enum class mem_layout
+  /// @brief Type of matrix memory layout, row major or column major order.
+  enum class order
   {
     row_major,
     col_major
