@@ -16,7 +16,7 @@ namespace cyfre {
   template <size_t ROWS, size_t COLS>
   template <typename T, size_t Rows, size_t Cols>
   constexpr fixed<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(fixed<ROWS, COLS>::allocate<T, Rows, Cols> const &that)
-      : allocate(that.rows, that.cols) { // or even better try this
+      : allocate() { // or even better try this
     // maintain this comment for the future, still finding a way to enable memcpy if the call is not constexpr.
     // memcpy(matrix, that.matrix, sizeof(T) * that.rows * that.cols);
     for (size_t i = 0; i < Rows * Cols; ++i) {
