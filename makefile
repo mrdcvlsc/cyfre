@@ -24,13 +24,16 @@ test/test.out: test/tests.cpp $(HEADERS) $(SRC)
 	@echo Compiling test programs...
 	@echo Operating System : $(OS)
 	@echo Architecture     : $(ARCH)
-	@echo C Compiler       : $(CC)
+	@echo
 	@echo C++ Compiler     : $(CXX)
+	@echo C Compiler       : $(CC)
+	@$(CC) --version
+	@echo
 	$(CXX) $(LINKING) $(CXXFLAGS) test/tests.cpp -o test/test.out
 
 clean:
 	@echo "main makefile - clean"
-	@rm $(SRC)/test.out
+	@rm test/*.out
 
 install:
 	@ln -s $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/cyfre /usr/local/include/
