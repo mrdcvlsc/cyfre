@@ -4,11 +4,15 @@ SortIncludes: false
 IndentWidth: 2
 
 Language: Cpp
+SeparateDefinitionBlocks: Always
 
 # LINES
+AllowShortFunctionsOnASingleLine: true
 AllowShortEnumsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: Yes
+AllowShortBlocksOnASingleLine: Always
 EmptyLineAfterAccessModifier: Always
 
 # BRACE WRAPPINGS
@@ -35,5 +39,11 @@ AccessModifierOffset: 0
 
 # SPACES
 FixNamespaceComments: true
+SpaceBeforeParens: true
 SpaceBeforeRangeBasedForLoopColon: false
 SpaceAfterCStyleCast: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceInEmptyBlock: false
+
+KeepEmptyLinesAtTheStartOfBlocks: false

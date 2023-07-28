@@ -13,18 +13,18 @@ namespace cyfre {
 
   namespace backend {
     /// @brief heap allocator meta-function for the matrix class (raw no typedef).
-    template <size_t ROWS = 0, size_t COLS = 0>
+    template <size_t Rows = 0, size_t Cols = 0>
     struct dynamic {
-      static constexpr size_t rows = ROWS;
-      static constexpr size_t cols = COLS;
+      static constexpr size_t rows = Rows;
+      static constexpr size_t cols = Cols;
 
       /// @brief stack allocator type for the matrix class.
       /// @tparam T the type of the scalar values/elements of the matrix.
       /// @tparam Rows fixed height of the matrix.
       /// @tparam Cols fixed width of the matrix.
-      template <typename T, size_t Rows, size_t Cols>
+      template <typename _T, size_t _Rows, size_t _Cols>
       struct allocate {
-        T *matrix;
+        _T *matrix;
         size_t rows;
         size_t cols;
 
@@ -44,8 +44,8 @@ namespace cyfre {
         /// @brief Move Assignment.
         allocate &operator=(allocate &&that);
 
-        inline T &operator[](size_t i);
-        inline const T &operator[](size_t i) const;
+        inline _T &operator[](size_t i);
+        inline const _T &operator[](size_t i) const;
       };
     };
   } // namespace backend

@@ -10,7 +10,7 @@
 namespace cyfre {
 
   /// @brief Type of matrix memory layout, row major or column major order.
-  enum class order
+  enum class order_t
   {
     row_major,
     col_major

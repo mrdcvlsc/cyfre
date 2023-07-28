@@ -20,14 +20,10 @@ namespace cyfre {
 
     auto operation_function = [scalar_operation](const T matrix_index, const T operation_value) {
       switch (scalar_operation) {
-        case ADD:
-          return matrix_index + operation_value;
-        case SUB:
-          return matrix_index - operation_value;
-        case MUL:
-          return matrix_index * operation_value;
-        case DIV:
-          return matrix_index / operation_value;
+        case ADD: return matrix_index + operation_value;
+        case SUB: return matrix_index - operation_value;
+        case MUL: return matrix_index * operation_value;
+        case DIV: return matrix_index / operation_value;
         default:
           throw std::invalid_argument(
             "\n\nERROR : scale_column(const size_t column_index, const SCALAR scalar_operation, const T "
@@ -62,14 +58,10 @@ namespace cyfre {
 
     auto operation_function = [scalar_operation](const T matrix_index, const T operation_value) {
       switch (scalar_operation) {
-        case ADD:
-          return matrix_index + operation_value;
-        case SUB:
-          return matrix_index - operation_value;
-        case MUL:
-          return matrix_index * operation_value;
-        case DIV:
-          return matrix_index / operation_value;
+        case ADD: return matrix_index + operation_value;
+        case SUB: return matrix_index - operation_value;
+        case MUL: return matrix_index * operation_value;
+        case DIV: return matrix_index / operation_value;
         default:
           throw std::invalid_argument(
             "\n\nERROR : void column_operation(const size_t output_index, const SCALAR scalar_operation, "

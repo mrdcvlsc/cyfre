@@ -14,21 +14,21 @@ namespace cyfre {
   /// @brief stack allocator meta-function for the matrix class.
   /// @tparam ROWS fixed height of the matrix.
   /// @tparam COLS fixed width of the matrix.
-  template <size_t ROWS, size_t COLS>
+  template <size_t Rows, size_t Cols>
   struct fixed {
-    static constexpr size_t rows = ROWS;
-    static constexpr size_t cols = COLS;
+    static constexpr size_t rows = Rows;
+    static constexpr size_t cols = Cols;
 
     /// @brief stack allocator type for the matrix class.
     /// @tparam T the type of the scalar values/elements of the matrix.
     /// @tparam Rows fixed height of the matrix.
     /// @tparam Cols fixed width of the matrix.
-    template <typename T, size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
     struct allocate {
-      static constexpr size_t rows = Rows;
-      static constexpr size_t cols = Cols;
+      static constexpr size_t rows = _Rows;
+      static constexpr size_t cols = _Cols;
 
-      T matrix[Rows * Cols];
+      _T matrix[_Rows * _Cols];
 
       constexpr allocate();
 
@@ -38,8 +38,8 @@ namespace cyfre {
       /// @brief Copy Assignment.
       constexpr allocate &operator=(const allocate &that);
 
-      constexpr T &operator[](size_t i);
-      constexpr const T &operator[](size_t i) const;
+      constexpr _T &operator[](size_t i);
+      constexpr const _T &operator[](size_t i) const;
     };
   };
 

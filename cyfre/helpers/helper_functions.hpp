@@ -31,9 +31,7 @@ namespace cyfre::helpers {
       if (rational_true > 1) {
         throw value;
       }
-    } catch (size_t NO_VALUE_ERROR) {
-      return {false, false};
-    } catch (std::string VALUE_ERROR) {
+    } catch (size_t NO_VALUE_ERROR) { return {false, false}; } catch (std::string VALUE_ERROR) {
       return {false, false};
     }
     return {true, rational_true};

@@ -152,12 +152,8 @@ namespace cyfre {
 
     for (size_t i = 0; i < n; ++i) {
       switch (typechoice) {
-        case RANDOM::INTEGER:
-          matrix[i] = random_number_int(rand_engine);
-          break;
-        case RANDOM::REAL:
-          matrix[i] = random_number_float(rand_engine);
-          break;
+        case RANDOM::INTEGER: matrix[i] = random_number_int(rand_engine); break;
+        case RANDOM::REAL: matrix[i] = random_number_float(rand_engine); break;
         default:
           throw std::invalid_argument(
             "\n\nERROR : mat(const size_t height, const size_t width, const RANDOM typechoice, const T "
@@ -190,10 +186,8 @@ namespace cyfre {
   template <class T>
   mat<T>::mat(const TYPE matrix_type, const size_t n) : mat<T>(matrix_type, n, 0) {
     switch (matrix_type) {
-      case TYPE::IDENTITY:
-        break;
-      case TYPE::NULLZERO:
-        break;
+      case TYPE::IDENTITY: break;
+      case TYPE::NULLZERO: break;
       case TYPE::SCALARMATRIX:
         throw std::invalid_argument(
           "\n\nERROR : mat(TYPE matrix_type, size_t n, T scalar)\n"

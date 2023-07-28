@@ -1,52 +1,49 @@
 #ifndef MRDCVLSC_HEAP_ALLOCATION_CPP
 #define MRDCVLSC_HEAP_ALLOCATION_CPP
 
-#include <stddef.h>
-#include <assert.h>
 #include <string.h>
 
 #include "../../include/cyfre/heap_alloc.hpp"
-#include "../../include/cyfre/type_checks.hpp"
 
 namespace cyfre {
   namespace backend {
     // =================== BASIC CONSTRUCTORS ===================
 
-    template <size_t ROWS, size_t COLS>
-    template <typename T, size_t Rows, size_t Cols>
-    dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(size_t rows, size_t cols)
-        : matrix(new T[rows * cols]), rows(rows), cols(cols) {
-    }
+    template <size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
+    dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::allocate(size_t rows, size_t cols)
+        : matrix(new _T[rows * cols]), rows(rows), cols(cols) {}
 
     // =================== DESTRUCTOR ===================
 
-    template <size_t ROWS, size_t COLS>
-    template <typename T, size_t Rows, size_t Cols>
-    dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::~allocate() {
+    template <size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
+    dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::~allocate() {
       delete[] matrix;
     }
 
     // =================== SPECIAL CONSTRUCTORS ===================
 
-    template <size_t ROWS, size_t COLS>
-    template <typename T, size_t Rows, size_t Cols>
-    dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(dynamic<ROWS, COLS>::allocate<T, Rows, Cols> const &that)
+    template <size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
+    dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::allocate(
+      dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols> const &that
+    )
         : allocate(that.rows, that.cols) { // or even better try this
-      memcpy(matrix, that.matrix, sizeof(T) * that.rows * that.cols);
+      memcpy(matrix, that.matrix, sizeof(_T) * that.rows * that.cols);
     }
 
-    template <size_t ROWS, size_t COLS>
-    template <typename T, size_t Rows, size_t Cols>
-    dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::allocate(dynamic<ROWS, COLS>::allocate<T, Rows, Cols> &&that)
+    template <size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
+    dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::allocate(dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols> &&that)
         : matrix(that.matrix), rows(that.rows), cols(that.cols) {
       that.matrix = NULL;
     }
 
-    template <size_t ROWS, size_t COLS>
-    template <typename T, size_t Rows, size_t Cols>
-    typename dynamic<ROWS, COLS>::template allocate<T, Rows, Cols>
-      &dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::operator=(const dynamic<ROWS, COLS>::allocate<T, Rows, Cols> &that
-      ) {
+    template <size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
+    typename dynamic<Rows, Cols>::template allocate<_T, _Rows, _Cols> &dynamic<Rows, Cols>::allocate<
+      _T, _Rows, _Cols>::operator=(const dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols> &that) {
       if (this != &that) {
         rows = that.rows;
         cols = that.cols;
@@ -56,16 +53,17 @@ namespace cyfre {
         }
 
         size_t n = that.rows * that.cols;
-        matrix = new T[n];
-        memcpy(matrix, that.matrix, sizeof(T) * n);
+        matrix = new _T[n];
+        memcpy(matrix, that.matrix, sizeof(_T) * n);
       }
       return *this;
     }
 
-    template <size_t ROWS, size_t COLS>
-    template <typename T, size_t Rows, size_t Cols>
-    typename dynamic<ROWS, COLS>::template allocate<T, Rows, Cols>
-      &dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::operator=(dynamic<ROWS, COLS>::allocate<T, Rows, Cols> &&that) {
+    template <size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
+    typename dynamic<Rows, Cols>::template allocate<_T, _Rows, _Cols>
+      &dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::operator=(dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols> &&that
+      ) {
       if (this != &that) {
         if (matrix) {
           delete[] matrix;
@@ -84,15 +82,15 @@ namespace cyfre {
 
     // =================== INDEXING OPERATOR ===================
 
-    template <size_t ROWS, size_t COLS>
-    template <typename T, size_t Rows, size_t Cols>
-    inline T &dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::operator[](size_t i) {
+    template <size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
+    inline _T &dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::operator[](size_t i) {
       return matrix[i];
     }
 
-    template <size_t ROWS, size_t COLS>
-    template <typename T, size_t Rows, size_t Cols>
-    inline const T &dynamic<ROWS, COLS>::allocate<T, Rows, Cols>::operator[](size_t i) const {
+    template <size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
+    inline const _T &dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::operator[](size_t i) const {
       return matrix[i];
     }
   } // namespace backend

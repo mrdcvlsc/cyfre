@@ -9,8 +9,9 @@
 
 #include <stddef.h>
 #include <utility>
-#include "cyfre_concepts.hpp"
+
 #include "enums.hpp"
+#include "cyfre_concepts.hpp"
 #include "heap_alloc.hpp"
 #include "stack_alloc.hpp"
 
@@ -21,7 +22,7 @@ namespace cyfre {
   /// @tparam dim dimension allocator of the matrix, this template argument
   /// will decide whether the matrix will be fixed (stack allocated) or dynamic (heap allocated).
   /// @tparam maj_t the major order layout of the matrix, row_major or col_major.
-  template <typename T, typename dim, order maj_t = order::row_major>
+  template <concepts::scalars T, typename Dim, order_t Order = order_t::row_major>
   class mat {
     public:
 
@@ -56,25 +57,25 @@ namespace cyfre {
     constexpr const T &operator()(size_t i, size_t j) const;
 
     /// @returns true if the matrix is equal, false otherwise.
-    template <matrix_t MatArg>
-    constexpr bool operator==(MatArg const &) const;
+    template <concepts::matrices Matrix>
+    constexpr bool operator==(Matrix const &) const;
 
     private:
 
     using ScalarType = T;
-    using AllocatorType = dim;
-    static constexpr order MajorOrder = maj_t;
+    using AllocatorType = Dim;
+    static constexpr order_t MajorOrder = Order;
 
     /// @brief allocated matrix.
-    typename dim::template allocate<T, dim::rows, dim::cols> matrix;
+    typename Dim::template allocate<T, Dim::rows, Dim::cols> matrix;
   };
 
-  template <typename T, order maj_t = order::row_major>
+  template <typename T, order_t maj_t = order_t::row_major>
   auto identity_dynamic(size_t side_n) {
     return std::move(mat<T, dynamic, maj_t>(side_n, side_n));
   }
 
-  template <typename T, size_t side_n, order maj_t = order::row_major>
+  template <typename T, size_t side_n, order_t maj_t = order_t::row_major>
   auto identity_fixed() {
     return std::move(mat<T, fixed<side_n, side_n>, maj_t>(side_n, side_n));
   }

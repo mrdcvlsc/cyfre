@@ -1,19 +1,131 @@
-// #include "../../extended-precision-integers/epi.hpp"
-#include "../include/cyfre/cyfre.hpp"
-
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
 #include <iostream>
 #include <type_traits>
 
+#include "../../extended-precision-integers/epi.hpp"
+#include "../include/cyfre/cyfre.hpp"
+
 typedef unsigned long long ullint;
 
-struct InvalidType {
-  InvalidType() {
-  }
+struct MatrixType1 {
+  MatrixType1() {}
 };
 
+struct MatrixType2 {
+  int rows;
+  int cols;
+
+  MatrixType2() {}
+
+  private:
+
+  using ScalarType = char;
+  using AllocatorType = double;
+};
+
+struct MatrixType3 {
+  int rows();
+  MatrixType1 cols();
+
+  MatrixType3() {}
+
+  private:
+
+  using ScalarType = char;
+  using AllocatorType = double;
+  char matrix;
+  int MajorOrder = 5;
+};
+
+struct MatrixType4 {
+  size_t rows();
+  size_t cols();
+
+  MatrixType4() {}
+
+  private:
+
+  using ScalarType = MatrixType1;
+  using AllocatorType = double;
+  int matrix[10];
+  cyfre::order_t MajorOrder = cyfre::order_t::col_major;
+};
+
+struct MatrixType5 {
+  size_t rows();
+  char cols();
+
+  MatrixType5() {}
+
+  private:
+
+  using ScalarType = char;
+  using AllocatorType = double;
+  char matrix = 2;
+  cyfre::order_t MajorOrder = cyfre::order_t::col_major;
+};
+
+struct MatrixType6 {
+  size_t rows();
+  size_t cols();
+
+  MatrixType6() {}
+
+  private:
+
+  using ScalarType = char;
+  using AllocatorType = double;
+  char *matrix;
+  cyfre::order_t MajorOrder = cyfre::order_t::col_major;
+};
+
+struct MatrixType7 {
+  size_t rows();
+  size_t cols();
+
+  MatrixType7() : matrix(4, 4) {}
+
+  private:
+
+  using ScalarType = char;
+  using AllocatorType = cyfre::dynamic;
+  cyfre::dynamic::allocate<char, 0, 0> matrix;
+  cyfre::order_t MajorOrder = cyfre::order_t::col_major;
+};
+
+int arr_test1[10];
+int *arr_test2;
+int arr_test3;
+
 int main() {
+  static_assert(cyfre::concepts::arrays<decltype(arr_test1)>, "should be valid");
+  static_assert(cyfre::concepts::arrays<decltype(arr_test2)>, "should be valid");
+  static_assert(not cyfre::concepts::arrays<decltype(arr_test3)>, "should not be valid");
+  static_assert(not cyfre::concepts::arrays<MatrixType1>, "should not be valid");
+
+  // scalar type checks
+  static_assert(cyfre::concepts::scalars<char>, "Scalar Type1 - test");
+  static_assert(cyfre::concepts::scalars<float>, "Scalar Type2 - test");
+  static_assert(cyfre::concepts::scalars<int>, "Scalar Type3 - test");
+  static_assert(not cyfre::concepts::scalars<MatrixType1>, "Scalar Type3 - test");
+  static_assert(not cyfre::concepts::scalars<MatrixType2>, "Scalar Type4 - test");
+  static_assert(not cyfre::concepts::scalars<MatrixType3>, "Scalar Type5 - test");
+  static_assert(cyfre::concepts::scalars<epi::uint1024_t>, "Scalar Type1 - test");
+
+  // allocator types
+  static_assert(cyfre::concepts::allocators<cyfre::dynamic::allocate<char, 0, 0>>, "dynamic allocator");
+  static_assert(cyfre::concepts::allocators<cyfre::fixed<5, 5>::allocate<char, 5, 5>>, "stack allocator");
+  static_assert(not cyfre::concepts::allocators<MatrixType1>, "stack allocator");
+
+  static_assert(not cyfre::concepts::matrices<MatrixType1>, "MatrixType1 - test");
+  static_assert(not cyfre::concepts::matrices<MatrixType2>, "MatrixType2 - test");
+  static_assert(not cyfre::concepts::matrices<MatrixType3>, "MatrixType3 - test");
+  static_assert(not cyfre::concepts::matrices<MatrixType4>, "MatrixType4 - test");
+  static_assert(not cyfre::concepts::matrices<MatrixType5>, "MatrixType5 - test");
+  static_assert(not cyfre::concepts::matrices<MatrixType6>, "MatrixType6 - test");
+
   // ================================== allocators ==================================
 
   std::cout << "allocators...\n";
