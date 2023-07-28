@@ -20,8 +20,11 @@ jobs:
     - name: Install essentials
       run: sudo apt-get install qemu-user qemu-user-static gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu binutils-aarch64-linux-gnu-dbg build-essential
 
+    - name: System Info
+      run: make info CXX=aarch64-linux-gnu-g++ CC=aarch64-linux-gnu-gcc LINKING=-static
+
     - name: Compile and Run Tests
-      run: make test CXX=aarch64-linux-gnu-g++ CC=aarch64-linux-gnu-gcc LINKING=-static
+      run: make -j2 test CXX=aarch64-linux-gnu-g++ CC=aarch64-linux-gnu-gcc LINKING=-static
 
   clang:
 
@@ -34,8 +37,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: System Info
+      run: make info CXX=clang++ CC=clang
+
     - name: Compile and Run Tests
-      run: make test CXX=clang++ CC=clang
+      run: make -j2 test CXX=clang++ CC=clang
 
   gcc:
 
@@ -48,5 +54,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: System Info
+      run: make info CXX=g++ CC=gcc
+
     - name: Compile and Run Tests
-      run: make test CXX=g++ CC=gcc
+      run: make -j2 test CXX=g++ CC=gcc

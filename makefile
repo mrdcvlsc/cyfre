@@ -1,26 +1,17 @@
 OS:=$(shell uname)
 ARCH:=$(shell uname -p)
-
 CC:=clang
 CXX:=clang++
 
-CXXFLAGS:=-std=c++20 -Wall -Wextra
-LINKING:=
+.PHONY: test info clean style
 
-HEADERS:=$(wildcard include/cyfre/*)
-SRC:=$(wildcard src/cyfre/*)
+test:
+	$(MAKE) -C test test
 
-ifeq ($(CXX), clang++)
-CXXFLAGS+=-fsanitize=address
-endif
+clean:
+	$(MAKE) -C test clean
 
-# alternative for the above ifeq
-# CXXFLAGS+=$(and $(findstring clang++, $(CXX)), $(findstring clang, $(CC)), -fsanitize=address)
-
-test: test/test.out
-	@./test/test.out
-
-test/test.out: test/tests.cpp $(HEADERS) $(SRC)
+info:
 	@echo Compiling test programs...
 	@echo Operating System : $(OS)
 	@echo Architecture     : $(ARCH)
@@ -29,17 +20,6 @@ test/test.out: test/tests.cpp $(HEADERS) $(SRC)
 	@echo C Compiler       : $(CC)
 	@$(CC) --version
 	@echo
-	$(CXX) $(LINKING) $(CXXFLAGS) test/tests.cpp -o test/test.out
-
-clean:
-	@echo "main makefile - clean"
-	@rm test/*.out
-
-install:
-	@ln -s $(dir $(abspath $(lastword $(MAKEFILE_LIST))))/cyfre /usr/local/include/
-
-uninstall:
-	@unlink /usr/local/include/cyfre
 
 style:
 	@clang-format -i -style=file \
