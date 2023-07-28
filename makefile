@@ -23,6 +23,6 @@ info:
 
 style:
 	@clang-format -i -style=file \
-	include/cyfre/*.hpp \
-	src/cyfre/*.cpp \
+	include/cyfre/*.hpp include/cyfre/*/*.hpp include/cyfre/*/*/*.hpp include/cyfre/*/*/*/*.hpp \
+	src/cyfre/*.cpp src/cyfre/*/*.cpp src/cyfre/*/*/*.cpp src/cyfre/*/*/*/*.cpp \
 	test/*.cpp

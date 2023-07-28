@@ -19,7 +19,7 @@ CHECK_SHAPE_DISABLE  -  Disable internal shape checking of matricies in matrix o
 */
 
 #include "enums.hpp"
-#include "cyfre_concepts.hpp"
+#include "concepts.hpp"
 
 #include "heap_alloc.hpp"
 #include "stack_alloc.hpp"

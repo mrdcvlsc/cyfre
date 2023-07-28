@@ -4,10 +4,10 @@
  *  @author mrdcvlsc
  ***********************************************/
 
-#ifndef MRDCVLSC_CYFRE_TYPE_CHECKS_HPP
-#define MRDCVLSC_CYFRE_TYPE_CHECKS_HPP
+#ifdef MRDCVLSC_CYFRE_TYPE_CHECKS_HPP
+  #define MRDCVLSC_CYFRE_TYPE_CHECKS_HPP
 
-#include <type_traits>
+  #include <type_traits>
 
 // Using SFINAE to check for the pressence of operators for type T : replace this with C++ concepts in the future.
 

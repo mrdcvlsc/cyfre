@@ -42,7 +42,6 @@ namespace cyfre {
       constexpr const _T &operator[](size_t i) const;
     };
   };
-
 } // namespace cyfre
 
 #endif

@@ -8,24 +8,24 @@
 namespace cyfre {
 
   /// @brief Fixed size stack allocation constructor.
-  template <concepts::scalars T, typename Dim, order_t Order>
-  constexpr mat<T, Dim, Order>::mat() : matrix() {}
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas>::mat() : matrix() {}
 
   /// @brief Dynamic size heap allocation constructor.
-  template <concepts::scalars T, typename Dim, order_t Order>
-  mat<T, Dim, Order>::mat(size_t rows, size_t cols) : matrix(rows, cols) {}
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  mat<T, Dim, Order, Blas>::mat(size_t rows, size_t cols) : matrix(rows, cols) {}
 
   /// @brief Copy Constructor.
-  template <concepts::scalars T, typename Dim, order_t Order>
-  constexpr mat<T, Dim, Order>::mat(const mat &that) : matrix(that.matrix) {}
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas>::mat(const mat &that) : matrix(that.matrix) {}
 
   /// @brief Move Constructor.
-  template <concepts::scalars T, typename Dim, order_t Order>
-  mat<T, Dim, Order>::mat(mat &&that) : matrix(std::move(that.matrix)) {}
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  mat<T, Dim, Order, Blas>::mat(mat &&that) : matrix(std::move(that.matrix)) {}
 
   /// @brief Copy Assignment.
-  template <concepts::scalars T, typename Dim, order_t Order>
-  mat<T, Dim, Order> &mat<T, Dim, Order>::operator=(const mat &that) {
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator=(const mat &that) {
     if (this != &that) {
       matrix = that.matrix;
     }
@@ -33,8 +33,8 @@ namespace cyfre {
   }
 
   /// @brief Move Assignment.
-  template <concepts::scalars T, typename Dim, order_t Order>
-  mat<T, Dim, Order> &mat<T, Dim, Order>::operator=(mat &&that) {
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator=(mat &&that) {
     if (this != &that) {
       matrix = std::move(that.matrix);
     }
@@ -42,20 +42,20 @@ namespace cyfre {
   }
 
   /// @returns number of rows in the matrix.
-  template <concepts::scalars T, typename Dim, order_t Order>
-  constexpr size_t mat<T, Dim, Order>::rows() const {
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr size_t mat<T, Dim, Order, Blas>::rows() const {
     return matrix.rows;
   }
 
   /// @returns number of columns in the matrix.
-  template <concepts::scalars T, typename Dim, order_t Order>
-  constexpr size_t mat<T, Dim, Order>::cols() const {
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr size_t mat<T, Dim, Order, Blas>::cols() const {
     return matrix.cols;
   }
 
   /// @brief Fill the matrix with the given value.
-  template <concepts::scalars T, typename Dim, order_t Order>
-  constexpr void mat<T, Dim, Order>::fill(T value) {
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr void mat<T, Dim, Order, Blas>::fill(T value) {
     for (size_t i = 0; i < rows() * cols(); ++i) {
       matrix[i] = value;
     }
@@ -63,8 +63,8 @@ namespace cyfre {
 
   /////////////////////// OPERATORS ///////////////////
 
-  template <concepts::scalars T, typename Dim, order_t Order>
-  constexpr T &mat<T, Dim, Order>::operator()(size_t i, size_t j) {
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr T &mat<T, Dim, Order, Blas>::operator()(size_t i, size_t j) {
     if constexpr (Order == order_t::row_major) {
       return matrix[i * rows() + j];
     } else {
@@ -72,8 +72,8 @@ namespace cyfre {
     }
   }
 
-  template <concepts::scalars T, typename Dim, order_t Order>
-  constexpr const T &mat<T, Dim, Order>::operator()(size_t i, size_t j) const {
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr const T &mat<T, Dim, Order, Blas>::operator()(size_t i, size_t j) const {
     if constexpr (Order == order_t::row_major) {
       return matrix[i * rows() + j];
     } else {
@@ -81,9 +81,9 @@ namespace cyfre {
     }
   }
 
-  template <concepts::scalars T, typename Dim, order_t Order>
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
   template <concepts::matrices Matrix>
-  constexpr bool mat<T, Dim, Order>::operator==(Matrix const &op) const {
+  constexpr bool mat<T, Dim, Order, Blas>::operator==(Matrix const &op) const {
     if (rows() != op.rows() || cols() != op.cols()) {
       return false;
     }

@@ -15,7 +15,6 @@ endif
 # CXXFLAGS+=$(and $(findstring clang++, $(CXX)), $(findstring clang, $(CC)), -fsanitize=address)
 
 test: $(TEST_EXECUTABLES)
-	@echo dep = $^
 	$(foreach TEST_PROGRAM, $^,\
 		./$(TEST_PROGRAM) ;\
 	)

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <type_traits>
 
-#include "../../extended-precision-integers/epi.hpp"
+// #include "../../extended-precision-integers/epi.hpp"
 #include "../include/cyfre/cyfre.hpp"
 
 typedef unsigned long long ullint;
@@ -112,7 +112,7 @@ int main() {
   static_assert(not cyfre::concepts::scalars<MatrixType1>, "Scalar Type3 - test");
   static_assert(not cyfre::concepts::scalars<MatrixType2>, "Scalar Type4 - test");
   static_assert(not cyfre::concepts::scalars<MatrixType3>, "Scalar Type5 - test");
-  static_assert(cyfre::concepts::scalars<epi::uint1024_t>, "Scalar Type1 - test");
+  // static_assert(cyfre::concepts::scalars<epi::uint1024_t>, "Scalar Type1 - test");
 
   // allocator types
   static_assert(cyfre::concepts::allocators<cyfre::dynamic::allocate<char, 0, 0>>, "dynamic allocator");

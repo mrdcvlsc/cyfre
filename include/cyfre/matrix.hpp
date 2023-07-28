@@ -10,19 +10,22 @@
 #include <stddef.h>
 #include <utility>
 
+#include "backend/cyfre/blas.hpp"
 #include "enums.hpp"
-#include "cyfre_concepts.hpp"
+#include "concepts.hpp"
 #include "heap_alloc.hpp"
 #include "stack_alloc.hpp"
 
 namespace cyfre {
+
+
 
   /// @brief matrix calss.
   /// @tparam T the type of the scalar values/elements.
   /// @tparam dim dimension allocator of the matrix, this template argument
   /// will decide whether the matrix will be fixed (stack allocated) or dynamic (heap allocated).
   /// @tparam maj_t the major order layout of the matrix, row_major or col_major.
-  template <concepts::scalars T, typename Dim, order_t Order = order_t::row_major>
+  template <concepts::scalars T, typename Dim, order_t Order = order_t::row_major, typename Blas = backend::cyfre_blas>
   class mat {
     public:
 
@@ -69,6 +72,14 @@ namespace cyfre {
     /// @brief allocated matrix.
     typename Dim::template allocate<T, Dim::rows, Dim::cols> matrix;
   };
+
+  /// @brief Fixed vector.
+  template <concepts::scalars T, size_t Dim, order_t Order = order_t::row_major, typename Blas = backend::cyfre_blas>
+  struct fvec : public mat<T, fixed<Dim, 1>, Order, Blas> {};
+
+  /// @brief Dynamic vector.
+  template <concepts::scalars T, order_t Order = order_t::row_major, typename Blas = backend::cyfre_blas>
+  struct dvec : public mat<T, dynamic, Order, Blas> {};
 
   template <typename T, order_t maj_t = order_t::row_major>
   auto identity_dynamic(size_t side_n) {
