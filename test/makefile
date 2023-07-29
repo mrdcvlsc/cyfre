@@ -1,4 +1,4 @@
-CXXFLAGS:=-std=c++20 -Wall -Wextra
+CXXFLAGS:=-Wall -Wextra
 LINKING:=
 
 HEADERS:=$(wildcard ../include/cyfre/*)
@@ -6,7 +6,10 @@ SRC:=$(wildcard ../src/cyfre/*)
 TEST_EXECUTABLES:=$(subst .cpp,.out,$(wildcard *.cpp))
 
 ifeq ($(CXX), clang++)
+CXXFLAGS+=-std=c++20
 CXXFLAGS+=-fsanitize=address
+else ifeq ($(CXX), g++)
+CXXFLAGS+=-std=c++2a
 endif
 
 .PHONY: test clean
