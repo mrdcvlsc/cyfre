@@ -196,10 +196,11 @@ int main() {
   //////////////// dynamic & fixed matrix equality test ////////////////
 
   cyfre::mat<char, cyfre::fixed<5, 5>> fixed_mat1;
-  cyfre::mat<char, cyfre::dynamic> dynamic_mat1(5, 5);
+  cyfre::mat<char, cyfre::dynamic> dynamic_mat1(10, 10);
 
   fixed_mat1.fill(0xde);
   dynamic_mat1.fill(0xde);
+  dynamic_mat1.resize(5, 5);
 
   assert(fixed_mat1 == dynamic_mat1);
 

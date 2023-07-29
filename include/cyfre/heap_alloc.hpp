@@ -46,6 +46,8 @@ namespace cyfre {
 
         inline _T &operator[](size_t i);
         inline const _T &operator[](size_t i) const;
+
+        void resize(size_t rows, size_t cols);
       };
     };
   } // namespace backend

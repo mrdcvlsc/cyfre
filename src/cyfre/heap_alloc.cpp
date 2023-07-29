@@ -1,7 +1,9 @@
 #ifndef MRDCVLSC_HEAP_ALLOCATION_CPP
 #define MRDCVLSC_HEAP_ALLOCATION_CPP
 
+#include <cstdlib>
 #include <string.h>
+#include <stdlib.h>
 
 #include "../../include/cyfre/heap_alloc.hpp"
 
@@ -12,14 +14,14 @@ namespace cyfre {
     template <size_t Rows, size_t Cols>
     template <typename _T, size_t _Rows, size_t _Cols>
     dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::allocate(size_t rows, size_t cols)
-        : matrix(new _T[rows * cols]), rows(rows), cols(cols) {}
+        : matrix(reinterpret_cast<_T*>(malloc(sizeof(_T) * rows * cols))), rows(rows), cols(cols) {}
 
     // =================== DESTRUCTOR ===================
 
     template <size_t Rows, size_t Cols>
     template <typename _T, size_t _Rows, size_t _Cols>
     dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::~allocate() {
-      delete[] matrix;
+      if (matrix) free(matrix);
     }
 
     // =================== SPECIAL CONSTRUCTORS ===================
@@ -49,11 +51,11 @@ namespace cyfre {
         cols = that.cols;
 
         if (matrix) {
-          delete[] matrix;
+          free(matrix);
         }
 
         size_t n = that.rows * that.cols;
-        matrix = new _T[n];
+        matrix = reinterpret_cast<_T*>(malloc(sizeof(_T) * that.rows * that.cols));
         memcpy(matrix, that.matrix, sizeof(_T) * n);
       }
       return *this;
@@ -66,7 +68,7 @@ namespace cyfre {
       ) {
       if (this != &that) {
         if (matrix) {
-          delete[] matrix;
+          free(matrix);
         }
 
         rows = that.rows;
@@ -92,6 +94,14 @@ namespace cyfre {
     template <typename _T, size_t _Rows, size_t _Cols>
     inline const _T &dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::operator[](size_t i) const {
       return matrix[i];
+    }
+
+    template <size_t Rows, size_t Cols>
+    template <typename _T, size_t _Rows, size_t _Cols>
+    void dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::resize(size_t rows, size_t cols) {
+      matrix = reinterpret_cast<_T*>(realloc(matrix, sizeof(_T) * rows * cols));
+      this->rows = rows;
+      this->cols = cols;
     }
   } // namespace backend
 } // namespace cyfre

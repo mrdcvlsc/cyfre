@@ -41,6 +41,8 @@ namespace cyfre {
     return *this;
   }
 
+  /////////////////////// METHODS ///////////////////
+
   /// @returns number of rows in the matrix.
   template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
   constexpr size_t mat<T, Dim, Order, Blas>::rows() const {
@@ -59,6 +61,13 @@ namespace cyfre {
     for (size_t i = 0; i < rows() * cols(); ++i) {
       matrix[i] = value;
     }
+  }
+
+  /// @brief Resizes the the matrix (only for dynamic).
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  void mat<T, Dim, Order, Blas>::resize(size_t rows, size_t cols) {
+    static_assert(std::is_same_v<AllocatorType, dynamic>, "fixed size matrices cannot be resized");
+    matrix.resize(rows, cols);
   }
 
   /////////////////////// OPERATORS ///////////////////
