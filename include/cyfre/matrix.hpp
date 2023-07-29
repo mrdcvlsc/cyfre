@@ -7,8 +7,10 @@
 #ifndef MRDCVLSC_MATRIX_CLASS_HPP
 #define MRDCVLSC_MATRIX_CLASS_HPP
 
-#include <stddef.h>
+#include <iostream>
+#include <algorithm>
 #include <utility>
+#include <exception>
 
 #include "backend/cyfre/blas.hpp"
 #include "enums.hpp"
@@ -17,8 +19,6 @@
 #include "stack_alloc.hpp"
 
 namespace cyfre {
-
-
 
   /// @brief matrix calss.
   /// @tparam T the type of the scalar values/elements.
@@ -32,6 +32,8 @@ namespace cyfre {
 
     /// @brief Dynamic size heap allocation constructor.
     mat(size_t rows, size_t cols);
+
+    constexpr mat(std::initializer_list<std::initializer_list<T>> sequence);
 
     /// @brief Copy Constructor.
     constexpr mat(const mat &);
@@ -53,6 +55,9 @@ namespace cyfre {
 
     /// @brief Fill the matrix with the given value.
     constexpr void fill(T value);
+
+    /// @brief Print the matrix.
+    void print() const;
 
     /// @brief Resizes the the matrix (only for dynamic).
     void resize(size_t rows, size_t cols);

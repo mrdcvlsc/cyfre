@@ -198,11 +198,44 @@ int main() {
   cyfre::mat<char, cyfre::fixed<5, 5>> fixed_mat1;
   cyfre::mat<char, cyfre::dynamic> dynamic_mat1(10, 10);
 
-  fixed_mat1.fill(0xde);
-  dynamic_mat1.fill(0xde);
+  fixed_mat1.fill('a');
+  dynamic_mat1.fill('a');
   dynamic_mat1.resize(5, 5);
 
+  cyfre::mat<char, cyfre::dynamic> dynamic_mat2 = {
+    {'a', 'a', 'a', 'a', 'a'},
+    {'a', 'a', 'a', 'a', 'a'},
+    {'a', 'a', 'a', 'a', 'a'},
+    {'a', 'a', 'a', 'a', 'a'},
+    {'a', 'a', 'a', 'a', 'a'},
+  };
+
+  cyfre::mat<char, cyfre::fixed<5, 5>> fixed_mat2 = {
+    {'a', 'a', 'a', 'a', 'a'},
+    {'a', 'a', 'a', 'a', 'a'},
+    {'a', 'a', 'a', 'a', 'a'},
+    {'a', 'a', 'a', 'a', 'a'},
+    {'a', 'a', 'a', 'a', 'a'},
+  };
+
+  fixed_mat1.print();
+  std::cout << "fix1.rows = " << fixed_mat1.rows() << "\n";
+  std::cout << "fix1.cols = " << fixed_mat1.cols() << "\n\n";
+
+  fixed_mat2.print();
+  std::cout << "fix2.rows = " << fixed_mat2.rows() << "\n";
+  std::cout << "fix2.cols = " << fixed_mat2.cols() << "\n\n";
+
+  dynamic_mat1.print();
+  std::cout << "dyn1.rows = " << dynamic_mat1.rows() << "\n";
+  std::cout << "dyn1.cols = " << dynamic_mat1.cols() << "\n\n";
+
+  dynamic_mat2.print();
+  std::cout << "dyn2.rows = " << dynamic_mat2.rows() << "\n";
+  std::cout << "dyn2.cols = " << dynamic_mat2.cols() << "\n\n";
+
   assert(fixed_mat1 == dynamic_mat1);
+  assert(fixed_mat1 == dynamic_mat2);
 
   // ================================== matrix ==================================
 

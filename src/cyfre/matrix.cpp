@@ -1,6 +1,10 @@
 #ifndef MRDCVLSC_MATRIX_CLASS_CPP
 #define MRDCVLSC_MATRIX_CLASS_CPP
 
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+
 #include "../../include/cyfre/matrix.hpp"
 
 // #include <iostream> // remove all iostream class and function to minimize executable and compile time in the future.
@@ -41,6 +45,29 @@ namespace cyfre {
     return *this;
   }
 
+  /// @brief initializer list constructor.
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas>::mat(std::initializer_list<std::initializer_list<T>> sequence)
+      : mat(sequence.size(), (sequence.begin())[0].size()) {
+    if (sequence.size() > rows() * cols()) {
+      throw std::invalid_argument("initializer list total elements should be <= (rows * cols)");
+    }
+
+    size_t initial_row_width = cols();
+    size_t i = 0;
+    for (auto initalizer_list_row: sequence) {
+      size_t j = 0;
+      if (initial_row_width != initalizer_list_row.size()) {
+        throw std::invalid_argument("initializer list elements rows should have the same lengths");
+      }
+
+      for (T initalizer_list_col: initalizer_list_row) {
+        this->operator()(i, j++) = initalizer_list_col;
+      }
+      i++;
+    }
+  }
+
   /////////////////////// METHODS ///////////////////
 
   /// @returns number of rows in the matrix.
@@ -68,6 +95,30 @@ namespace cyfre {
   void mat<T, Dim, Order, Blas>::resize(size_t rows, size_t cols) {
     static_assert(std::is_same_v<AllocatorType, dynamic>, "fixed size matrices cannot be resized");
     matrix.resize(rows, cols);
+  }
+
+  /// @brief Print the matrix.
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  void mat<T, Dim, Order, Blas>::print() const {
+    // Calculate the maximum width of each column
+    std::vector<size_t> widths(cols(), 0);
+    for (size_t i = 0; i < rows(); ++i) {
+      for (size_t j = 0; j < cols(); ++j) {
+        std::stringstream ss;
+        ss << this->operator()(i, j);
+        widths[i] = std::max(widths[i], ss.str().length());
+      }
+    }
+
+    for (size_t i = 0; i < rows(); ++i) {
+      for (size_t j = 0; j < cols(); ++j) {
+        std::cout << std::setw(widths[i]) << this->operator()(i, j) << " ";
+      }
+      std::cout << '\n';
+    }
+
+    // std::cout << std::setw(0) << '\n';
+    std::cout << '\n';
   }
 
   /////////////////////// OPERATORS ///////////////////

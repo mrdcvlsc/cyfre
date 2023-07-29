@@ -2,11 +2,16 @@
 #define MRDCVLSC_STACK_ALLOCATION_CPP
 
 #include "../../include/cyfre/stack_alloc.hpp"
+#include <cstddef>
 
 namespace cyfre {
   template <size_t Rows, size_t Cols>
   template <typename _T, size_t _Rows, size_t _Cols>
   constexpr fixed<Rows, Cols>::allocate<_T, _Rows, _Cols>::allocate() : matrix() {}
+
+  template <size_t Rows, size_t Cols>
+  template <typename _T, size_t _Rows, size_t _Cols>
+  constexpr fixed<Rows, Cols>::allocate<_T, _Rows, _Cols>::allocate(size_t, size_t) : matrix() {}
 
   template <size_t Rows, size_t Cols>
   template <typename _T, size_t _Rows, size_t _Cols>

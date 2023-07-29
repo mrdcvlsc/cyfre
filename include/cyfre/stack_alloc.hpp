@@ -32,6 +32,11 @@ namespace cyfre {
 
       constexpr allocate();
 
+      /// @warning This constructor is only implemented for the sake of completion,
+      /// the constructor parameter rows and cols has no effect to the actual
+      /// size of the fixed matrix on stack.
+      constexpr allocate(size_t, size_t);
+
       /// @brief Copy Constructor.
       constexpr allocate(const allocate &that);
 

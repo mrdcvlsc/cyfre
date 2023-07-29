@@ -24,10 +24,16 @@ namespace cyfre {
       /// @tparam Cols fixed width of the matrix.
       template <typename _T, size_t _Rows, size_t _Cols>
       struct allocate {
+        static constexpr size_t dim_default = 4;
+
         _T *matrix;
         size_t rows;
         size_t cols;
 
+        /// @brief allocate matrix with dimension size : 4 x 4.
+        allocate();
+
+        /// @brief allocate matrix with dimension size : rows x cols.
         allocate(size_t rows, size_t cols);
 
         ~allocate();
