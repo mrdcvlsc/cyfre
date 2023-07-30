@@ -1,9 +1,11 @@
 #ifndef MRDCVLSC_MATRIX_CLASS_CPP
 #define MRDCVLSC_MATRIX_CLASS_CPP
 
-#include <iostream>
+#include <cstddef>
 #include <iomanip>
+#include <iostream>
 #include <sstream>
+#include <vector>
 
 #include "../../include/cyfre/matrix.hpp"
 
@@ -47,8 +49,11 @@ namespace cyfre {
 
   /// @brief initializer list constructor.
   template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
-  constexpr mat<T, Dim, Order, Blas>::mat(std::initializer_list<std::initializer_list<T>> sequence)
-      : mat(sequence.size(), (sequence.begin())[0].size()) {
+  constexpr mat<T, Dim, Order, Blas>::mat(std::initializer_list<std::initializer_list<T>> sequence) : mat() {
+    if constexpr (std::is_same<AllocatorType, dynamic>::value) {
+      this->resize(sequence.size(), sequence.begin()[0].size());
+    }
+
     if (sequence.size() > rows() * cols()) {
       throw std::invalid_argument("initializer list total elements should be <= (rows * cols)");
     }
@@ -101,18 +106,20 @@ namespace cyfre {
   template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
   void mat<T, Dim, Order, Blas>::print() const {
     // Calculate the maximum width of each column
+
     std::vector<size_t> widths(cols(), 0);
+
     for (size_t i = 0; i < rows(); ++i) {
       for (size_t j = 0; j < cols(); ++j) {
         std::stringstream ss;
         ss << this->operator()(i, j);
-        widths[i] = std::max(widths[i], ss.str().length());
+        widths[j] = std::max(widths[j], ss.str().length());
       }
     }
 
     for (size_t i = 0; i < rows(); ++i) {
       for (size_t j = 0; j < cols(); ++j) {
-        std::cout << std::setw(widths[i]) << this->operator()(i, j) << " ";
+        std::cout << std::setw(widths[j]) << this->operator()(i, j) << " ";
       }
       std::cout << '\n';
     }
@@ -126,7 +133,7 @@ namespace cyfre {
   template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
   constexpr T &mat<T, Dim, Order, Blas>::operator()(size_t i, size_t j) {
     if constexpr (Order == order_t::row_major) {
-      return matrix[i * rows() + j];
+      return matrix[i * cols() + j];
     } else {
       return matrix[j * rows() + i];
     }
@@ -135,10 +142,27 @@ namespace cyfre {
   template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
   constexpr const T &mat<T, Dim, Order, Blas>::operator()(size_t i, size_t j) const {
     if constexpr (Order == order_t::row_major) {
-      return matrix[i * rows() + j];
+      return matrix[i * cols() + j];
     } else {
       return matrix[j * rows() + i];
     }
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr bool mat<T, Dim, Order, Blas>::operator==(mat const &op) const {
+    if (rows() != op.rows() || cols() != op.cols()) {
+      return false;
+    }
+
+    for (size_t i = 0; i < rows(); ++i) {
+      for (size_t j = 0; j < cols(); ++j) {
+        if (this->operator()(i, j) != op(i, j)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
@@ -158,7 +182,6 @@ namespace cyfre {
 
     return true;
   }
-
 } // namespace cyfre
 
 #endif

@@ -13,8 +13,9 @@ namespace cyfre {
 
   /// @brief stack allocator meta-function for the matrix class.
   /// @tparam ROWS fixed height of the matrix.
-  /// @tparam COLS fixed width of the matrix.
-  template <size_t Rows, size_t Cols>
+  /// @tparam COLS fixed width of the matrix - defaults to 1 if not specified to enable 1 argument pass in the vec<>
+  /// class.
+  template <size_t Rows, size_t Cols = 1>
   struct fixed {
     static constexpr size_t rows = Rows;
     static constexpr size_t cols = Cols;

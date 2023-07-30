@@ -2,10 +2,10 @@
 #define MRDCVLSC_CYFRE_CONCEPTS_HPP
 
 #include "enums.hpp"
-#include <utility>
 #include <concepts>
-#include <type_traits>
 #include <stddef.h>
+#include <type_traits>
+#include <utility>
 
 namespace cyfre {
 

@@ -15,6 +15,13 @@ namespace cyfre {
     row_major,
     col_major
   };
+
+  /// @brief Axis type for a vector.
+  enum class axis_t
+  {
+    x,
+    y
+  };
 } // namespace cyfre
 
 #endif

@@ -1,3 +1,5 @@
+/// TEST ALL KINDS OF OPERATORS HERE
+
 #include <cassert>
 #include <iostream>
 
@@ -6,6 +8,6 @@
 using namespace cyfre;
 
 int main() {
-  std::cout << "Tests : PASSED - BLAS level 2\n";
+  std::cout << "Tests : PASSED - Operators\n";
   return 0;
 }

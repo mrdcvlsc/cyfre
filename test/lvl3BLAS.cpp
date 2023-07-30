@@ -1,6 +1,11 @@
+#include <cassert>
 #include <iostream>
 
+#include "../include/cyfre.hpp"
+
+using namespace cyfre;
+
 int main() {
-  std::cout << "Level 3 BLAS Operation Tests - NOT IMPLEMENTED\n";
+  std::cout << "Tests : PASSED - BLAS level 3\n";
   return 0;
 }

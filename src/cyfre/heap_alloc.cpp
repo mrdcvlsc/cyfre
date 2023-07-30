@@ -2,8 +2,8 @@
 #define MRDCVLSC_HEAP_ALLOCATION_CPP
 
 #include <cstdlib>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../../include/cyfre/heap_alloc.hpp"
 
@@ -14,8 +14,7 @@ namespace cyfre {
     template <size_t Rows, size_t Cols>
     template <typename _T, size_t _Rows, size_t _Cols>
     dynamic<Rows, Cols>::allocate<_T, _Rows, _Cols>::allocate()
-        : matrix(reinterpret_cast<_T *>(malloc(sizeof(_T) * dim_default * dim_default))), rows(dim_default),
-          cols(dim_default) {}
+        : matrix(reinterpret_cast<_T *>(malloc(0))), rows(0), cols(0) {}
 
     template <size_t Rows, size_t Cols>
     template <typename _T, size_t _Rows, size_t _Cols>

@@ -1,5 +1,6 @@
 *.out
 test/test_dev.cpp
+main.cpp
 
 # Prerequisites
 *.d

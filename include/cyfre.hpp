@@ -18,15 +18,19 @@ CHECK_SHAPE_DISABLE  -  Disable internal shape checking of matricies in matrix o
 
 */
 
-#include "enums.hpp"
-#include "concepts.hpp"
+#include "cyfre/concepts.hpp"
+#include "cyfre/enums.hpp"
 
-#include "heap_alloc.hpp"
-#include "stack_alloc.hpp"
-#include "matrix.hpp"
+#include "cyfre/heap_alloc.hpp"
+#include "cyfre/stack_alloc.hpp"
+#include "cyfre/matrix.hpp"
+#include "cyfre/specialization.hpp"
+#include "cyfre/vectors.hpp"
 
-#include "../../src/cyfre/heap_alloc.cpp"
-#include "../../src/cyfre/stack_alloc.cpp"
-#include "../../src/cyfre/matrix.cpp"
+#include "../src/cyfre/heap_alloc.cpp"
+#include "../src/cyfre/stack_alloc.cpp"
+#include "../src/cyfre/matrix.cpp"
+#include "../src/cyfre/specialization.cpp"
+#include "../src/cyfre/vectors.cpp"
 
 #endif
