@@ -1,4 +1,6 @@
-# cyfre matrix initialization
+[[< Previous](compilation.md)] | [[Home](../README.md)] | [[Next >](scalar-to-vector-and-matrix.md)]
+
+# Initialization (WIP)
 
 When initializing a matrix this library offers a way to either allocate on stack or to allocate in heap.
 
@@ -48,4 +50,8 @@ This way you can shorten the declarations like this.
 ```c++
 mat<float, fixed<4, 4>> matrix1;
 mat<float, dynamic> matrix2(4, 4);
-``````
+```
+
+-----
+
+[[< Previous](compilation.md)] | [[Home](../README.md)] | [[Next >](scalar-to-vector-and-matrix.md)]

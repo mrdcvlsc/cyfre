@@ -1,23 +1,18 @@
-CXXFLAGS:=-Wall -Wextra
-LINKING:=
-
 HEADERS:=$(wildcard ../include/cyfre/*)
 SRC:=$(wildcard ../src/cyfre/*)
 TEST_EXECUTABLES:=$(subst .cpp,.out,$(wildcard *.cpp))
+LINKING:=
+
+CXXFLAGS:=-Wall -Wextra -std=c++20
 
 ifeq ($(CXX), clang++)
-CXXFLAGS+=-std=c++20
 CXXFLAGS+=-fsanitize=address
-else ifeq($(CXX), aarch64-linux-gnu-g++)
-CXXFLAGS+=-std=c++20
-else ifeq ($(CXX), g++)
-CXXFLAGS+=-std=c++2a
 endif
-
-.PHONY: test clean
 
 # alternative for the above ifeq
 # CXXFLAGS+=$(and $(findstring clang++, $(CXX)), $(findstring clang, $(CC)), -fsanitize=address)
+
+.PHONY: test clean
 
 test: $(TEST_EXECUTABLES)
 	$(foreach TEST_PROGRAM, $^,\

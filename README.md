@@ -5,9 +5,10 @@
 
 A Templated **C++20** matrix library which aims to provide an easy to use interface for basic and intermediate vector-vector, vector-matrix & matrix-matrix operations.
 
-<!-- > [!NOTE]  
-> Highlights information that users should take into account, even when skimming.
+[!NOTE]  
+> Requires: c++20
 
+<!-- > 
 > [!IMPORTANT]  
 > Crucial information necessary for users to succeed.
 
@@ -19,10 +20,15 @@ A Templated **C++20** matrix library which aims to provide an easy to use interf
 
 ### **Docs**
 
-1. [Initialization](docs/initialization.md)
-2. [vector-vector (not available yet)](docs/initialization.md)
-3. [vector-matrix (not available yet)](docs/initialization.md)
-4. [matrix-matrix (not available yet)](docs/initialization.md)
+### **Docs**
+
+1. [Installation (work in progress)](docs/installation.md)
+2. [Compilation (work in progress)](docs/compilation.md)
+3. [Initialization](docs/initialization.md)
+4. [scalar operations with vectors and matrices (not available yet)](docs/scalar-to-vector-and-matrix.md)
+5. [vector-vector operations (not available yet)](docs/vector-vector.md)
+6. [vector-matrix operations (not available yet)](docs/vector-matrix.md)
+7. [matrix-matrix operations (not available yet)](docs/matrix-matrix.md)
 
 ### **About**
 
