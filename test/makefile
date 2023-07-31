@@ -8,6 +8,8 @@ TEST_EXECUTABLES:=$(subst .cpp,.out,$(wildcard *.cpp))
 ifeq ($(CXX), clang++)
 CXXFLAGS+=-std=c++20
 CXXFLAGS+=-fsanitize=address
+else ifeq($(CXX), aarch64-linux-gnu-g++)
+CXXFLAGS+=-std=c++20
 else ifeq ($(CXX), g++)
 CXXFLAGS+=-std=c++2a
 endif
