@@ -48,6 +48,11 @@ namespace cyfre {
     /// @brief Move Assignment.
     mat &operator=(mat &&);
 
+    void *operator new(std::size_t) throw();
+    void operator delete(void *) throw();
+    void *operator new[](std::size_t) throw();
+    void operator delete[](void *) throw();
+
     /// @returns Number of rows in the matrix.
     constexpr size_t rows() const;
 
@@ -72,6 +77,40 @@ namespace cyfre {
     /// @returns true if the matrix is equal, false otherwise.
     template <concepts::matrices Matrix>
     constexpr bool operator==(Matrix const &) const;
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    constexpr mat &operator+=(T scalar);
+    constexpr mat operator+(T scalar) const;
+
+    constexpr mat &operator-=(T scalar);
+    constexpr mat operator-(T scalar) const;
+
+    constexpr mat &operator*=(T scalar);
+    constexpr mat operator*(T scalar) const;
+
+    constexpr mat &operator/=(T scalar);
+    constexpr mat operator/(T scalar) const;
+
+    constexpr mat &operator%=(T scalar);
+    constexpr mat operator%(T scalar) const;
+
+    constexpr mat &operator&=(T scalar);
+    constexpr mat operator&(T scalar) const;
+
+    constexpr mat &operator^=(T scalar);
+    constexpr mat operator^(T scalar) const;
+
+    constexpr mat &operator|=(T scalar);
+    constexpr mat operator|(T scalar) const;
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
     using ScalarType = T;
     using AllocatorType = Dim;

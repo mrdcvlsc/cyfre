@@ -182,6 +182,145 @@ namespace cyfre {
 
     return true;
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator+=(T scalar) {
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      matrix[i] += scalar;
+    }
+    return *this;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> mat<T, Dim, Order, Blas>::operator+(T scalar) const {
+    mat answer(rows(), cols());
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      answer.matrix[i] = matrix[i] + scalar;
+    }
+    return answer;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator-=(T scalar) {
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      matrix[i] -= scalar;
+    }
+    return *this;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> mat<T, Dim, Order, Blas>::operator-(T scalar) const {
+    mat answer(rows(), cols());
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      answer.matrix[i] = matrix[i] - scalar;
+    }
+    return answer;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator*=(T scalar) {
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      matrix[i] *= scalar;
+    }
+    return *this;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> mat<T, Dim, Order, Blas>::operator*(T scalar) const {
+    mat answer(rows(), cols());
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      answer.matrix[i] = matrix[i] * scalar;
+    }
+    return answer;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator/=(T scalar) {
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      matrix[i] /= scalar;
+    }
+    return *this;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> mat<T, Dim, Order, Blas>::operator/(T scalar) const {
+    mat answer(rows(), cols());
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      answer.matrix[i] = matrix[i] / scalar;
+    }
+    return answer;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator%=(T scalar) {
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      matrix[i] %= scalar;
+    }
+    return *this;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> mat<T, Dim, Order, Blas>::operator%(T scalar) const {
+    mat answer(rows(), cols());
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      answer.matrix[i] = matrix[i] % scalar;
+    }
+    return answer;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator&=(T scalar) {
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      matrix[i] &= scalar;
+    }
+    return *this;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> mat<T, Dim, Order, Blas>::operator&(T scalar) const {
+    mat answer(rows(), cols());
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      answer.matrix[i] = matrix[i] & scalar;
+    }
+    return answer;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator^=(T scalar) {
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      matrix[i] ^= scalar;
+    }
+    return *this;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> mat<T, Dim, Order, Blas>::operator^(T scalar) const {
+    mat answer(rows(), cols());
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      answer.matrix[i] = matrix[i] ^ scalar;
+    }
+    return answer;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> &mat<T, Dim, Order, Blas>::operator|=(T scalar) {
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      matrix[i] |= scalar;
+    }
+    return *this;
+  }
+
+  template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
+  constexpr mat<T, Dim, Order, Blas> mat<T, Dim, Order, Blas>::operator|(T scalar) const {
+    mat answer(rows(), cols());
+    for (size_t i = 0; i < rows() * cols(); ++i) {
+      answer.matrix[i] = matrix[i] | scalar;
+    }
+    return answer;
+  }
+
 } // namespace cyfre
 
 #endif
