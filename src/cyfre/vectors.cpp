@@ -44,6 +44,24 @@ namespace cyfre {
     }
   }
 
+  template <concepts::scalars T, typename Dim, axis_t Axis, order_t Order, typename Blas>
+  constexpr T &vec<T, Dim, Axis, Order, Blas>::operator[](size_t i) {
+    if constexpr (Axis == axis_t::x) {
+      return mat<T, typename VecOrient<Dim, Axis>::OrientDim, Order, Blas>::operator()(0, i);
+    } else {
+      return mat<T, typename VecOrient<Dim, Axis>::OrientDim, Order, Blas>::operator()(i, 0);
+    }
+  }
+  
+  template <concepts::scalars T, typename Dim, axis_t Axis, order_t Order, typename Blas>
+  constexpr const T &vec<T, Dim, Axis, Order, Blas>::operator[](size_t i) const {
+    if constexpr (Axis == axis_t::x) {
+      return mat<T, typename VecOrient<Dim, Axis>::OrientDim, Order, Blas>::operator()(0, i);
+    } else {
+      return mat<T, typename VecOrient<Dim, Axis>::OrientDim, Order, Blas>::operator()(i, 0);
+    }
+  }
+
   /// @returns true if the matrix is equal, false otherwise.
   template <concepts::scalars T, typename Dim, axis_t Axis, order_t Order, typename Blas>
   constexpr bool vec<T, Dim, Axis, Order, Blas>::operator==(vec const &that) const {
@@ -56,7 +74,7 @@ namespace cyfre {
   constexpr bool vec<T, Dim, Axis, Order, Blas>::operator==(Matrix const &that) const {
     return mat<T, typename VecOrient<Dim, Axis>::OrientDim, Order, Blas>::operator==(that);
   }
-
+  
   template <concepts::scalars T, typename Dim, axis_t Axis, order_t Order, typename Blas>
   constexpr size_t vec<T, Dim, Axis, Order, Blas>::size() const {
     return this->rows() * this->cols();

@@ -35,6 +35,9 @@ namespace cyfre {
 
     constexpr vec(std::initializer_list<T> sequence);
 
+    constexpr T &operator[](size_t i);
+    constexpr const T &operator[](size_t i) const;
+
     /// @returns true if the matrix is equal, false otherwise.
     constexpr bool operator==(vec const &that) const;
 
