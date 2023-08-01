@@ -1,5 +1,6 @@
 #include <cassert>
 #include <iostream>
+#include <stdexcept>
 
 #include "../include/cyfre.hpp"
 
@@ -124,6 +125,9 @@ int main() {
 
   // problem with protected members if not accessed inside the mat class.
   static_assert(concepts::matrices<MatrixType7>, "MatrixType6 - test");
+
+  static_assert(concepts::matrices<mat<int, fixed<4, 4>>>, "Matrix Test - test 1");
+  static_assert(concepts::matrices<mat<int, dynamic>>, "Matrix Test - test 2");
 
   std::cout << "Tests : PASSED - Type Assertions\n";
   return 0;

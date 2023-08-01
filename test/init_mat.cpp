@@ -23,8 +23,7 @@ int main() {
 
     for (size_t i = 0; i < ROWS; ++i) {
       for (size_t j = 0; j < COLS; ++j) {
-        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) =
-          mat_daxis_x_cmo(i, j) = rng(rng_engine);
+        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) = mat_daxis_x_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -63,8 +62,7 @@ int main() {
 
     for (size_t i = 0; i < COLS; ++i) {
       for (size_t j = 0; j < ROWS; ++j) {
-        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) =
-          mat_daxis_y_cmo(i, j) = rng(rng_engine);
+        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) = mat_daxis_y_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -111,8 +109,7 @@ int main() {
 
     for (size_t i = 0; i < ROWS; ++i) {
       for (size_t j = 0; j < COLS; ++j) {
-        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) =
-          mat_daxis_x_cmo(i, j) = rng(rng_engine);
+        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) = mat_daxis_x_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -151,8 +148,7 @@ int main() {
 
     for (size_t i = 0; i < COLS; ++i) {
       for (size_t j = 0; j < ROWS; ++j) {
-        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) =
-          mat_daxis_y_cmo(i, j) = rng(rng_engine);
+        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) = mat_daxis_y_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -199,8 +195,7 @@ int main() {
 
     for (size_t i = 0; i < ROWS; ++i) {
       for (size_t j = 0; j < COLS; ++j) {
-        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) =
-          mat_daxis_x_cmo(i, j) = rng(rng_engine);
+        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) = mat_daxis_x_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -239,8 +234,7 @@ int main() {
 
     for (size_t i = 0; i < COLS; ++i) {
       for (size_t j = 0; j < ROWS; ++j) {
-        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) =
-          mat_daxis_y_cmo(i, j) = rng(rng_engine);
+        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) = mat_daxis_y_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -287,8 +281,7 @@ int main() {
 
     for (size_t i = 0; i < ROWS; ++i) {
       for (size_t j = 0; j < COLS; ++j) {
-        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) =
-          mat_daxis_x_cmo(i, j) = rng(rng_engine);
+        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) = mat_daxis_x_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -327,8 +320,7 @@ int main() {
 
     for (size_t i = 0; i < COLS; ++i) {
       for (size_t j = 0; j < ROWS; ++j) {
-        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) =
-          mat_daxis_y_cmo(i, j) = rng(rng_engine);
+        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) = mat_daxis_y_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -375,8 +367,7 @@ int main() {
 
     for (size_t i = 0; i < ROWS; ++i) {
       for (size_t j = 0; j < COLS; ++j) {
-        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) =
-          mat_daxis_x_cmo(i, j) = rng(rng_engine);
+        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) = mat_daxis_x_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -415,8 +406,7 @@ int main() {
 
     for (size_t i = 0; i < COLS; ++i) {
       for (size_t j = 0; j < ROWS; ++j) {
-        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) =
-          mat_daxis_y_cmo(i, j) = rng(rng_engine);
+        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) = mat_daxis_y_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -463,8 +453,7 @@ int main() {
 
     for (size_t i = 0; i < ROWS; ++i) {
       for (size_t j = 0; j < COLS; ++j) {
-        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) =
-          mat_daxis_x_cmo(i, j) = rng(rng_engine);
+        mat_faxis_x_rmo(i, j) = mat_daxis_x_rmo(i, j) = mat_faxis_x_cmo(i, j) = mat_daxis_x_cmo(i, j) = rng(rng_engine);
       }
     }
 
@@ -503,8 +492,7 @@ int main() {
 
     for (size_t i = 0; i < COLS; ++i) {
       for (size_t j = 0; j < ROWS; ++j) {
-        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) =
-          mat_daxis_y_cmo(i, j) = rng(rng_engine);
+        mat_faxis_y_rmo(i, j) = mat_daxis_y_rmo(i, j) = mat_faxis_y_cmo(i, j) = mat_daxis_y_cmo(i, j) = rng(rng_engine);
       }
     }
 
