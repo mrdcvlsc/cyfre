@@ -1,10 +1,4 @@
-#include <cassert>
-#include <iostream>
-#include <chrono>
-#include <limits>
-#include <random>
-
-#include "../include/cyfre.hpp"
+#include "include/functions.hpp"
 
 using namespace cyfre;
 

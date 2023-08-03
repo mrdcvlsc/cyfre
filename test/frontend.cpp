@@ -1,11 +1,4 @@
-#include <algorithm>
-#include <cassert>
-#include <cstdint>
-#include <iostream>
-#include <type_traits>
-
-// #include "../../extended-precision-integers/epi.hpp"
-#include "../include/cyfre.hpp"
+#include "include/functions.hpp"
 
 int main() {
   //////////////// dynamic matrix equality test ////////////////

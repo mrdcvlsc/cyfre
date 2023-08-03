@@ -1,7 +1,4 @@
-#include <cassert>
-#include <iostream>
-
-#include "../include/cyfre.hpp"
+#include "include/functions.hpp"
 
 using namespace cyfre;
 

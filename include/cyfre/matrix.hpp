@@ -92,19 +92,31 @@ namespace cyfre {
     constexpr mat &operator/=(T scalar);
     constexpr mat operator/(T scalar) const;
 
-    constexpr mat &operator%=(T scalar);
-    constexpr mat operator%(T scalar) const;
-
-    constexpr mat &operator&=(T scalar);
-    constexpr mat operator&(T scalar) const;
-
-    constexpr mat &operator^=(T scalar);
-    constexpr mat operator^(T scalar) const;
-
-    constexpr mat &operator|=(T scalar);
-    constexpr mat operator|(T scalar) const;
-
     ///////////////////////////////////////////////////////////////////////////////////////////
+
+    template <concepts::matrices MatrixT>
+    constexpr mat &operator+=(MatrixT const &);
+
+    template <concepts::matrices MatrixT>
+    constexpr mat operator+(MatrixT const &) const;
+
+    template <concepts::matrices MatrixT>
+    constexpr mat &operator-=(MatrixT const &);
+
+    template <concepts::matrices MatrixT>
+    constexpr mat operator-(MatrixT const &) const;
+
+    template <concepts::matrices MatrixT>
+    constexpr mat &operator*=(MatrixT const &);
+
+    template <concepts::matrices MatrixT>
+    constexpr mat operator*(MatrixT const &) const;
+
+    template <concepts::matrices MatrixT>
+    constexpr mat &operator/=(MatrixT const &);
+
+    template <concepts::matrices MatrixT>
+    constexpr mat operator/(MatrixT const &) const;
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
