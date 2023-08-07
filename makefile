@@ -26,3 +26,6 @@ style:
 	include/cyfre/*.hpp include/cyfre/*/*.hpp include/cyfre/*/*/*.hpp include/cyfre/*/*/*/*.hpp \
 	src/cyfre/*.cpp src/cyfre/*/*.cpp src/cyfre/*/*/*.cpp src/cyfre/*/*/*/*.cpp \
 	test/*.cpp
+
+play:
+	$(CXX) main.cpp -o main.out -std=c++20 -fsanitize=address
