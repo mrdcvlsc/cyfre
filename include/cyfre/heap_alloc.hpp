@@ -8,6 +8,8 @@
 #define MRDCVLSC_HEAP_ALLOC_HPP
 
 #include <stddef.h>
+#include "concepts.hpp"
+#include "enums.hpp"
 
 namespace cyfre {
 
@@ -47,6 +49,22 @@ namespace cyfre {
 
         /// @brief Move Assignment.
         allocate &operator=(allocate &&that);
+
+        /// @brief Copy Constructor For Other Types.
+        template <concepts::allocators AllocatorT>
+        allocate(const AllocatorT &that);
+
+        /// @brief Move Constructor For Other Types.
+        template <concepts::allocators AllocatorT>
+        allocate(AllocatorT &&that);
+
+        /// @brief Copy Assignment For Other Types.
+        template <concepts::allocators AllocatorT>
+        allocate &operator=(const AllocatorT &that);
+
+        /// @brief Move Assignment For Other Types.
+        template <concepts::allocators AllocatorT>
+        allocate &operator=(AllocatorT &&that);
 
         inline _T &operator[](size_t i);
         inline const _T &operator[](size_t i) const;
