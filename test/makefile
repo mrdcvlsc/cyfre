@@ -3,7 +3,7 @@ SRC:=$(wildcard ../src/cyfre/*)
 TEST_EXECUTABLES:=$(subst .cpp,.out,$(wildcard *.cpp))
 LINKING:=
 
-CXXFLAGS:=-Wall -Wextra -std=c++20
+CXXFLAGS:=-Wall -Wextra -g3 -std=c++20
 
 ifeq ($(CXX), clang++)
 CXXFLAGS+=-fsanitize=address
