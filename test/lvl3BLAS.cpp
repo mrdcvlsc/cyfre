@@ -20,7 +20,14 @@ int main() {
     }
   }
 
-  // AMFR = BMFC + CMDC;
+  cyfre::mat<unsigned int, fixed<ROWS, COLS>, order_t::col_major> test;
+  std::cout << "start debug\n";
+  test = BMFC + CMDC;
+  std::cout << "end debug\n";
+
+  BMFC.print();
+  CMDC.print();
+  test.print();
 
   std::cout << "Tests : PASSED - BLAS level 3\n";
   return 0;

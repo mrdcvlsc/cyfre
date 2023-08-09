@@ -2,15 +2,16 @@
 
 int main() {
   //////////////// dynamic matrix equality test ////////////////
-
-  cyfre::mat<char, cyfre::dynamic> mat3(2, 12);
+  cyfre::mat<int, cyfre::dynamic> mat3(2, 12);
   assert(mat3.rows() == 2);
   assert(mat3.cols() == 12);
   static_assert(sizeof(mat3) == sizeof(size_t) * 3, "wrong dynamic container stack size");
 
-  auto mat4 = mat3;
+  cyfre::mat<int, cyfre::dynamic> mat4 = mat3;
   assert(mat4 == mat3);
+
   mat4(1, 6) = 77;
+
   assert(mat4 != mat3);
 
   auto mat5 = std::move(mat3);

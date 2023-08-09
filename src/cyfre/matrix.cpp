@@ -1,6 +1,8 @@
 #ifndef MRDCVLSC_MATRIX_CLASS_CPP
 #define MRDCVLSC_MATRIX_CLASS_CPP
 
+#include "stack_alloc.cpp"
+#include <type_traits>
 #define CYFRE_MAT_TARGS template <concepts::scalars T, typename Dim, order_t Order, typename Blas>
 #define CYFRE_MAT_TARGS_MatrixT CYFRE_MAT_TARGS template <concepts::matrices MatrixT>
 #define CYFRE_MAT mat<T, Dim, Order, Blas>
@@ -30,10 +32,11 @@ namespace cyfre {
   CYFRE_MAT_TARGS CYFRE_MAT::mat(mat &&that) : matrix(std::move(that.matrix)) {}
 
   /// @brief Copy Assignment.
-  CYFRE_MAT_TARGS CYFRE_MAT &CYFRE_MAT::operator=(const mat &that) {
+  CYFRE_MAT_TARGS constexpr CYFRE_MAT &CYFRE_MAT::operator=(const mat &that) {
     if (this != &that) {
       matrix = that.matrix;
     }
+
     return *this;
   }
 
@@ -42,6 +45,40 @@ namespace cyfre {
     if (this != &that) {
       matrix = std::move(that.matrix);
     }
+
+    return *this;
+  }
+
+  /// @brief Copy Constructor For Other Types.
+  CYFRE_MAT_TARGS_MatrixT constexpr CYFRE_MAT::mat(const MatrixT &that) : matrix(that.matrix) {}
+
+  /// @brief Move Constructor For Other Types.
+  CYFRE_MAT_TARGS_MatrixT CYFRE_MAT::mat(MatrixT &&that) : matrix(std::move(that.matrix)) {}
+
+  /// @brief Copy Assignment For Other Types.
+  CYFRE_MAT_TARGS_MatrixT constexpr CYFRE_MAT &CYFRE_MAT::operator=(const MatrixT &that) {
+    constexpr bool invalid_order_t = MajorOrder == MatrixT::MajorOrder;
+    if constexpr (!invalid_order_t) {
+      static_assert(invalid_order_t, "cannot directly assign if matrices have different 'order_t' value");
+    }
+
+    matrix = that.matrix;
+    return *this;
+  }
+
+  /// @brief Move Assignment For Other Types.
+  CYFRE_MAT_TARGS_MatrixT CYFRE_MAT &CYFRE_MAT::operator=(MatrixT &&that) {
+    constexpr bool invalid_assignment = std::is_same<AllocatorType, dynamic>::value;
+    constexpr bool invalid_order_t = MajorOrder == MatrixT::MajorOrder;
+
+    if constexpr (!invalid_assignment) {
+      static_assert(invalid_assignment, "exact 'mat<T, fixed<...>...>' type is required");
+    } else if constexpr (!invalid_order_t) {
+      static_assert(invalid_order_t, "cannot directly assign if matrices have different 'order_t' value");
+    } else {
+      matrix = std::move(that.matrix);
+    }
+
     return *this;
   }
 
@@ -55,15 +92,14 @@ namespace cyfre {
       throw std::invalid_argument("initializer list total elements should be <= (rows * cols)");
     }
 
-    size_t initial_row_width = cols();
     size_t i = 0;
-    for (auto initalizer_list_row: sequence) {
+    for (auto initialized_rows: sequence) {
       size_t j = 0;
-      if (initial_row_width != initalizer_list_row.size()) {
+      if (initialized_rows.size() != cols()) {
         throw std::invalid_argument("initializer list elements rows should have the same lengths");
       }
 
-      for (T initalizer_list_col: initalizer_list_row) {
+      for (T initalizer_list_col: initialized_rows) {
         this->operator()(i, j++) = initalizer_list_col;
       }
       i++;
