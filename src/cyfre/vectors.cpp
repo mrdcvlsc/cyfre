@@ -3,14 +3,14 @@
 
 #define CYFRE_VEC_TARGS template <concepts::scalars T, typename Dim, axis_t Axis, order_t Order, typename Blas>
 #define CYFRE_VEC vec<T, Dim, Axis, Order, Blas>
-#define CYFRE_VEC_MAT_CONSTRUCTOR mat<T, typename VecOrient<Dim, Axis>::OrientDim, Order, Blas>
+#define CYFRE_VEC_MAT_CONSTRUCTOR mat<T, typename backend::VecOrient<Dim, Axis>::OrientDim, Order, Blas>
 
 #include "../../include/cyfre/vectors.hpp"
 
 namespace cyfre {
 
   CYFRE_VEC_TARGS constexpr CYFRE_VEC::vec()
-      : CYFRE_VEC_MAT_CONSTRUCTOR(VecOrient<Dim, Axis>::rows, VecOrient<Dim, Axis>::cols) {}
+      : CYFRE_VEC_MAT_CONSTRUCTOR(backend::VecOrient<Dim, Axis>::rows, backend::VecOrient<Dim, Axis>::cols) {}
 
   CYFRE_VEC_TARGS CYFRE_VEC::vec(size_t n) : CYFRE_VEC_MAT_CONSTRUCTOR() {
     if constexpr (Axis == axis_t::x) {

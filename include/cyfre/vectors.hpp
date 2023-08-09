@@ -10,17 +10,18 @@
 #include "matrix.hpp"
 
 namespace cyfre {
-
-  template <typename Dim, axis_t Axis>
-  struct VecOrient {
-    static constexpr bool IsFixed = !std::is_same<Dim, dynamic>::value;
-    using FixedAxisX = fixed<1, Dim::rows>;
-    using FixedAxisY = fixed<Dim::rows, 1>;
-    using FixedOrientation = typename std::conditional<Axis == axis_t::x, FixedAxisX, FixedAxisY>::type;
-    using OrientDim = typename std::conditional<IsFixed, FixedOrientation, dynamic>::type;
-    static constexpr size_t rows = (Axis == axis_t::x) ? 1 : Dim::rows;
-    static constexpr size_t cols = (Axis == axis_t::x) ? Dim::rows : 1;
-  };
+  namespace backend {
+    template <typename Dim, axis_t Axis>
+    struct VecOrient {
+      static constexpr bool IsFixed = !std::is_same<Dim, dynamic<0, 0>>::value;
+      using FixedAxisX = fixed<1, Dim::rows>;
+      using FixedAxisY = fixed<Dim::rows, 1>;
+      using FixedOrientation = typename std::conditional<Axis == axis_t::x, FixedAxisX, FixedAxisY>::type;
+      using OrientDim = typename std::conditional<IsFixed, FixedOrientation, dynamic<0, 0>>::type;
+      static constexpr size_t rows = (Axis == axis_t::x) ? 1 : Dim::rows;
+      static constexpr size_t cols = (Axis == axis_t::x) ? Dim::rows : 1;
+    };
+  } // namespace backend
 
   /// ===============================================================================================================
 
@@ -28,7 +29,7 @@ namespace cyfre {
   template <
     concepts::scalars T, typename Dim, axis_t Axis, order_t Order = order_t::row_major,
     typename Blas = backend::cyfre_blas>
-  struct vec : public mat<T, typename VecOrient<Dim, Axis>::OrientDim, Order, Blas> {
+  struct vec : public mat<T, typename backend::VecOrient<Dim, Axis>::OrientDim, Order, Blas> {
     constexpr vec();
 
     vec(size_t n);
