@@ -186,6 +186,29 @@ namespace cyfre::backend {
         }
       }
     }
+
+    template <bool OverWrite = true, concepts::matrices MT1, concepts::matrices MT2, concepts::matrices MT3>
+    static constexpr void dot(MT1 &A, const MT2 &B, const MT3 &C) {
+      constexpr bool SameColumnMajor = MT1::MajorOrder == MT2::MajorOrder && MT1::MajorOrder == MT3::MajorOrder &&
+                                       MT1::MajorOrder == order_t::col_major;
+      if constexpr (!SameColumnMajor) {
+        for (size_t i = 0; i < B.rows(); ++i) {
+          for (size_t k = 0; k < B.cols(); ++k) {
+            for (size_t j = 0; j < C.cols(); ++j) {
+              A(i, j) = C(k, j) * B(i, k);
+            }
+          }
+        }
+      } else {
+        for (size_t j = 0; j < C.cols(); ++j) {
+          for (size_t k = 0; k < B.cols(); ++k) {
+            for (size_t i = 0; i < B.rows(); ++i) {
+              A(i, j) = B(i, k) * C(k, j);
+            }
+          }
+        }
+      }
+    }
   };
 } // namespace cyfre::backend
 

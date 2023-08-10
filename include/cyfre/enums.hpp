@@ -22,6 +22,14 @@ namespace cyfre {
     x,
     y
   };
+
+  enum class operation_t
+  {
+    add,
+    sub,
+    mul,
+    div
+  };
 } // namespace cyfre
 
 #endif

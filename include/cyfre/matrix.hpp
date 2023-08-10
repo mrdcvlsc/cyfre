@@ -64,19 +64,36 @@ namespace cyfre {
     template <concepts::matrices MatrixT>
     mat &operator=(MatrixT &&);
 
-    // void *operator new(std::size_t) throw();
-    // void operator delete(void *) throw();
-    // void *operator new[](std::size_t) throw();
-    // void operator delete[](void *) throw();
-
     /// @returns Number of rows in the matrix.
     constexpr size_t rows() const;
 
     /// @returns Number of columns in the matrix.
     constexpr size_t cols() const;
 
+    // TODO:
+    /// @brief Matrix Arithmetic Elementary Operations.
+    template <operation_t Operation, axis_t Axis>
+    constexpr void elemMath(size_t idxAns, size_t idxOp);
+
+    // TODO:
+    template <axis_t Axis>
+    constexpr void elemScale(size_t idx, T scalar);
+
+    // TODO:
+    template <axis_t Axis>
+    constexpr void elemSwap(size_t idxA, size_t idxB);
+
     /// @brief Fill the matrix with the given value.
     constexpr void fill(T value);
+
+    // TODO:
+    constexpr void makeScalar(T value);
+
+    // TODO:
+    constexpr void makeIdentity();
+
+    // TODO:
+    constexpr void makeNullZero();
 
     /// @brief Print the matrix.
     void print() const;
@@ -90,9 +107,17 @@ namespace cyfre {
     /// @returns true if the matrix is equal, false otherwise.
     constexpr bool operator==(mat const &) const;
 
+    // TODO:
+    constexpr bool operator!=(mat const &) const;
+
     /// @returns true if the matrix is equal, false otherwise.
     template <concepts::matrices Matrix>
     constexpr bool operator==(Matrix const &) const;
+
+    // TODO:
+    /// @returns true if the matrix is equal, false otherwise.
+    template <concepts::matrices Matrix>
+    constexpr bool operator!=(Matrix const &) const;
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 

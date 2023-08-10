@@ -114,6 +114,65 @@ namespace cyfre {
   /// @returns number of columns in the matrix.
   CYFRE_MAT_TARGS constexpr size_t CYFRE_MAT::cols() const { return matrix.cols; }
 
+  CYFRE_MAT_TARGS template <operation_t Operation, axis_t Axis>
+  constexpr void CYFRE_MAT::elemMath(size_t idxAns, size_t idxOp) {
+    if constexpr (Axis == axis_t::x) {
+      for (size_t i = 0; i < cols(); ++i) {
+        if constexpr (Operation == operation_t::add) {
+          this->operator()(idxAns, i) += this->operator()(idxOp, i);
+
+        } else if constexpr (Operation == operation_t::sub) {
+          this->operator()(idxAns, i) -= this->operator()(idxOp, i);
+
+        } else if constexpr (Operation == operation_t::mul) {
+          this->operator()(idxAns, i) *= this->operator()(idxOp, i);
+        } else {
+          this->operator()(idxAns, i) /= this->operator()(idxOp, i);
+        }
+      }
+    } else {
+      for (size_t i = 0; i < cols(); ++i) {
+        if constexpr (Operation == operation_t::add) {
+          this->operator()(i, idxAns) += this->operator()(i, idxOp);
+
+        } else if constexpr (Operation == operation_t::sub) {
+          this->operator()(i, idxAns) -= this->operator()(i, idxOp);
+
+        } else if constexpr (Operation == operation_t::mul) {
+          this->operator()(i, idxAns) *= this->operator()(i, idxOp);
+        } else {
+          this->operator()(i, idxAns) /= this->operator()(i, idxOp);
+        }
+      }
+    }
+  }
+
+  CYFRE_MAT_TARGS template <axis_t Axis>
+  constexpr void CYFRE_MAT::elemScale(size_t idx, T scalar) {
+    if constexpr (Axis == axis_t::x) {
+      for (size_t i = 0; i < cols(); ++i) {
+        this->operator()(idx, i) *= scalar;
+      }
+    } else {
+      for (size_t i = 0; i < cols(); ++i) {
+        this->operator()(i, idx) *= scalar;
+      }
+    }
+  }
+
+  CYFRE_MAT_TARGS template <axis_t Axis>
+  constexpr void CYFRE_MAT::elemSwap(size_t idxA, size_t idxB) {
+    if constexpr (Axis == axis_t::x) {
+      for (size_t i = 0; i < cols(); ++i) {
+        std::swap(this->operator()(idxA, i), this->operator()(idxB, i));
+      }
+    } else {
+      for (size_t i = 0; i < cols(); ++i) {
+        std::swap(this->operator()(i, idxA), this->operator()(i, idxA));
+      }
+    }
+  }
+
   /// @brief Fill the matrix with the given value.
   CYFRE_MAT_TARGS constexpr void CYFRE_MAT::fill(T value) {
     for (size_t i = 0; i < rows() * cols(); ++i) {
